@@ -1,0 +1,25 @@
+{
+  "output_dir": "final",
+  "books": [
+    {
+      "output": "01-تصور-الموقع.pdf",
+      "title": "تصور موقع براند ألاء",
+      "subtitle": "شرح موقع وشلي كنموذج، والتصور الكامل لموقعك",
+      "kicker": "عرض مشروع",
+      "sources": [
+        "docs/01-site-explanation.md",
+        "docs/02-vision-proposal.md"
+      ]
+    },
+    {
+      "output": "02-الأسعار-والخطط.pdf",
+      "title": "الأسعار والخطط",
+      "subtitle": "تكلفة الشغل، الاشتراكات، والدومين، ومدة التنفيذ",
+      "kicker": "عرض مشروع",
+      "sources": [
+        "docs/04-pricing-plans.md",
+        { "path": "docs/03-backend-comparison.md", "kicker": "ملحق" }
+      ]
+    }
+  ]
+}
