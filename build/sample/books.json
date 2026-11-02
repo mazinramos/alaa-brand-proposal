@@ -1,0 +1,16 @@
+{
+  "books": [
+    {
+      "output": "sample-01.pdf",
+      "title": "عينة اختبار: تصور الموقع",
+      "subtitle": "ملف تجريبي لفحص الأداة، المحتوى كله وهمي",
+      "sources": ["docs/01-site-explanation.md", "docs/02-vision-proposal.md"]
+    },
+    {
+      "output": "sample-02.pdf",
+      "title": "عينة اختبار: الأسعار والخطط",
+      "subtitle": "ملف تجريبي لفحص الأداة، المحتوى كله وهمي",
+      "sources": ["docs/04-pricing-plans.md", { "path": "docs/03-backend-comparison.md", "kicker": "ملحق" }]
+    }
+  ]
+}

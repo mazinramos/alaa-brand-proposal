@@ -1,0 +1,161 @@
+/* هوية وشلي - shared/style-guide.md */
+:root{
+  --cream:#FBF6F3; --blush-light:#F6E9E8; --blush:#EBD6D5;
+  --mauve:#9A5C6D; --mauve-dark:#7A4455; --ink:#3B2A2F; --divider:#C9A3A8;
+  --shadow:rgba(122,68,85,.4);
+}
+@page{ size:A4; margin:24mm 20mm 24mm 20mm; background:#FBF6F3; }
+@page cover{ size:A4; margin:0; }
+
+*{ box-sizing:border-box; }
+html{ background:var(--cream); }
+body{
+  margin:0; direction:rtl; text-align:right;
+  font-family:'Cairo',sans-serif; font-weight:400; font-size:11pt; line-height:1.95;
+  color:var(--ink);
+  font-feature-settings:"liga" 1,"calt" 1;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+p{ margin:0 0 .75em; orphans:3; widows:3; }
+strong,b{ font-weight:700; color:var(--mauve-dark); }
+a{ color:var(--mauve-dark); text-decoration:none; border-bottom:1px solid var(--divider); }
+ltr,.ltr{ direction:ltr; unicode-bidi:isolate; display:inline-block; }
+code{
+  font-family:'Cairo',monospace; font-size:10.5pt; direction:ltr; unicode-bidi:isolate;
+  background:var(--blush-light); border:1px solid var(--blush); border-radius:6px; padding:0 .35em;
+}
+pre{
+  direction:ltr; text-align:left; background:#fff; border:1px solid var(--blush); border-radius:14px;
+  padding:12px 16px; font-size:10.5pt; line-height:1.6; white-space:pre-wrap; break-inside:avoid;
+}
+pre code{ background:none; border:0; padding:0; }
+hr{ border:0; border-top:1px solid var(--blush); margin:1.4em 0; }
+img{ max-width:100%; }
+
+/* ---------- العناوين ---------- */
+h1,h2,h3,h4{ break-after:avoid; break-inside:avoid; font-family:'Cairo',sans-serif; line-height:1.5; }
+h1{
+  font-weight:800; font-size:27pt; color:var(--mauve-dark); text-align:center;
+  margin:0 0 .3em; break-before:page;
+}
+.part-kicker{ text-align:center; margin:0 0 5mm; break-before:page; break-after:avoid; }
+.part-kicker + h1{ break-before:auto; }
+.lead{ text-align:center; color:var(--mauve-dark); font-weight:500; font-size:12pt; max-width:140mm; margin:0 auto 1.4em; }
+h2{
+  display:flex; align-items:center; justify-content:center; gap:16px; text-align:center;
+  font-weight:700; font-size:17pt; color:var(--mauve-dark); margin:1.7em 0 .8em;
+}
+h2::before,h2::after{ content:""; flex:1 1 18mm; height:1px; background:var(--divider); }
+h3{
+  font-weight:700; font-size:13.5pt; color:var(--mauve-dark); margin:1.4em 0 .5em;
+  padding-inline-start:10px; border-inline-start:4px solid var(--divider);
+}
+h4{ font-weight:700; font-size:12pt; color:var(--mauve); margin:1.1em 0 .4em; }
+h1 + .lead + h2, h1 + h2{ margin-top:.6em; }
+
+/* ---------- القوائم ---------- */
+ul,ol{ margin:0 0 .9em; padding-inline-start:1.5em; }
+li{ margin:.15em 0; padding-inline-start:.2em; }
+li > p{ margin:0 0 .3em; }
+ul{ list-style:none; }
+ul > li{ position:relative; }
+ul > li::before{
+  content:""; position:absolute; inset-inline-start:-1.15em; top:.85em;
+  width:7px; height:7px; border-radius:50%; background:var(--mauve);
+}
+ol > li::marker{ color:var(--mauve); font-weight:700; }
+li ul,li ol{ margin:.2em 0 .3em; }
+li{ break-inside:avoid; }
+
+/* ---------- الجداول ---------- */
+.table-wrap{ margin:.6em 0 1.3em; border:1px solid var(--blush); border-radius:14px; overflow:hidden; background:#fff; }
+table{ width:100%; border-collapse:collapse; font-size:10.5pt; line-height:1.7; }
+thead{ display:table-header-group; }
+tr{ break-inside:avoid; page-break-inside:avoid; }
+th{
+  background:var(--mauve-dark); color:#fff; font-weight:700; text-align:right;
+  padding:8px 12px; border-bottom:1px solid var(--mauve-dark);
+}
+th strong{ color:#fff; }
+td{ padding:7px 12px; border-top:1px solid var(--blush); vertical-align:top; background:#fff; }
+tbody tr:nth-child(even) td{ background:var(--blush-light); }
+tbody tr:first-child td{ border-top:0; }
+td p,th p{ margin:0; }
+
+/* ---------- صناديق الملاحظة ---------- */
+blockquote{
+  margin:1em 0 1.2em; padding:12px 18px; background:var(--blush-light);
+  border:1px solid var(--blush); border-inline-start:5px solid var(--mauve);
+  border-radius:14px; break-inside:avoid; color:var(--ink);
+}
+blockquote > :last-child{ margin-bottom:0; }
+blockquote.warn{ border-inline-start-color:var(--mauve-dark); background:#fff; border-color:var(--divider); }
+blockquote.ok{ border-inline-start-color:var(--mauve); }
+.ico{ display:inline-block; width:1.05em; height:1.05em; vertical-align:-.17em; margin-inline-end:.3em; }
+.ico svg{ width:100%; height:100%; display:block; }
+.ico.ok{ color:var(--mauve); } .ico.warn{ color:var(--mauve-dark); } .ico.no{ color:var(--mauve-dark); }
+
+/* ---------- بطاقات وشارات ---------- */
+.card{
+  background:#fff; border:1px solid var(--blush); border-radius:14px; padding:14px 20px;
+  margin:1em 0 1.2em; break-inside:avoid; box-shadow:0 1px 0 var(--blush);
+}
+.card > :last-child{ margin-bottom:0; }
+.card-title{ font-weight:700; color:var(--mauve-dark); font-size:12.5pt; margin:0 0 .3em; }
+.badge{
+  display:inline-block; background:var(--mauve); color:#fff; border-radius:999px;
+  padding:0 .85em; font-weight:600; font-size:10.5pt; line-height:1.7; border:1.5px solid var(--mauve); white-space:nowrap;
+}
+.badge.outline{ background:transparent; color:var(--mauve); }
+.pagebreak{ break-after:page; height:0; margin:0; padding:0; }
+
+/* ---------- الغلاف ---------- */
+.cover{
+  page:cover; width:210mm; height:296.5mm; background:var(--mauve-dark); color:var(--cream);
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  padding:30mm 24mm 26mm; break-after:page; position:relative; overflow:hidden;
+}
+.cover::before,.cover::after{
+  content:""; position:absolute; border:1px solid rgba(251,246,243,.18); border-radius:50%;
+}
+.cover::before{ width:150mm; height:150mm; top:-55mm; inset-inline-start:-50mm; }
+.cover::after{ width:120mm; height:120mm; bottom:-45mm; inset-inline-end:-40mm; }
+.cover .top{ position:relative; z-index:1; }
+.cover .brand{
+  font-family:'Great Vibes',cursive; font-weight:400; font-size:78pt; line-height:1.15; color:var(--cream);
+  direction:ltr; margin-top:48mm; position:relative; z-index:1;
+}
+.cover .rule{ width:42mm; height:1px; background:var(--divider); margin:10mm auto 10mm; position:relative; z-index:1; }
+.cover .doc-title{ font-weight:800; font-size:27pt; line-height:1.6; color:var(--cream); position:relative; z-index:1; max-width:150mm; }
+.cover .doc-sub{ font-weight:400; font-size:13pt; color:var(--blush); margin-top:4mm; position:relative; z-index:1; }
+.cover .foot{ margin-top:auto; position:relative; z-index:1; }
+.cover .foot .for{ font-weight:600; font-size:13pt; color:var(--cream); }
+.cover .foot .for bdi{ font-weight:700; }
+.cover .foot .date{ font-weight:400; font-size:12pt; color:var(--blush); margin-top:2mm; }
+.cover .pill{
+  display:inline-block; border:1.5px solid var(--divider); color:var(--cream); border-radius:999px;
+  padding:0 1.1em; font-weight:600; font-size:11pt; line-height:1.9;
+}
+
+/* ---------- الفهرس ---------- */
+.toc{ page:auto; break-after:page; }
+.toc-title{
+  display:flex; align-items:center; justify-content:center; gap:16px;
+  font-weight:800; font-size:22pt; color:var(--mauve-dark); margin:0 0 1.2em;
+}
+.toc-title::before,.toc-title::after{ content:""; flex:1 1 18mm; height:1px; background:var(--divider); }
+.toc-row{ display:flex; align-items:baseline; gap:8px; margin:0; line-height:1.9; break-inside:avoid; }
+.toc-row .t{ flex:0 1 auto; }
+.toc-row .dots{ flex:1 1 auto; border-bottom:1.5px dotted var(--divider); transform:translateY(-4px); min-width:12px; }
+.toc-row .n{ flex:0 0 auto; font-weight:700; color:var(--mauve-dark); min-width:2em; text-align:left; direction:ltr; }
+.toc-row.l1{ margin-top:1.1em; font-weight:800; font-size:12.5pt; color:var(--mauve-dark); }
+.toc-row.l2{ padding-inline-start:1.2em; font-weight:600; }
+.toc-row.l3{ padding-inline-start:3em; font-weight:400; font-size:10.5pt; color:var(--ink); }
+.toc-row.l1:first-of-type{ margin-top:0; }
+
+/* ---------- هيدر وفوتر (صناديق هامش الصفحة) ---------- */
+@page{
+  /* @top-right (عنوان الملف) يُحقن من build.py لكل ملف */
+  @top-left{ content:"Alaa Mahjob"; font-family:'Cairo'; font-size:10.5pt; font-weight:600; color:var(--mauve); direction:ltr; vertical-align:bottom; padding-bottom:6mm; }
+  @bottom-center{ content:counter(page); font-family:'Cairo'; font-size:11pt; font-weight:700; color:var(--mauve-dark); vertical-align:top; padding-top:7mm; }
+}
