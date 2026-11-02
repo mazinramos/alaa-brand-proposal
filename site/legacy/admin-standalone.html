@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة تحكم وشلي | Wishly Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%239A5C6D'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='Georgia,serif'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { cream:'#FBF6F3', blush:'#EBD6D5', blushL:'#F6E9E8', mauve:'#9A5C6D', mauveD:'#7A4455', ink:'#3B2A2F' },
+    fontFamily: { body:['Cairo','sans-serif'], script:['"Great Vibes"','cursive'] },
+  } } }
+</script>
+<style>
+  :root{
+    --cream:#FBF6F3; --blush:#EBD6D5; --blushL:#F6E9E8; --mauve:#9A5C6D; --mauveD:#7A4455; --ink:#3B2A2F;
+    --muted:#8E787D; --line:#F0E2E1; --good:#0B6B0B; --goodBg:#DDF3DD; --warnBg:#FFF1CC; --warn:#7A5200;
+    --crit:#8F2222; --critBg:#F8DADA; --blueBg:#DCEBFB; --blue:#184F95; --violBg:#EAE3FA; --viol:#3F3399;
+  }
+  *{ -webkit-tap-highlight-color:transparent; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Cairo',sans-serif; background:var(--cream); color:var(--ink); }
+  .logo-script{ font-family:'Great Vibes',cursive; }
+  :focus-visible{ outline:2px solid var(--mauve); outline-offset:2px; }
+  ::-webkit-scrollbar{ width:8px; height:8px; } ::-webkit-scrollbar-thumb{ background:#D9B9BE; border-radius:10px; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:18px; }
+  .card-pad{ padding:1.25rem; }
+  .card-title{ font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:.5rem; }
+  .card-title i{ color:var(--mauve); font-size:.85rem; }
+  .muted{ color:var(--muted); }
+
+  .btn{ background:var(--mauve); color:#fff; border-radius:999px; padding:.55rem 1.3rem; font-weight:700; font-size:.82rem; display:inline-flex; align-items:center; justify-content:center; gap:.45rem; transition:.25s; white-space:nowrap; }
+  .btn:hover{ background:var(--mauveD); transform:translateY(-1px); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  .btn-ghost{ background:transparent; color:var(--mauve); border:1.5px solid var(--mauve); }
+  .btn-ghost:hover{ background:var(--mauve); color:#fff; }
+  .btn-soft{ background:var(--blushL); color:var(--mauveD); }
+  .btn-soft:hover{ background:var(--blush); color:var(--mauveD); }
+  .btn-danger{ background:var(--critBg); color:var(--crit); } .btn-danger:hover{ background:var(--crit); color:#fff; }
+  .btn-sm{ padding:.35rem .85rem; font-size:.75rem; }
+  .btn-icon{ width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; color:var(--mauve); transition:.2s; font-size:.85rem; }
+  .btn-icon:hover{ background:var(--blushL); }
+  .btn-icon.danger{ color:var(--crit); } .btn-icon.danger:hover{ background:var(--critBg); }
+
+  .input{ width:100%; border-radius:12px; border:1px solid #E6CFD1; background:#fff; padding:.55rem .9rem; font-size:.85rem; transition:.2s; }
+  .input:focus{ outline:none; border-color:var(--mauve); box-shadow:0 0 0 3px rgba(154,92,109,.12); }
+  .label{ display:block; font-size:.75rem; font-weight:700; color:var(--muted); margin-bottom:.3rem; }
+  textarea.input{ resize:vertical; }
+
+  .nav-item{ display:flex; align-items:center; gap:.75rem; padding:.65rem .9rem; border-radius:14px; font-size:.88rem; font-weight:600; color:#6B5459; transition:.2s; width:100%; position:relative; text-align:right; }
+  .nav-item i{ width:18px; text-align:center; color:var(--mauve); opacity:.8; }
+  .nav-item:hover{ background:var(--blushL); color:var(--mauveD); }
+  .nav-item.active{ background:var(--mauve); color:#fff; box-shadow:0 10px 20px -12px rgba(154,92,109,.9); }
+  .nav-item.active i{ color:#fff; opacity:1; }
+  .nav-badge{ margin-right:auto; background:var(--mauveD); color:#fff; font-size:.65rem; font-weight:700; min-width:20px; height:20px; border-radius:99px; display:inline-flex; align-items:center; justify-content:center; padding:0 .35rem; }
+  .nav-item.active .nav-badge{ background:#fff; color:var(--mauveD); }
+
+  .tbl{ width:100%; border-collapse:collapse; }
+  .tbl th{ text-align:right; padding:.8rem 1rem; font-size:.72rem; font-weight:700; color:var(--muted); background:#FCF8F6; white-space:nowrap; position:sticky; top:0; }
+  .tbl td{ padding:.8rem 1rem; font-size:.84rem; border-top:1px solid var(--line); vertical-align:middle; }
+  .tbl tr.row-click{ cursor:pointer; transition:background .15s; } .tbl tr.row-click:hover{ background:#FDF7F6; }
+  .tbl tr.unseen td:first-child{ box-shadow:inset -3px 0 0 var(--mauve); }
+
+  .pill{ display:inline-flex; align-items:center; gap:.3rem; font-size:.7rem; font-weight:700; padding:.22rem .65rem; border-radius:999px; white-space:nowrap; }
+  .pill i{ font-size:.62rem; }
+  .p-warn{ background:var(--warnBg); color:var(--warn); } .p-blue{ background:var(--blueBg); color:var(--blue); }
+  .p-mauve{ background:#F3E2E8; color:var(--mauveD); } .p-good{ background:var(--goodBg); color:var(--good); }
+  .p-crit{ background:var(--critBg); color:var(--crit); } .p-viol{ background:var(--violBg); color:var(--viol); }
+  .p-gray{ background:#EFE9E9; color:#5E4F52; }
+
+  .chip{ padding:.4rem .95rem; border-radius:999px; font-size:.78rem; font-weight:600; border:1px solid #E6CFD1; background:#fff; color:#6B5459; transition:.2s; white-space:nowrap; }
+  .chip:hover{ background:var(--blushL); }
+  .chip.on{ background:var(--mauve); border-color:var(--mauve); color:#fff; }
+  .chip .n{ opacity:.7; margin-right:.25rem; font-size:.7rem; }
+
+  .delta{ display:inline-flex; align-items:center; gap:.2rem; font-size:.7rem; font-weight:700; padding:.1rem .45rem; border-radius:99px; }
+  .delta.up{ background:var(--goodBg); color:var(--good); } .delta.down{ background:var(--critBg); color:var(--crit); } .delta.flat{ background:#EFE9E9; color:#5E4F52; }
+
+  .kpi{ position:relative; overflow:hidden; }
+  .kpi .v{ font-size:1.55rem; font-weight:800; letter-spacing:-.01em; line-height:1.2; }
+  .kpi .spark{ position:absolute; left:0; bottom:0; width:46%; height:44px; opacity:.9; }
+
+  .bar-row{ display:grid; grid-template-columns:1fr auto; gap:.2rem .75rem; align-items:center; padding:.35rem 0; }
+  .bar-track{ grid-column:1 / -1; height:7px; border-radius:99px; background:var(--blushL); overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:99px; background:var(--mauve); transition:width .7s cubic-bezier(.2,.8,.2,1); }
+
+  .heat{ display:grid; grid-template-columns:70px repeat(4,1fr); gap:3px; direction:rtl; }
+  .heat div{ border-radius:7px; min-height:34px; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; }
+  .heat .hd{ background:none; color:var(--muted); font-weight:600; font-size:.7rem; }
+  .heat .hr{ justify-content:flex-start; color:#6B5459; font-size:.75rem; font-weight:600; background:none; }
+
+  .insight{ display:flex; gap:.75rem; padding:.85rem; border-radius:14px; background:#fff; border:1px solid var(--line); text-align:right; width:100%; transition:.2s; }
+  .insight:hover{ border-color:#E0BEC4; transform:translateY(-1px); }
+  .insight .ic{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.85rem; }
+  .ic-crit{ background:var(--critBg); color:var(--crit); } .ic-warn{ background:var(--warnBg); color:var(--warn); }
+  .ic-good{ background:var(--goodBg); color:var(--good); } .ic-info{ background:var(--blueBg); color:var(--blue); }
+
+  .hero-card{ background:linear-gradient(135deg,#7A4455 0%,#9A5C6D 60%,#B47A89 100%); color:#fff; border-radius:22px; position:relative; overflow:hidden; }
+  .hero-card::before{ content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1' opacity='.09'%3E%3Cpath d='M45 10c8 8 8 18 0 26-8-8-8-18 0-26z'/%3E%3Cpath d='M45 36c10-4 20 0 24 10-10 4-20 0-24-10z'/%3E%3Cpath d='M45 36c-10-4-20 0-24 10 10 4 20 0 24-10z'/%3E%3C/g%3E%3C/svg%3E"); }
+  .hero-card > *{ position:relative; }
+  .hero-line{ display:flex; gap:.6rem; align-items:flex-start; padding:.55rem .75rem; border-radius:12px; background:rgba(255,255,255,.12); font-size:.82rem; line-height:1.6; text-align:right; width:100%; transition:.2s; }
+  .hero-line:hover{ background:rgba(255,255,255,.2); }
+
+  .stepper{ display:flex; align-items:center; gap:.25rem; }
+  .step{ flex:1; text-align:center; font-size:.68rem; font-weight:700; color:var(--muted); position:relative; cursor:pointer; padding-top:.2rem; }
+  .step .dot{ width:26px; height:26px; border-radius:50%; margin:0 auto .3rem; display:flex; align-items:center; justify-content:center; background:var(--blushL); color:var(--mauve); font-size:.7rem; border:2px solid transparent; transition:.2s; }
+  .step.done .dot{ background:var(--mauve); color:#fff; } .step.now .dot{ background:#fff; border-color:var(--mauve); box-shadow:0 0 0 4px rgba(154,92,109,.15); }
+  .step.done, .step.now{ color:var(--mauveD); }
+  .step:not(:last-child)::after{ content:''; position:absolute; top:15px; left:-50%; width:100%; height:2px; background:var(--blush); z-index:0; }
+  .step.done:not(:last-child)::after{ background:var(--mauve); }
+  .step .dot{ position:relative; z-index:1; }
+
+  .board{ display:grid; grid-auto-flow:column; grid-auto-columns:minmax(250px,1fr); gap:.9rem; overflow-x:auto; padding-bottom:.75rem; scroll-snap-type:x proximity; }
+  .col{ background:#F7EFEC; border-radius:18px; padding:.7rem; min-height:300px; scroll-snap-align:start; transition:background .2s; }
+  .col.over{ background:#EFDDDF; outline:2px dashed var(--mauve); }
+  .ocard{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:.8rem; margin-bottom:.6rem; cursor:grab; transition:.2s; }
+  .ocard:hover{ box-shadow:0 12px 24px -16px rgba(122,68,85,.5); transform:translateY(-2px); }
+  .ocard.dragging{ opacity:.45; }
+
+  .ov{ position:fixed; inset:0; display:flex; }
+  .ov-bg{ position:absolute; inset:0; background:rgba(59,42,47,.5); backdrop-filter:blur(4px); animation:fade .2s; }
+  .modal{ position:relative; margin:auto; background:var(--cream); border-radius:22px; width:calc(100% - 2rem); max-height:calc(100vh - 2rem); display:flex; flex-direction:column; box-shadow:0 40px 80px -30px rgba(59,42,47,.6); animation:pop .25s cubic-bezier(.2,.8,.2,1); }
+  .modal.md{ max-width:620px; } .modal.lg{ max-width:820px; } .modal.sm{ max-width:420px; }
+  .panel{ position:relative; margin-right:auto; width:100%; max-width:520px; height:100%; background:var(--cream); display:flex; flex-direction:column; box-shadow:-30px 0 60px -30px rgba(59,42,47,.5); animation:slide .3s cubic-bezier(.2,.8,.2,1); }
+  .ov-head{ display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid var(--line); background:#fff; border-radius:22px 22px 0 0; }
+  .panel .ov-head{ border-radius:0; }
+  .ov-body{ padding:1.25rem; overflow-y:auto; flex:1; }
+  @keyframes fade{ from{opacity:0} to{opacity:1} } @keyframes pop{ from{opacity:0; transform:translateY(14px) scale(.98)} to{opacity:1; transform:none} }
+  @keyframes slide{ from{transform:translateX(-30px); opacity:0} to{transform:none; opacity:1} }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+
+  .toast{ background:var(--ink); color:#fff; border-radius:14px; padding:.75rem 1.1rem; font-size:.85rem; font-weight:600; display:flex; align-items:center; gap:.6rem; box-shadow:0 20px 40px -20px rgba(0,0,0,.6); animation:pop .25s; max-width:92vw; }
+  .toast.err{ background:var(--crit); } .toast i{ color:#F2C9D3; }
+
+  .skel{ background:linear-gradient(90deg,#f1e2e1 25%,#f8eeed 37%,#f1e2e1 63%); background-size:400% 100%; animation:skel 1.4s ease infinite; border-radius:10px; }
+  @keyframes skel{ 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+
+  .kbd{ font-size:.65rem; font-weight:700; border:1px solid #E6CFD1; border-radius:6px; padding:.05rem .4rem; color:var(--muted); background:#fff; }
+  .cmd-item{ display:flex; align-items:center; gap:.75rem; padding:.6rem .8rem; border-radius:12px; width:100%; text-align:right; font-size:.85rem; }
+  .cmd-item.on, .cmd-item:hover{ background:var(--blushL); }
+  .cmd-item .ci{ width:30px; height:30px; border-radius:9px; background:var(--blushL); color:var(--mauve); display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0; }
+  .tg{ position:relative; width:42px; height:24px; border-radius:99px; background:#DDC8CA; transition:.2s; flex-shrink:0; cursor:pointer; }
+  .tg::after{ content:''; position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.2s; }
+  input:checked + .tg{ background:var(--mauve); } input:checked + .tg::after{ right:21px; }
+
+  .strip-pat{ background:#EBD6D5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%23d9b9bb' stroke-width='1' opacity='.7'%3E%3Cpath d='M45 10c8 8 8 18 0 26-8-8-8-18 0-26z'/%3E%3Cpath d='M45 36c10-4 20 0 24 10-10 4-20 0-24-10z'/%3E%3Cpath d='M45 36c-10-4-20 0-24 10 10 4 20 0 24-10z'/%3E%3C/g%3E%3C/svg%3E"); }
+
+  #invoicePaper{ background:#fff; color:#3B2A2F; font-family:'Cairo',sans-serif; }
+  @media print{
+    body *{ visibility:hidden; }
+    #invoicePaper, #invoicePaper *{ visibility:visible; }
+    #invoicePaper{ position:absolute; top:0; right:0; width:100%; margin:0; box-shadow:none; }
+    .ov{ position:static !important; } .modal{ max-height:none !important; box-shadow:none !important; }
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<div id="toastWrap" class="fixed bottom-5 inset-x-0 z-[999] flex flex-col items-center gap-2 px-4 pointer-events-none"></div>
+<div id="modalRoot"></div>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center px-5 strip-pat">
+  <form id="loginForm" class="w-full max-w-sm card p-8 shadow-2xl" style="box-shadow:0 40px 80px -40px rgba(122,68,85,.5)">
+    <div class="flex flex-col items-center mb-7 leading-none">
+      <svg width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="26" width="40" height="30" rx="2"/><rect x="8" y="20" width="48" height="9" rx="2"/><path d="M32 20v36"/><path d="M32 20c-6-12-18-10-14-3 3 5 14 3 14 3zM32 20c6-12 18-10 14-3-3 5-14 3-14 3z"/></svg>
+      <span class="logo-script text-5xl text-mauve mt-1">Wishly</span>
+      <span class="text-[10px] tracking-[.2em] text-mauve/70 mt-1">GIFTS • TREATS • MEMORIES</span>
+      <p class="font-bold mt-4">لوحة تحكم وشلي</p>
+      <p class="text-xs muted mt-1">دخول فريق العمل فقط</p>
+    </div>
+    <div class="space-y-4">
+      <div><label class="label" for="loginEmail">البريد الإلكتروني</label><input required id="loginEmail" type="email" autocomplete="username" class="input" dir="ltr" placeholder="admin@wishly.com"></div>
+      <div><label class="label" for="loginPassword">كلمة المرور</label><input required id="loginPassword" type="password" autocomplete="current-password" class="input" dir="ltr" placeholder="••••••••"></div>
+      <p id="loginError" class="hidden text-sm rounded-xl px-4 py-2.5" style="background:var(--critBg);color:var(--crit)"></p>
+      <button id="loginSubmitBtn" class="btn w-full !py-3">دخول</button>
+      <button type="button" id="forgotBtn" class="w-full text-xs text-mauve hover:underline">نسيت كلمة المرور؟</button>
+    </div>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="adminApp" class="hidden">
+  <!-- mobile top bar -->
+  <div class="lg:hidden sticky top-0 z-[90] bg-cream/95 backdrop-blur border-b border-[color:var(--line)] px-4 h-14 flex items-center justify-between">
+    <button id="menuBtn" class="btn-icon" aria-label="القائمة"><i class="fa-solid fa-bars text-lg"></i></button>
+    <span class="logo-script text-3xl text-mauve leading-none">Wishly</span>
+    <div class="flex items-center gap-1">
+      <button class="btn-icon" data-act="openCmd" aria-label="بحث"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="btn-icon relative" data-act="openBell" aria-label="التنبيهات"><i class="fa-regular fa-bell"></i><span class="bellCount hidden absolute -top-0.5 -left-0.5 bg-mauveD text-white text-[9px] font-bold min-w-[16px] h-4 rounded-full flex items-center justify-center px-1"></span></button>
+    </div>
+  </div>
+
+  <div class="flex">
+    <div id="sideBg" class="hidden fixed inset-0 z-[95] bg-ink/40 lg:hidden"></div>
+    <aside id="sidebar" class="fixed lg:sticky top-0 right-0 z-[96] h-screen w-[270px] shrink-0 bg-white border-l border-[color:var(--line)] flex flex-col p-4 translate-x-full lg:translate-x-0 transition-transform duration-300">
+      <a href="#dashboard" class="flex flex-col items-center leading-none py-3 mb-3">
+        <span class="logo-script text-[44px] text-mauve">Wishly</span>
+        <span class="text-[8px] tracking-[.22em] text-mauve/70 -mt-1">وشلي • لوحة التحكم</span>
+      </a>
+      <nav id="adminNav" class="flex flex-col gap-1 overflow-y-auto flex-1 pr-0.5"></nav>
+      <div class="pt-3 mt-3 border-t border-[color:var(--line)]">
+        <a href="index.html" target="_blank" rel="noopener" class="nav-item"><i class="fa-solid fa-store"></i> فتح المتجر</a>
+        <p class="text-[11px] muted px-3 pt-2 truncate" id="loggedInAs"></p>
+        <button data-act="logout" class="nav-item !text-[color:var(--crit)]"><i class="fa-solid fa-arrow-right-from-bracket !text-[color:var(--crit)]"></i> تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 min-w-0 px-4 md:px-8 pb-24 pt-5 lg:pt-7 max-w-[1500px]">
+      <div class="flex items-start justify-between gap-3 mb-6 flex-wrap">
+        <div>
+          <h1 class="text-2xl md:text-[1.75rem] font-extrabold text-mauveD" id="pageTitle">لوحة التحكم</h1>
+          <p class="text-xs muted mt-1 flex items-center gap-2 flex-wrap"><span id="pageSub"></span><span class="inline-flex items-center gap-1.5" id="connStatus"><span class="w-2 h-2 rounded-full" style="background:#0ca30c"></span> متصلة مباشرة</span></p>
+        </div>
+        <div class="hidden lg:flex items-center gap-2">
+          <button data-act="openCmd" class="chip !rounded-xl flex items-center gap-2 !px-4 !py-2 min-w-[210px] justify-between"><span class="flex items-center gap-2 muted"><i class="fa-solid fa-magnifying-glass"></i> بحث شامل</span><span class="kbd" dir="ltr">Ctrl K</span></button>
+          <button class="btn-icon relative !w-10 !h-10 bg-white border border-[color:var(--line)]" data-act="openBell" aria-label="التنبيهات"><i class="fa-regular fa-bell"></i><span class="bellCount hidden absolute -top-1 -left-1 bg-mauveD text-white text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1"></span></button>
+          <button class="btn" data-act="newOrder"><i class="fa-solid fa-plus"></i> طلب يدوي</button>
+        </div>
+      </div>
+      <div id="adminContent"></div>
+    </main>
+  </div>
+</div>
+
+<script type="module">
+/* =========================================================================
+   Wishly Admin — core: firebase, state, helpers, UI primitives
+========================================================================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, limit,
+  writeBatch, increment, arrayUnion, deleteField
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "REDACTED",
+  authDomain: "REDACTED",
+  projectId: "REDACTED",
+  storageBucket: "REDACTED",
+  messagingSenderId: "REDACTED",
+  appId: "REDACTED",
+  measurementId: "REDACTED"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+/* ---------- reference data ---------- */
+const CATEGORY_LIST = [
+  { key:'wedding',    name:'توزيعات أفراح' },
+  { key:'engagement', name:'توزيعات خطوبة' },
+  { key:'success',    name:'توزيعات نجاح وتخرج' },
+  { key:'baby',       name:'استقبال المواليد' },
+  { key:'birthday',   name:'أعياد الميلاد' },
+  { key:'corporate',  name:'هدايا الشركات' },
+  { key:'vip',        name:'هدايا VIP' },
+  { key:'custom',     name:'بوكسات حسب الطلب' },
+  { key:'jertig',     name:'توزيعات جرتق' },
+  { key:'misc',       name:'توزيعات منوعة' },
+];
+const ORDER_STATUSES  = ['قيد الانتظار','قيد التجهيز','جاهز للتسليم','تم التسليم','ملغي'];
+const FLOW_STATUSES   = ['قيد الانتظار','قيد التجهيز','جاهز للتسليم','تم التسليم'];
+const CUSTOM_STATUSES = ['جديد','تم التواصل','قيد التصميم','عرض سعر مُرسل','مؤكد','ملغي'];
+const SOURCES = { web:'المتجر', whatsapp:'واتساب', instagram:'إنستغرام', tiktok:'تيك توك', call:'اتصال', special:'طلب خاص', other:'أخرى' };
+const STATUS_UI = {
+  'قيد الانتظار': ['p-warn','fa-hourglass-half'], 'قيد التجهيز': ['p-blue','fa-box-open'], 'جاهز للتسليم': ['p-mauve','fa-gift'],
+  'تم التسليم': ['p-good','fa-circle-check'], 'ملغي': ['p-crit','fa-ban'],
+  'جديد': ['p-mauve','fa-sparkles'], 'تم التواصل': ['p-blue','fa-phone-volume'], 'قيد التصميم': ['p-viol','fa-pen-ruler'],
+  'عرض سعر مُرسل': ['p-warn','fa-file-invoice-dollar'], 'مؤكد': ['p-good','fa-circle-check'],
+};
+const WEEKDAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const WEEK_ORDER = [6,0,1,2,3,4,5]; // Saturday first
+const DAY = 86400000;
+/* validated categorical order (dataviz skill) + brand mauve ramp */
+const SERIES = ['#B24A7B','#2A78D6','#D98E0B','#1BAF7A','#6250D6','#EB6834'];
+const MAUVE = '#9A5C6D';
+
+/* ---------- state ---------- */
+let products = [], orders = [], customOrders = [], offers = [], templates = [], stockLogs = [];
+let settings = { heroImage:'', countryCode:'249', defaultMinStock:3, lateHours:24, phone:'0904298584', email:'hello@wishly-atelier.com' };
+let unsub = [];
+let activeTab = 'dashboard';
+let ready = { orders:false, custom:false, products:false };
+
+/* ---------- tiny helpers ---------- */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const num = (n) => Number(n || 0).toLocaleString('en-US');
+const money = (n) => num(Math.round(n || 0)) + ' ج.س';
+const sum = (arr, f) => arr.reduce((s, x) => s + (Number(f(x)) || 0), 0);
+const fmtDate = (ts, o) => new Date(ts).toLocaleDateString('ar-EG-u-nu-latn', o || { day:'numeric', month:'short' });
+const fmtDT = (ts) => new Date(ts).toLocaleString('ar-EG-u-nu-latn', { day:'numeric', month:'short', hour:'numeric', minute:'2-digit' });
+const startOfDay = (ts) => { const d = new Date(ts); d.setHours(0,0,0,0); return d.getTime(); };
+function ago(ts){
+  const m = Math.floor((Date.now() - ts) / 60000);
+  if (m < 1) return 'الآن'; if (m < 60) return `منذ ${m} د`;
+  const h = Math.floor(m / 60); if (h < 24) return `منذ ${h} س`;
+  const d = Math.floor(h / 24); if (d < 30) return `منذ ${d} يوم`;
+  return fmtDate(ts, { day:'numeric', month:'short', year:'numeric' });
+}
+const code = (o) => '#' + String(o.id).slice(-6).toUpperCase();
+const catName = (k) => CATEGORY_LIST.find(c => c.key === k)?.name || (k === 'general' ? 'عام' : (k || '—'));
+const isLive = (o) => o.status !== 'ملغي';
+const normPhone = (p) => String(p || '').replace(/\D/g, '').slice(-9);
+const custKey = (o) => normPhone(o.phone) || ('n:' + (o.customer || o.name || '').trim());
+const fallbackImg = () => 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=300&q=70&auto=format';
+const productById = (id) => products.find(p => p.id === id);
+const tracked = (p) => !!p && typeof p.stock === 'number';
+const minStockOf = (p) => (typeof p.minStock === 'number' ? p.minStock : Number(settings.defaultMinStock) || 3);
+function costOf(it){ const p = productById(it.id); return p && typeof p.cost === 'number' && p.cost > 0 ? p.cost : null; }
+function pill(status){ const [cls, ic] = STATUS_UI[status] || ['p-gray','fa-circle']; return `<span class="pill ${cls}"><i class="fa-solid ${ic}"></i>${esc(status)}</span>`; }
+function normalizeImageUrl(url){
+  url = (url || '').trim(); if (!url) return url;
+  for (const re of [/drive\.google\.com\/file\/d\/([^/]+)/, /drive\.google\.com\/open\?id=([^&]+)/, /[?&]id=([a-zA-Z0-9_-]{20,})/]) {
+    const m = url.match(re); if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`;
+  }
+  return url;
+}
+function waNumber(phone){
+  let d = String(phone || '').replace(/\D/g, ''); if (!d) return '';
+  if (d.startsWith('00')) d = d.slice(2);
+  const cc = String(settings.countryCode || '249');
+  if (d.startsWith(cc) && d.length >= cc.length + 8) return d;
+  if (d.startsWith('0')) { if (d.length === 11 && d.startsWith('01')) return '20' + d.slice(1); return cc + d.slice(1); }
+  if (d.length <= 9) return cc + d;
+  return d;
+}
+const waLink = (phone, text) => { const n = waNumber(phone); return n ? `https://wa.me/${n}${text ? '?text=' + encodeURIComponent(text) : ''}` : '#'; };
+function downloadCSV(name, rows){
+  const clean = (c) => { let s = String(c ?? ''); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
+  const blob = new Blob(['﻿' + rows.map(r => r.map(clean).join(',')).join('\r\n')], { type:'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+}
+function friendlyError(err){
+  const c = err?.code || '';
+  const map = {
+    'storage/unauthorized':'مفيش صلاحية لرفع الصور — راجعي Storage Rules في Firebase Console',
+    'storage/unauthenticated':'لازم تكوني مسجلة دخول — سجّلي خروج ودخول تاني',
+    'storage/unknown':'خدمة Cloud Storage غير مفعّلة — من Firebase Console: Storage ← Get Started',
+    'storage/retry-limit-exceeded':'انتهت مهلة رفع الصورة، جربي صورة أصغر',
+    'permission-denied':'الصلاحيات مرفوضة — راجعي Firestore Rules (الملف المرفق firestore.rules)',
+    'unavailable':'تعذر الاتصال بقاعدة البيانات، تحققي من الإنترنت',
+    'failed-precondition':'العملية تحتاج فهرساً أو شرطاً غير مكتمل في Firestore',
+  };
+  return map[c] || `حدث خطأ: ${c || err?.message || 'غير معروف'}`;
+}
+
+/* ---------- toast / modal / confirm ---------- */
+function toast(msg, type){
+  const el = document.createElement('div'); el.className = 'toast pointer-events-auto' + (type === 'err' ? ' err' : '');
+  el.innerHTML = `<i class="fa-solid ${type === 'err' ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i><span>${esc(msg)}</span>`;
+  $('#toastWrap').appendChild(el);
+  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 320); }, type === 'err' ? 6500 : 3000);
+}
+let zTop = 300; const modalStack = [];
+function openModal({ title = '', body = '', size = 'md', side = false, foot = '', headExtra = '', onClose } = {}){
+  const wrap = document.createElement('div'); wrap.className = 'ov'; wrap.style.zIndex = ++zTop;
+  wrap.setAttribute('role', 'dialog'); wrap.setAttribute('aria-modal', 'true');
+  wrap.innerHTML = `<div class="ov-bg" data-close></div>
+    <div class="${side ? 'panel' : 'modal ' + size}">
+      <div class="ov-head"><p class="font-bold text-[1.02rem]" data-title>${title}</p><div class="flex items-center gap-1">${headExtra}<button class="btn-icon" data-close aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button></div></div>
+      <div class="ov-body" data-body>${body}</div>${foot ? `<div class="p-4 border-t border-[color:var(--line)] bg-white flex gap-2 flex-wrap" data-foot>${foot}</div>` : ''}
+    </div>`;
+  $('#modalRoot').appendChild(wrap);
+  const api = { el: wrap, body: $('[data-body]', wrap),
+    close(){ const i = modalStack.indexOf(api); if (i > -1) modalStack.splice(i, 1); wrap.remove(); if (onClose) onClose(); },
+    setBody(h){ $('[data-body]', wrap).innerHTML = h; }, setTitle(h){ $('[data-title]', wrap).innerHTML = h; } };
+  wrap.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) api.close(); });
+  modalStack.push(api); return api;
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalStack.length) modalStack[modalStack.length - 1].close(); });
+function confirmBox({ title = 'تأكيد', text = '', okText = 'تأكيد', danger = false } = {}){
+  return new Promise((resolve) => {
+    let done = false; const fin = (v) => { if (done) return; done = true; m.close(); resolve(v); };
+    const m = openModal({ title: esc(title), size:'sm', body: `<p class="text-sm leading-7">${esc(text)}</p>`,
+      foot: `<button class="btn ${danger ? 'btn-danger' : ''} flex-1" data-ok>${esc(okText)}</button><button class="btn btn-soft flex-1" data-no>إلغاء</button>`,
+      onClose: () => { if (!done) { done = true; resolve(false); } } });
+    $('[data-ok]', m.el).onclick = () => fin(true); $('[data-no]', m.el).onclick = () => fin(false);
+  });
+}
+function beep(){ try { const c = new (window.AudioContext || window.webkitAudioContext)(); const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.value = .06; o.connect(g); g.connect(c.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .35); o.stop(c.currentTime + .4); } catch (e) {} }
+
+/* ---------- event delegation (no inline handlers) ---------- */
+const actions = {};
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  if (t.tagName === 'A' && t.getAttribute('href') && t.getAttribute('href') !== '#') { /* real link */ }
+  const fn = actions[t.dataset.act]; if (fn) { if (t.dataset.stop !== undefined) e.stopPropagation(); fn(t.dataset, t, e); }
+});
+document.addEventListener('change', (e) => { const t = e.target.closest('[data-change]'); if (t && actions[t.dataset.change]) actions[t.dataset.change](t.dataset, t, e); });
+document.addEventListener('input', (e) => { const t = e.target.closest('[data-input]'); if (t && actions[t.dataset.input]) actions[t.dataset.input](t.dataset, t, e); });
+
+/* ---------- image upload ---------- */
+function resizeToBlob(file, maxDim = 1100, quality = .78){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h && w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } else if (h >= w && h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        cv.toBlob((b) => resolve(b), 'image/jpeg', quality);
+      };
+      img.onerror = reject; img.src = e.target.result;
+    };
+    reader.onerror = reject; reader.readAsDataURL(file);
+  });
+}
+async function uploadImage(file, folder){
+  const blob = await resizeToBlob(file);
+  const r = ref(storage, `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`);
+  await uploadBytes(r, blob, { contentType:'image/jpeg' });
+  return await getDownloadURL(r);
+}
+
+/* ---------- auth ---------- */
+const authErr = (c) => ({
+  'auth/invalid-credential':'البريد الإلكتروني أو كلمة المرور غير صحيحة', 'auth/user-not-found':'لا يوجد حساب بهذا البريد',
+  'auth/wrong-password':'كلمة المرور غير صحيحة', 'auth/invalid-email':'صيغة البريد الإلكتروني غير صحيحة',
+  'auth/too-many-requests':'محاولات كثيرة، حاولي بعد قليل' }[c] || 'حدث خطأ أثناء تسجيل الدخول، حاولي مرة أخرى');
+$('#loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('#loginSubmitBtn'), er = $('#loginError'); er.classList.add('hidden'); btn.disabled = true; btn.textContent = 'جارِ الدخول...';
+  try { await signInWithEmailAndPassword(auth, $('#loginEmail').value.trim(), $('#loginPassword').value); }
+  catch (err) { er.textContent = authErr(err.code); er.classList.remove('hidden'); }
+  btn.disabled = false; btn.textContent = 'دخول';
+});
+$('#forgotBtn').addEventListener('click', async () => {
+  const email = $('#loginEmail').value.trim(); const er = $('#loginError');
+  if (!email) { er.textContent = 'اكتبي بريدك الإلكتروني أولاً ثم اضغطي "نسيت كلمة المرور"'; er.classList.remove('hidden'); return; }
+  try { await sendPasswordResetEmail(auth, email); er.classList.add('hidden'); toast('أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك'); }
+  catch (err) { er.textContent = authErr(err.code); er.classList.remove('hidden'); }
+});
+actions.logout = () => signOut(auth);
+
+/* =========================================================================
+   Engine: analytics, smart insights, stock operations
+========================================================================= */
+function bounds(days){
+  const now = Date.now();
+  if (days >= 9999) {
+    const first = orders.length ? Math.min(...orders.map(o => o.createdAt || now)) : now;
+    return { from: startOfDay(first), prevFrom: null, span: Math.max(1, Math.ceil((now - startOfDay(first)) / DAY) + 1) };
+  }
+  const from = startOfDay(now) - (days - 1) * DAY;
+  return { from, prevFrom: from - days * DAY, span: days };
+}
+function metrics(list){
+  const live = list.filter(isLive); const sales = sum(live, o => o.total);
+  let profit = 0, covered = 0, total = 0;
+  live.forEach(o => (o.items || []).forEach(it => { const rev = (it.price || 0) * (it.qty || 0); total += rev; const c = costOf(it); if (c != null) { profit += rev - c * it.qty; covered += rev; } }));
+  const delivered = list.filter(o => o.status === 'تم التسليم').length;
+  return { sales, orders: list.length, live: live.length, avg: live.length ? sales / live.length : 0, profit, cover: total ? covered / total : 0,
+    customers: new Set(live.map(custKey)).size, fulfil: list.length ? Math.round(delivered / list.length * 100) : 0 };
+}
+function firstOrderMap(){ const m = new Map(); orders.filter(isLive).forEach(o => { const k = custKey(o), t = o.createdAt || 0; if (!m.has(k) || t < m.get(k)) m.set(k, t); }); return m; }
+function soldUnits(days){
+  const from = Date.now() - days * DAY, m = {};
+  orders.filter(o => isLive(o) && o.createdAt >= from).forEach(o => (o.items || []).forEach(it => { m[it.id] = (m[it.id] || 0) + (Number(it.qty) || 0); }));
+  return m;
+}
+function stockState(p, sold30){
+  if (!tracked(p)) return { key:'none', label:'غير متتبع', cls:'p-gray', icon:'fa-minus', days:null };
+  const vel = ((sold30 || {})[p.id] || 0) / 30; const days = vel > 0 ? p.stock / vel : null;
+  if (p.stock <= 0) return { key:'out', label:'نافد', cls:'p-crit', icon:'fa-ban', days:0, vel };
+  if (p.stock <= minStockOf(p)) return { key:'low', label:'منخفض', cls:'p-warn', icon:'fa-triangle-exclamation', days, vel };
+  if (days != null && days <= 7) return { key:'soon', label:'قارب على النفاد', cls:'p-warn', icon:'fa-hourglass-end', days, vel };
+  return { key:'ok', label:'متوفر', cls:'p-good', icon:'fa-circle-check', days, vel };
+}
+function customersAgg(){
+  const map = new Map();
+  orders.filter(isLive).forEach(o => {
+    const k = custKey(o); let c = map.get(k);
+    if (!c) { c = { key:k, name:o.customer || '—', phone:o.phone || '', orders:[], total:0, first:o.createdAt, last:o.createdAt }; map.set(k, c); }
+    c.orders.push(o); c.total += o.total || 0; if (o.createdAt > c.last) { c.last = o.createdAt; c.name = o.customer || c.name; c.phone = o.phone || c.phone; } if (o.createdAt < c.first) c.first = o.createdAt;
+  });
+  const list = [...map.values()];
+  const sorted = list.map(c => c.total).sort((a, b) => b - a);
+  const vipLine = list.length >= 10 ? sorted[Math.floor(list.length * .1)] : Infinity;
+  list.forEach(c => {
+    c.count = c.orders.length; const d = (Date.now() - c.last) / DAY;
+    if (c.count >= 3 || c.total >= vipLine) c.seg = ['VIP','p-mauve','fa-crown'];
+    else if (d <= 30 && c.count === 1) c.seg = ['جديدة','p-blue','fa-seedling'];
+    else if (d <= 45) c.seg = ['نشطة','p-good','fa-heart'];
+    else if (d <= 120) c.seg = ['تحتاج متابعة','p-warn','fa-bell'];
+    else c.seg = ['خاملة','p-gray','fa-moon'];
+  });
+  return list.sort((a, b) => b.total - a.total);
+}
+function segPill(c){ return `<span class="pill ${c.seg[1]}"><i class="fa-solid ${c.seg[2]}"></i>${c.seg[0]}</span>`; }
+
+/* ---------- smart insights ---------- */
+function computeInsights(){
+  const out = []; const now = Date.now(); const sold30 = soldUnits(30);
+  const late = orders.filter(o => o.status === 'قيد الانتظار' && now - o.createdAt > (Number(settings.lateHours) || 24) * 3600000);
+  if (late.length) out.push({ sev:'crit', icon:'fa-clock', title:`${late.length} ${late.length === 1 ? 'طلب' : 'طلبات'} تنتظر الرد`, text:`مرّ أكثر من ${settings.lateHours || 24} ساعة بدون متابعة — تواصلي مع العميلات لتأكيد الطلب.`, go:{ tab:'orders', status:'قيد الانتظار' } });
+  const tr = products.filter(tracked);
+  const out0 = tr.filter(p => p.stock <= 0);
+  if (out0.length) out.push({ sev:'crit', icon:'fa-ban', title:`${out0.length} ${out0.length === 1 ? 'منتج نفد' : 'منتجات نفدت'} من المخزون`, text: out0.slice(0, 3).map(p => p.name).join('، ') + (out0.length > 3 ? ' وغيرها' : '') + ' — لن يتمكن العملاء من طلبها.', go:{ tab:'inventory', filter:'out' } });
+  const low = tr.filter(p => p.stock > 0 && p.stock <= minStockOf(p));
+  if (low.length) out.push({ sev:'warn', icon:'fa-triangle-exclamation', title:`${low.length} ${low.length === 1 ? 'منتج' : 'منتجات'} وصلت للحد الأدنى`, text: low.slice(0, 3).map(p => `${p.name} (${p.stock})`).join('، '), go:{ tab:'inventory', filter:'low' } });
+  const soon = tr.filter(p => { const s = stockState(p, sold30); return s.key === 'soon'; });
+  if (soon.length) { const p = soon.sort((a, b) => stockState(a, sold30).days - stockState(b, sold30).days)[0]; const d = Math.max(1, Math.round(stockState(p, sold30).days));
+    out.push({ sev:'warn', icon:'fa-hourglass-end', title:`"${p.name}" هيخلص خلال ~${d} ${d === 1 ? 'يوم' : 'أيام'}`, text:'حسب معدل البيع آخر 30 يوم. جهّزي توريد جديد قبل ما ينفد.', go:{ tab:'inventory', filter:'soon' } }); }
+  const ev = customOrders.filter(c => c.status !== 'ملغي' && c.eventDate).map(c => ({ c, d: Math.ceil((new Date(c.eventDate + 'T00:00:00').getTime() - startOfDay(now)) / DAY) })).filter(x => x.d >= 0 && x.d <= 14).sort((a, b) => a.d - b.d);
+  if (ev.length) out.push({ sev: ev[0].d <= 5 ? 'crit' : 'warn', icon:'fa-calendar-day', title:`مناسبة ${esc(ev[0].c.name || '')} ${ev[0].d === 0 ? 'اليوم' : 'بعد ' + ev[0].d + ' يوم'}`, text:`${ev.length} ${ev.length === 1 ? 'طلب خاص عنده' : 'طلبات خاصة عندها'} موعد خلال أسبوعين.`, go:{ tab:'custom' } });
+  const unseen = orders.filter(o => o.seen === false).length;
+  if (unseen) out.push({ sev:'info', icon:'fa-bell', title:`${unseen} ${unseen === 1 ? 'طلب جديد' : 'طلبات جديدة'} لم تتم مراجعتها`, text:'افتحي قائمة الطلبات لمراجعتها وتأكيدها.', go:{ tab:'orders' } });
+  const B = bounds(30); const cur = orders.filter(o => o.createdAt >= B.from), prev = orders.filter(o => o.createdAt >= B.prevFrom && o.createdAt < B.from);
+  const mc = metrics(cur), mp = metrics(prev);
+  if (mp.sales > 0 && mc.live >= 3) { const d = (mc.sales - mp.sales) / mp.sales * 100;
+    if (d >= 10) out.push({ sev:'good', icon:'fa-arrow-trend-up', title:`المبيعات زادت ${Math.round(d)}%`, text:`آخر 30 يوم مقابل الـ30 يوم السابقة (${money(mc.sales)} مقابل ${money(mp.sales)}).`, go:{ tab:'dashboard' } });
+    else if (d <= -10) out.push({ sev:'warn', icon:'fa-arrow-trend-down', title:`المبيعات انخفضت ${Math.abs(Math.round(d))}%`, text:'فكري في عرض قصير أو رسالة للعميلات الخاملات لتنشيط الطلبات.', go:{ tab:'customers' } }); }
+  const units = {}; cur.filter(isLive).forEach(o => (o.items || []).forEach(it => { units[it.name] = (units[it.name] || 0) + it.qty; }));
+  const top = Object.entries(units).sort((a, b) => b[1] - a[1])[0];
+  if (top) out.push({ sev:'info', icon:'fa-crown', title:`الأكثر مبيعاً: ${esc(top[0])}`, text:`${num(top[1])} قطعة آخر 30 يوم — تأكدي من توفر مخزونه وفكري في تمييزه في المتجر.`, go:{ tab:'dashboard' } });
+  const blocks = [0, 0, 0, 0], days = [0, 0, 0, 0, 0, 0, 0];
+  cur.forEach(o => { const d = new Date(o.createdAt); days[d.getDay()]++; const h = d.getHours(); blocks[h >= 5 && h < 12 ? 0 : h >= 12 && h < 17 ? 1 : h >= 17 && h < 22 ? 2 : 3]++; });
+  if (cur.length >= 6) { const di = days.indexOf(Math.max(...days)), bi = blocks.indexOf(Math.max(...blocks)); out.push({ sev:'info', icon:'fa-clock-rotate-left', title:`ذروة الطلبات: ${WEEKDAYS[di]} ${['صباحاً','ظهراً','مساءً','ليلاً'][bi]}`, text:'أنسب وقت لنشر عروضك وأن يكون الفريق متاحاً للرد.', go:{ tab:'dashboard' } }); }
+  const cs = customersAgg(); const rep = cs.filter(c => c.count >= 2).length;
+  if (cs.length >= 5) out.push({ sev: rep / cs.length >= .25 ? 'good' : 'info', icon:'fa-repeat', title:`${Math.round(rep / cs.length * 100)}% من العميلات طلبن أكثر من مرة`, text: rep / cs.length >= .25 ? 'ولاء ممتاز — استمري في الاهتمام بالتفاصيل.' : 'جربي رسالة شكر مع خصم للطلب القادم لزيادة نسبة التكرار.', go:{ tab:'customers' } });
+  const coldVip = cs.filter(c => c.seg[0] === 'VIP' && (now - c.last) / DAY > 60);
+  if (coldVip.length) out.push({ sev:'info', icon:'fa-crown', title:`${coldVip.length} ${coldVip.length === 1 ? 'عميلة مميزة' : 'عميلات مميزات'} غائبات منذ شهرين`, text:'ابعتي لهن رسالة واتساب شخصية بجديدك.', go:{ tab:'customers', seg:'VIP' } });
+  const dead = tr.filter(p => p.stock > 0 && !(sold30[p.id] > 0) && (now - (p.createdAt || now)) > 30 * DAY);
+  if (dead.length) out.push({ sev:'info', icon:'fa-box-archive', title:`${dead.length} ${dead.length === 1 ? 'منتج' : 'منتجات'} راكدة`, text:'لم تُبَع آخر 30 يوم — فكري في خصم أو تغيير مكانها في المتجر.', go:{ tab:'inventory' } });
+  const noCost = products.filter(p => !(p.cost > 0));
+  if (products.length && noCost.length) out.push({ sev:'info', icon:'fa-coins', title:`${noCost.length} منتج بدون سعر تكلفة`, text:'أضيفي التكلفة ليظهر صافي الربح الحقيقي في التقارير.', go:{ tab:'products' } });
+  const rank = { crit:0, warn:1, good:2, info:3 };
+  return out.sort((a, b) => rank[a.sev] - rank[b.sev]);
+}
+let insightsCache = [];
+function insightRow(it, i, cls = ''){
+  const ic = { crit:'ic-crit', warn:'ic-warn', good:'ic-good', info:'ic-info' }[it.sev];
+  return `<button class="insight ${cls}" data-act="goInsight" data-i="${i}"><span class="ic ${ic}"><i class="fa-solid ${it.icon}"></i></span><span class="flex-1 min-w-0"><span class="block font-bold text-[.84rem] leading-6">${it.title}</span><span class="block text-xs muted leading-5 mt-0.5">${it.text}</span></span></button>`;
+}
+
+/* ---------- stock operations ---------- */
+function stockOps(items, sign){
+  const ops = [], short = [];
+  (items || []).forEach(it => {
+    const p = productById(it.id); if (!tracked(p)) return; const qty = Number(it.qty) || 0; if (!qty) return;
+    const delta = sign * qty, before = p.stock, after = before + delta;
+    ops.push({ pid:p.id, name:p.name, delta, before, after });
+    if (sign < 0 && after < 0) short.push(`${p.name} (متاح ${before}، مطلوب ${qty})`);
+  });
+  return { ops, short };
+}
+function addOps(batch, ops, reason, orderId){
+  ops.forEach(op => {
+    batch.update(doc(db, 'products', op.pid), { stock: increment(op.delta) });
+    batch.set(doc(collection(db, 'stockLogs')), { productId:op.pid, name:op.name, delta:op.delta, before:op.before, after:op.after, reason, orderId:orderId || '', at:Date.now() });
+  });
+}
+async function adjustStock(pid, { delta, set, reason = 'تعديل يدوي', cost } = {}){
+  const p = productById(pid); if (!p) return;
+  const before = tracked(p) ? p.stock : 0; const after = set != null ? Number(set) : before + Number(delta || 0);
+  if (!Number.isFinite(after) || after < 0) { toast('الكمية لا يمكن أن تكون سالبة', 'err'); return false; }
+  try {
+    const b = writeBatch(db); const upd = { stock: after }; if (cost != null && cost > 0) upd.cost = cost;
+    b.update(doc(db, 'products', pid), upd);
+    b.set(doc(collection(db, 'stockLogs')), { productId:pid, name:p.name, delta: after - before, before, after, reason, orderId:'', at:Date.now() });
+    await b.commit(); return true;
+  } catch (err) { toast('تعذر تعديل المخزون — ' + friendlyError(err), 'err'); console.error(err); return false; }
+}
+async function setOrderStatus(id, newStatus){
+  const o = orders.find(x => x.id === id); if (!o || o.status === newStatus) return false;
+  const wantDeduct = !['قيد الانتظار', 'ملغي'].includes(newStatus);
+  const b = writeBatch(db); const upd = { status:newStatus, seen:true, statusHistory: arrayUnion({ status:newStatus, at:Date.now() }) };
+  if (wantDeduct && !o.stockDeducted) {
+    const r = stockOps(o.items, -1);
+    if (r.short.length) { const ok = await confirmBox({ title:'المخزون غير كافٍ', text:'بعض المنتجات لا تكفي: ' + r.short.join(' — ') + '. هل تريدين المتابعة (سيصبح المخزون سالباً)؟', okText:'متابعة رغم ذلك' }); if (!ok) return false; }
+    addOps(b, r.ops, `طلب ${code(o)}`, o.id); upd.stockDeducted = true;
+  } else if (!wantDeduct && o.stockDeducted) {
+    const r = stockOps(o.items, +1); addOps(b, r.ops, `إرجاع — ${newStatus === 'ملغي' ? 'إلغاء' : 'إعادة'} الطلب ${code(o)}`, o.id); upd.stockDeducted = false;
+  }
+  b.update(doc(db, 'orders', id), upd);
+  try { await b.commit(); toast(`${code(o)} ← ${newStatus}`); return true; }
+  catch (err) { toast('تعذر تحديث الحالة — ' + friendlyError(err), 'err'); console.error(err); return false; }
+}
+
+/* ---------- live listeners ---------- */
+let refreshQueued = false;
+function scheduleRefresh(){ if (refreshQueued) return; refreshQueued = true; requestAnimationFrame(() => { refreshQueued = false; refreshAll(); }); }
+function startListeners(){
+  const onErr = (what) => (err) => toast(`تعذر تحميل ${what} — ` + friendlyError(err), 'err');
+  unsub.push(onSnapshot(collection(db, 'products'), (s) => { products = s.docs.map(d => ({ id:d.id, ...d.data() })); ready.products = true; scheduleRefresh(); }, onErr('المنتجات')));
+  unsub.push(onSnapshot(collection(db, 'offers'), (s) => { offers = s.docs.map(d => ({ id:d.id, ...d.data() })); scheduleRefresh(); }, onErr('العروض')));
+  unsub.push(onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc')), (s) => {
+    if (ready.orders) s.docChanges().forEach(ch => { if (ch.type === 'added') notifyNew('order', ch.doc.data()); });
+    orders = s.docs.map(d => ({ id:d.id, ...d.data() })); ready.orders = true; scheduleRefresh();
+  }, onErr('الطلبات')));
+  unsub.push(onSnapshot(query(collection(db, 'customOrders'), orderBy('createdAt', 'desc')), (s) => {
+    if (ready.custom) s.docChanges().forEach(ch => { if (ch.type === 'added') notifyNew('custom', ch.doc.data()); });
+    customOrders = s.docs.map(d => ({ id:d.id, ...d.data() })); ready.custom = true; scheduleRefresh();
+  }, onErr('الطلبات الخاصة')));
+  unsub.push(onSnapshot(collection(db, 'messageTemplates'), (s) => { templates = s.docs.map(d => ({ id:d.id, ...d.data() })); scheduleRefresh(); }, onErr('الرسائل')));
+  unsub.push(onSnapshot(query(collection(db, 'stockLogs'), orderBy('at', 'desc'), limit(120)), (s) => { stockLogs = s.docs.map(d => ({ id:d.id, ...d.data() })); scheduleRefresh(); }, () => {}));
+  unsub.push(onSnapshot(doc(db, 'settings', 'store'), (s) => { if (s.exists()) settings = { ...settings, ...s.data() }; scheduleRefresh(); }));
+}
+function notifyNew(kind, d){
+  const label = kind === 'order' ? 'طلب جديد' : 'طلب خاص جديد';
+  const who = kind === 'order' ? d.customer : d.name;
+  toast(`${label} من ${who || 'عميلة'}${kind === 'order' ? ' — ' + money(d.total) : ''}`); beep();
+  if ('Notification' in window && Notification.permission === 'granted') { try { new Notification(label + ' — وشلي', { body:`${who || ''}`, tag:kind + Date.now() }); } catch (e) {} }
+}
+
+/* =========================================================================
+   Shell: tabs / router / bell / command palette
+========================================================================= */
+const views = {};
+const TABS = [
+  { key:'dashboard', label:'لوحة التحكم',    icon:'fa-chart-line' },
+  { key:'orders',    label:'الطلبات',         icon:'fa-bag-shopping' },
+  { key:'custom',    label:'الطلبات الخاصة',  icon:'fa-palette' },
+  { key:'products',  label:'المنتجات',        icon:'fa-gift' },
+  { key:'inventory', label:'المخزون',         icon:'fa-boxes-stacked' },
+  { key:'customers', label:'العملاء',         icon:'fa-users' },
+  { key:'offers',    label:'العروض',          icon:'fa-tags' },
+  { key:'messages',  label:'الرسائل',         icon:'fa-envelope-open-text' },
+  { key:'settings',  label:'الإعدادات',       icon:'fa-gear' },
+];
+const navParams = {};
+const takeParams = (tab) => { const p = navParams[tab] || {}; delete navParams[tab]; return p; };
+function navTo(tab, params){
+  if (params) navParams[tab] = params;
+  if (location.hash === '#' + tab) mountTab(tab); else location.hash = tab;
+}
+function mountTab(tab){
+  if (!views[tab]) tab = 'dashboard';
+  activeTab = tab;
+  $('#pageTitle').textContent = TABS.find(t => t.key === tab).label;
+  $('#pageSub').textContent = new Date().toLocaleDateString('ar-EG-u-nu-latn', { weekday:'long', day:'numeric', month:'long' });
+  $('#adminContent').innerHTML = '';
+  renderNav(); views[tab].mount(); window.scrollTo(0, 0); closeSidebar();
+}
+window.addEventListener('hashchange', () => { const t = location.hash.slice(1); if (views[t] && t !== activeTab && auth.currentUser) mountTab(t); });
+function closeSidebar(){ $('#sidebar').classList.add('translate-x-full'); $('#sideBg').classList.add('hidden'); }
+$('#menuBtn').addEventListener('click', () => { $('#sidebar').classList.remove('translate-x-full'); $('#sideBg').classList.remove('hidden'); });
+$('#sideBg').addEventListener('click', closeSidebar);
+
+function renderNav(){
+  const unseenO = orders.filter(o => o.seen === false).length, unseenC = customOrders.filter(c => c.seen === false).length;
+  const inv = products.filter(tracked).filter(p => p.stock <= minStockOf(p)).length;
+  const badge = { orders:unseenO, custom:unseenC, inventory:inv };
+  $('#adminNav').innerHTML = TABS.map(t => `<button class="nav-item ${activeTab === t.key ? 'active' : ''}" data-act="goTab" data-tab="${t.key}"><i class="fa-solid ${t.icon}"></i> ${t.label}${badge[t.key] ? `<span class="nav-badge">${badge[t.key]}</span>` : ''}</button>`).join('');
+}
+actions.goTab = (d) => navTo(d.tab);
+function renderBell(){
+  const n = insightsCache.filter(i => i.sev === 'crit' || i.sev === 'warn').length;
+  $$('.bellCount').forEach(el => { el.textContent = n; el.classList.toggle('hidden', n === 0); });
+}
+function refreshAll(){
+  if (!auth.currentUser) return;
+  insightsCache = computeInsights(); renderNav(); renderBell();
+  if (views[activeTab] && views[activeTab].update) views[activeTab].update();
+}
+actions.openBell = () => {
+  const body = insightsCache.length ? `<div class="space-y-2">${insightsCache.map((it, i) => insightRow(it, i)).join('')}</div>`
+    : `<div class="text-center py-10 muted"><i class="fa-solid fa-sparkles text-3xl text-mauve mb-3"></i><p class="font-bold">كل شيء تمام</p><p class="text-xs mt-1">لا توجد تنبيهات حالياً.</p></div>`;
+  openModal({ title:'<i class="fa-solid fa-wand-magic-sparkles text-mauve ml-2"></i> التنبيهات الذكية', body, size:'md' });
+};
+actions.goInsight = (d) => {
+  const it = insightsCache[Number(d.i)]; if (!it || !it.go) return;
+  while (modalStack.length) modalStack[modalStack.length - 1].close();
+  navTo(it.go.tab, it.go);
+};
+
+/* ---------- command palette (Ctrl/⌘ + K) ---------- */
+function cmdItems(q){
+  const s = q.trim().toLowerCase(), items = [];
+  const has = (...a) => a.some(x => String(x || '').toLowerCase().includes(s));
+  TABS.forEach(t => { if (!s || has(t.label)) items.push({ icon:t.icon, title:t.label, sub:'انتقال', run:() => navTo(t.key) }); });
+  const quick = [
+    { icon:'fa-plus', title:'طلب يدوي جديد', sub:'إجراء سريع', run:() => actions.newOrder() },
+    { icon:'fa-gift', title:'منتج جديد', sub:'إجراء سريع', run:() => { navTo('products', { newProduct:true }); } },
+    { icon:'fa-file-invoice', title:'فاتورة جديدة', sub:'إجراء سريع', run:() => actions.newInvoice() },
+    { icon:'fa-download', title:'تصدير الطلبات CSV', sub:'إجراء سريع', run:() => actions.exportOrders() },
+  ];
+  quick.forEach(a => { if (!s || has(a.title)) items.push(a); });
+  if (s.length >= 1) {
+    orders.filter(o => has(code(o), o.customer, o.phone)).slice(0, 6).forEach(o => items.push({ icon:'fa-bag-shopping', title:`${code(o)} — ${o.customer || ''}`, sub:`${money(o.total)} • ${o.status}`, run:() => openOrderPanel(o.id) }));
+    products.filter(p => has(p.name)).slice(0, 5).forEach(p => items.push({ icon:'fa-gift', title:p.name, sub:`${money(p.price)}${tracked(p) ? ' • مخزون ' + p.stock : ''}`, run:() => navTo('products', { edit:p.id }) }));
+    customersAgg().filter(c => has(c.name, c.phone)).slice(0, 5).forEach(c => items.push({ icon:'fa-user', title:c.name, sub:`${c.count} طلب • ${money(c.total)}`, run:() => openCustomerModal(c.key) }));
+  }
+  return items.slice(0, 14);
+}
+actions.openCmd = () => {
+  if (!auth.currentUser) return;
+  const m = openModal({ title:'<span class="block w-[min(72vw,440px)]"><input id="cmdInput" class="input" placeholder="ابحثي عن طلب، عميلة، منتج أو أمر..." autocomplete="off"></span>', body:'<div id="cmdList" class="space-y-1"></div>', size:'md' });
+  let idx = 0, items = [];
+  const draw = () => {
+    items = cmdItems($('#cmdInput', m.el).value); if (idx >= items.length) idx = 0;
+    $('#cmdList', m.el).innerHTML = items.map((it, i) => `<button class="cmd-item ${i === idx ? 'on' : ''}" data-i="${i}"><span class="ci"><i class="fa-solid ${it.icon}"></i></span><span class="flex-1 min-w-0"><span class="block font-bold truncate">${esc(it.title)}</span><span class="block text-[11px] muted truncate">${esc(it.sub)}</span></span></button>`).join('') || '<p class="text-center muted py-8 text-sm">لا توجد نتائج مطابقة</p>';
+  };
+  const run = (i) => { const it = items[i]; if (!it) return; m.close(); it.run(); };
+  const inp = $('#cmdInput', m.el); inp.focus(); draw();
+  inp.addEventListener('input', () => { idx = 0; draw(); });
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { idx = (idx + 1) % Math.max(1, items.length); draw(); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { idx = (idx - 1 + items.length) % Math.max(1, items.length); draw(); e.preventDefault(); }
+    else if (e.key === 'Enter') { run(idx); }
+  });
+  $('#cmdList', m.el).addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) run(Number(b.dataset.i)); });
+};
+document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if (!$('#cmdInput')) actions.openCmd(); } });
+
+/* ---------- auth state ---------- */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    $('#loginScreen').classList.add('hidden'); $('#adminApp').classList.remove('hidden');
+    $('#loggedInAs').textContent = user.email;
+    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+    startListeners();
+    const t = location.hash.slice(1); mountTab(views[t] ? t : 'dashboard');
+  } else {
+    $('#adminApp').classList.add('hidden'); $('#loginScreen').classList.remove('hidden');
+    unsub.forEach(u => u()); unsub = []; ready = { orders:false, custom:false, products:false };
+    products = []; orders = []; customOrders = []; offers = []; templates = []; stockLogs = [];
+    while (modalStack.length) modalStack[modalStack.length - 1].close();
+  }
+});
+
+/* =========================================================================
+   DASHBOARD — analytics
+========================================================================= */
+let dashRange = 30, trendMetric = 'sales', trendTable = false, charts = {};
+Chart.defaults.font.family = 'Cairo'; Chart.defaults.color = '#6B5459';
+
+const fmtShort = (t) => new Date(t).toLocaleDateString('en-GB', { day:'numeric', month:'numeric' });
+function delta(cur, prev, invert){
+  if (prev == null || prev === 0) return '';
+  const p = (cur - prev) / prev * 100; const good = invert ? p < 0 : p > 0;
+  if (Math.abs(p) < .5) return `<span class="delta flat"><i class="fa-solid fa-minus"></i> 0%</span>`;
+  return `<span class="delta ${good ? 'up' : 'down'}"><i class="fa-solid ${p > 0 ? 'fa-arrow-up' : 'fa-arrow-down'}"></i> ${Math.abs(Math.round(p))}%</span>`;
+}
+function spark(vals, color){
+  if (vals.length < 2 || Math.max(...vals) === 0) return '';
+  const w = 120, h = 44, max = Math.max(...vals), step = w / (vals.length - 1);
+  const pts = vals.map((v, i) => `${(i * step).toFixed(1)},${(h - 4 - (v / max) * (h - 10)).toFixed(1)}`);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="M0,${h} L${pts.join(' L')} L${w},${h} Z" fill="${color}" opacity=".13"/><polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+function forecast(vals, n){
+  const m = vals.length, xs = vals.map((_, i) => i), sx = sum(xs, x => x), sy = sum(vals, v => v), sxy = sum(xs, x => x * vals[x]), sxx = sum(xs, x => x * x);
+  const den = m * sxx - sx * sx, slope = den ? (m * sxy - sx * sy) / den : 0, ic = (sy - slope * sx) / m;
+  return Array.from({ length:n }, (_, k) => Math.max(0, Math.round(ic + slope * (m + k))));
+}
+function barList(rows, { fmt = money, color = MAUVE } = {}){
+  const max = Math.max(1, ...rows.map(r => r.v));
+  return rows.length ? rows.map(r => `<div class="bar-row" title="${esc(r.label)}: ${fmt(r.v)}"><span class="text-[.82rem] font-semibold truncate">${r.html || esc(r.label)}</span><span class="text-xs font-bold" style="color:var(--mauveD)">${fmt(r.v)}${r.sub ? `<span class="muted font-medium mr-1">${r.sub}</span>` : ''}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(2, r.v / max * 100)}%;background:${color}"></div></div></div>`).join('')
+    : '<p class="text-xs muted text-center py-6">لا توجد بيانات في هذه الفترة</p>';
+}
+const skeleton = () => `<div class="grid gap-4"><div class="skel h-52"></div><div class="grid grid-cols-2 lg:grid-cols-6 gap-4">${'<div class="skel h-28"></div>'.repeat(6)}</div><div class="skel h-80"></div></div>`;
+
+views.dashboard = { mount(){ const p = takeParams('dashboard'); if (p.range) dashRange = p.range; renderDashboard(); }, update(){ renderDashboard(); } };
+actions.dashRange = (d) => { dashRange = Number(d.v); renderDashboard(); };
+actions.trendMetric = (d) => { trendMetric = d.v; renderDashboard(); };
+actions.trendTable = () => { trendTable = !trendTable; renderDashboard(); };
+actions.exportDash = () => {
+  const B = bounds(dashRange); const n = Math.min(B.span, dashRange >= 9999 ? 90 : B.span); const start = startOfDay(Date.now()) - (n - 1) * DAY;
+  const rows = [['التاريخ', 'عدد الطلبات', 'المبيعات (ج.س)']];
+  for (let i = 0; i < n; i++) { const t = start + i * DAY; const day = orders.filter(o => startOfDay(o.createdAt) === t); rows.push([new Date(t).toISOString().slice(0, 10), day.length, sum(day.filter(isLive), o => o.total)]); }
+  downloadCSV('wishly-daily-sales.csv', rows);
+};
+
+function renderDashboard(){
+  if (activeTab !== 'dashboard') return;
+  const root = $('#adminContent');
+  if (!ready.orders || !ready.products) { root.innerHTML = skeleton(); return; }
+  Object.values(charts).forEach(c => c && c.destroy()); charts = {};
+  const now = Date.now(), B = bounds(dashRange);
+  const cur = orders.filter(o => o.createdAt >= B.from), prev = B.prevFrom ? orders.filter(o => o.createdAt >= B.prevFrom && o.createdAt < B.from) : null;
+  const M = metrics(cur), P = prev ? metrics(prev) : null;
+  const first = firstOrderMap();
+  const newOf = (list, from) => new Set(list.filter(isLive).map(custKey).filter(k => first.get(k) >= from)).size;
+  const newC = newOf(cur, B.from), newP = prev ? newOf(prev, B.prevFrom) : null;
+
+  /* daily buckets */
+  const nDays = Math.min(B.span, dashRange >= 9999 ? 90 : B.span), startDay = startOfDay(now) - (nDays - 1) * DAY;
+  const buckets = Array.from({ length:nDays }, (_, i) => ({ t:startDay + i * DAY, sales:0, count:0 }));
+  orders.forEach(o => { const i = Math.floor((startOfDay(o.createdAt) - startDay) / DAY); if (i >= 0 && i < nDays) { buckets[i].count++; if (isLive(o)) buckets[i].sales += o.total || 0; } });
+  const salesSeries = buckets.map(b => b.sales), countSeries = buckets.map(b => b.count);
+  const canForecast = nDays >= 7 && M.live >= 4;
+  const fcVals = canForecast ? forecast(salesSeries.slice(-14), 7) : [];
+  const fcTotal = sum(fcVals, v => v);
+
+  /* today vs yesterday */
+  const t0 = startOfDay(now), today = orders.filter(o => o.createdAt >= t0), yest = orders.filter(o => o.createdAt >= t0 - DAY && o.createdAt < t0);
+  const salesToday = sum(today.filter(isLive), o => o.total), salesYest = sum(yest.filter(isLive), o => o.total);
+  const pending = orders.filter(o => o.status === 'قيد الانتظار').length;
+  const hr = new Date().getHours(), greet = hr < 12 ? 'صباح الخير' : hr < 18 ? 'نهارك سعيد' : 'مساء الخير';
+  const top3 = insightsCache.slice(0, 3);
+
+  /* categories / products / channels */
+  const catRev = {}, prodAgg = {}, chan = {};
+  cur.filter(isLive).forEach(o => {
+    const src = o.source || 'web'; chan[src] = (chan[src] || 0) + (o.total || 0);
+    (o.items || []).forEach(it => { const rev = (it.price || 0) * (it.qty || 0); catRev[it.cat] = (catRev[it.cat] || 0) + rev;
+      const k = it.id || it.name; const a = prodAgg[k] || (prodAgg[k] = { id:it.id, name:it.name, units:0, rev:0, profit:0, hasCost:false }); a.units += it.qty || 0; a.rev += rev; const c = costOf(it); if (c != null) { a.profit += rev - c * it.qty; a.hasCost = true; } });
+  });
+  const catRows = Object.entries(catRev).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => ({ label:catName(k), v, sub:`${Math.round(v / Math.max(1, sum(Object.values(catRev), x => x)) * 100)}%` }));
+  const chanRows = Object.entries(chan).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label:SOURCES[k] || k, v }));
+  const topProds = Object.values(prodAgg).sort((a, b) => b.units - a.units).slice(0, 5);
+
+  /* status funnel */
+  const stCount = ORDER_STATUSES.map(s => ({ s, n: cur.filter(o => o.status === s).length })); const stMax = Math.max(1, ...stCount.map(x => x.n));
+
+  /* heatmap */
+  const blocks = ['صباحاً', 'ظهراً', 'مساءً', 'ليلاً'], grid = Array.from({ length:7 }, () => [0, 0, 0, 0]);
+  cur.forEach(o => { const d = new Date(o.createdAt), h = d.getHours(); grid[d.getDay()][h >= 5 && h < 12 ? 0 : h >= 12 && h < 17 ? 1 : h >= 17 && h < 22 ? 2 : 3]++; });
+  const hMax = Math.max(1, ...grid.flat());
+  const heat = `<div class="heat"><div class="hd"></div>${blocks.map(b => `<div class="hd">${b}</div>`).join('')}${WEEK_ORDER.map(d => `<div class="hr">${WEEKDAYS[d]}</div>${grid[d].map((v, bi) => { const a = v ? .12 + .8 * v / hMax : 0; return `<div title="${WEEKDAYS[d]} ${blocks[bi]}: ${v} طلب" style="background:${v ? `rgba(154,92,109,${a.toFixed(2)})` : '#FAF3F1'};color:${a > .5 ? '#fff' : '#3B2A2F'}">${v || ''}</div>`; }).join('')}`).join('')}</div>`;
+
+  /* customers */
+  const curLive = cur.filter(isLive); const keysIn = new Set(curLive.map(custKey));
+  const retN = [...keysIn].filter(k => first.get(k) < B.from).length, newN = keysIn.size - retN;
+  const spend = new Map(); curLive.forEach(o => { const k = custKey(o); const a = spend.get(k) || { name:o.customer, v:0, n:0 }; a.v += o.total || 0; a.n++; spend.set(k, a); });
+  const topCust = [...spend.values()].sort((a, b) => b.v - a.v).slice(0, 4);
+
+  /* inventory health */
+  const sold30 = soldUnits(30), trk = products.filter(tracked); const stc = { out:0, low:0, soon:0, ok:0 };
+  trk.forEach(p => { stc[stockState(p, sold30).key]++; });
+  const costVal = sum(trk, p => (p.cost > 0 ? p.cost : 0) * Math.max(0, p.stock)), retailVal = sum(trk, p => (p.price || 0) * Math.max(0, p.stock));
+  const stTot = Math.max(1, trk.length);
+
+  /* upcoming events */
+  const evs = customOrders.filter(c => c.status !== 'ملغي' && c.eventDate).map(c => ({ c, d: Math.ceil((new Date(c.eventDate + 'T00:00:00').getTime() - t0) / DAY) })).filter(x => x.d >= 0 && x.d <= 30).sort((a, b) => a.d - b.d).slice(0, 4);
+
+  const kpi = (icon, label, v, dl, sub, sp) => `<div class="card card-pad kpi"><div class="flex items-center justify-between mb-2"><span class="text-xs muted font-semibold flex items-center gap-2"><i class="fa-solid ${icon} text-mauve"></i>${label}</span>${dl}</div><p class="v">${v}</p><p class="text-[11px] muted mt-1 min-h-[16px]">${sub || ''}</p>${sp || ''}</div>`;
+  const rangeBtn = (v, l) => `<button class="chip ${dashRange === v ? 'on' : ''}" data-act="dashRange" data-v="${v}">${l}</button>`;
+
+  root.innerHTML = `
+  <section class="hero-card p-5 md:p-7 grid lg:grid-cols-[1.05fr_1fr] gap-6 mb-5">
+    <div>
+      <p class="text-white/75 text-sm">${greet} 🤍</p>
+      <h2 class="text-2xl md:text-[1.9rem] font-extrabold mt-1 leading-tight">وشلي النهاردة</h2>
+      <div class="grid grid-cols-3 gap-2.5 mt-5">
+        <div class="rounded-2xl bg-white/12 p-3.5" style="background:rgba(255,255,255,.13)"><p class="text-[11px] text-white/70">مبيعات اليوم</p><p class="text-lg md:text-xl font-extrabold mt-1">${money(salesToday)}</p><p class="text-[11px] text-white/70 mt-0.5">أمس ${money(salesYest)}</p></div>
+        <div class="rounded-2xl p-3.5" style="background:rgba(255,255,255,.13)"><p class="text-[11px] text-white/70">طلبات اليوم</p><p class="text-lg md:text-xl font-extrabold mt-1">${today.length}</p><p class="text-[11px] text-white/70 mt-0.5">أمس ${yest.length}</p></div>
+        <button data-act="goTab" data-tab="orders" class="rounded-2xl p-3.5 text-right" style="background:rgba(255,255,255,.13)"><p class="text-[11px] text-white/70">بانتظار الرد</p><p class="text-lg md:text-xl font-extrabold mt-1">${pending}</p><p class="text-[11px] text-white/70 mt-0.5">راجعيها الآن</p></button>
+      </div>
+      <p class="text-xs text-white/80 mt-4 leading-6">${canForecast ? `<i class="fa-solid fa-chart-line ml-1"></i> توقّع مبيعات الأسبوع القادم ≈ <b>${money(fcTotal)}</b> <span class="text-white/60">(تقدير خطي من آخر 14 يوم)</span>` : 'سيظهر توقّع المبيعات بعد تسجيل عدد كافٍ من الطلبات.'}</p>
+    </div>
+    <div>
+      <p class="font-bold text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> المساعد الذكي — أهم ما يحتاج انتباهك</p>
+      <div class="space-y-2">${top3.length ? top3.map((it, i) => `<button class="hero-line" data-act="goInsight" data-i="${i}"><i class="fa-solid ${it.icon} mt-1.5 text-[.8rem] opacity-90"></i><span><b class="block">${it.title}</b><span class="text-white/75 text-xs">${it.text}</span></span></button>`).join('') : '<p class="hero-line">كل شيء تمام ✨ لا توجد تنبيهات تحتاج تدخل الآن.</p>'}</div>
+      ${insightsCache.length > 3 ? `<button data-act="openBell" class="text-xs text-white/85 underline mt-3">عرض كل التنبيهات (${insightsCache.length})</button>` : ''}
+    </div>
+  </section>
+
+  <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
+    <div class="flex gap-2 flex-wrap">${rangeBtn(7, 'آخر 7 أيام')}${rangeBtn(30, 'آخر 30 يوم')}${rangeBtn(90, 'آخر 90 يوم')}${rangeBtn(9999, 'كل الفترة')}</div>
+    <button class="btn btn-soft btn-sm" data-act="exportDash"><i class="fa-solid fa-download"></i> تصدير المبيعات اليومية</button>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-5">
+    ${kpi('fa-sack-dollar', 'إجمالي المبيعات', money(M.sales), delta(M.sales, P?.sales), `${M.live} طلب فعّال`, spark(salesSeries, SERIES[0]))}
+    ${kpi('fa-bag-shopping', 'عدد الطلبات', num(M.orders), delta(M.orders, P?.orders), `${cur.filter(o => o.status === 'ملغي').length} ملغي`, spark(countSeries, SERIES[1]))}
+    ${kpi('fa-receipt', 'متوسط الطلب', money(M.avg), delta(M.avg, P?.avg), 'لكل طلب فعّال')}
+    ${kpi('fa-coins', 'صافي الربح التقديري', M.cover > 0 ? money(M.profit) : '—', P && M.cover > 0 ? delta(M.profit, P.profit) : '', M.cover > 0 ? `محسوب على ${Math.round(M.cover * 100)}% من المبيعات` : 'أضيفي سعر التكلفة للمنتجات')}
+    ${kpi('fa-user-plus', 'عميلات جديدات', num(newC), delta(newC, newP), `من ${M.customers} عميلة نشطة`)}
+    ${kpi('fa-circle-check', 'معدل الإنجاز', M.fulfil + '%', delta(M.fulfil, P?.fulfil), 'طلبات تم تسليمها')}
+  </div>
+
+  <div class="grid xl:grid-cols-3 gap-5 mb-5">
+    <div class="card card-pad xl:col-span-2">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <p class="card-title"><i class="fa-solid fa-chart-line"></i> ${trendMetric === 'sales' ? 'المبيعات اليومية' : 'الطلبات اليومية'}</p>
+        <div class="flex gap-2"><button class="chip !py-1 ${trendMetric === 'sales' ? 'on' : ''}" data-act="trendMetric" data-v="sales">المبيعات</button><button class="chip !py-1 ${trendMetric === 'count' ? 'on' : ''}" data-act="trendMetric" data-v="count">الطلبات</button><button class="chip !py-1 ${trendTable ? 'on' : ''}" data-act="trendTable"><i class="fa-solid fa-table"></i> جدول</button></div>
+      </div>
+      ${trendTable ? `<div class="max-h-[320px] overflow-auto rounded-xl border border-[color:var(--line)]"><table class="tbl"><thead><tr><th>التاريخ</th><th>الطلبات</th><th>المبيعات</th></tr></thead><tbody>${[...buckets].reverse().map(b => `<tr><td>${fmtDate(b.t)}</td><td>${b.count}</td><td>${money(b.sales)}</td></tr>`).join('')}</tbody></table></div>`
+        : `<div dir="ltr" style="height:300px"><canvas id="trendChart" role="img" aria-label="رسم بياني للمبيعات اليومية"></canvas></div>`}
+      ${trendMetric === 'sales' && canForecast && !trendTable ? `<p class="text-[11px] muted mt-3"><span class="inline-block w-5 border-t-2 border-dashed align-middle ml-1" style="border-color:${SERIES[0]}"></span> الخط المتقطع = توقّع الأيام السبعة القادمة</p>` : ''}
+    </div>
+    <div class="card card-pad">
+      <p class="card-title mb-4"><i class="fa-solid fa-filter"></i> مسار الطلبات</p>
+      <div class="space-y-3">${stCount.map(x => `<div><div class="flex items-center justify-between mb-1">${pill(x.s)}<b class="text-sm">${x.n}</b></div><div class="bar-track"><div class="bar-fill" style="width:${x.n ? Math.max(3, x.n / stMax * 100) : 0}%;background:${x.s === 'ملغي' ? '#C9A3A8' : MAUVE}"></div></div></div>`).join('')}</div>
+      <p class="text-[11px] muted mt-4 leading-5">${M.orders ? `نسبة الإلغاء ${Math.round(cur.filter(o => o.status === 'ملغي').length / M.orders * 100)}% • نسبة الإنجاز ${M.fulfil}%` : 'لا توجد طلبات في هذه الفترة.'}</p>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-5 mb-5">
+    <div class="card card-pad"><p class="card-title mb-3"><i class="fa-solid fa-layer-group"></i> المبيعات حسب القسم</p>${barList(catRows)}</div>
+    <div class="card card-pad"><p class="card-title mb-3"><i class="fa-solid fa-ranking-star"></i> الأكثر مبيعاً</p>
+      ${topProds.length ? topProds.map((p, i) => { const pr = productById(p.id); return `<div class="flex items-center gap-3 py-2 ${i ? 'border-t border-[color:var(--line)]' : ''}"><img src="${esc(pr?.img || fallbackImg())}" alt="" class="w-10 h-10 rounded-xl object-cover bg-blushL" loading="lazy"><div class="flex-1 min-w-0"><p class="text-[.82rem] font-bold truncate">${esc(p.name)}</p><p class="text-[11px] muted">${num(p.units)} قطعة • ${money(p.rev)}${p.hasCost ? ` • ربح ${money(p.profit)}` : ''}</p></div></div>`; }).join('') : '<p class="text-xs muted text-center py-6">لا توجد مبيعات في هذه الفترة</p>'}
+    </div>
+    <div class="card card-pad"><p class="card-title mb-3"><i class="fa-solid fa-tower-broadcast"></i> مصادر الطلبات</p>${barList(chanRows)}</div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-5 mb-5">
+    <div class="card card-pad lg:col-span-2"><p class="card-title mb-4"><i class="fa-solid fa-clock"></i> متى تأتي الطلبات؟</p>${heat}
+      <div class="flex items-center gap-2 mt-3 text-[11px] muted"><span>أقل</span><span class="h-2 w-24 rounded-full" style="background:linear-gradient(90deg,rgba(154,92,109,.12),rgba(154,92,109,.92))"></span><span>أكثر</span></div></div>
+    <div class="card card-pad"><p class="card-title mb-4"><i class="fa-solid fa-users"></i> العميلات</p>
+      ${keysIn.size ? `<div class="flex h-3 rounded-full overflow-hidden mb-2" style="gap:2px"><span style="width:${newN / keysIn.size * 100}%;background:${SERIES[1]}"></span><span style="width:${retN / keysIn.size * 100}%;background:${SERIES[0]}"></span></div>
+      <div class="flex justify-between text-xs mb-4"><span><span class="inline-block w-2.5 h-2.5 rounded-sm ml-1" style="background:${SERIES[1]}"></span>جديدات <b>${newN}</b></span><span><span class="inline-block w-2.5 h-2.5 rounded-sm ml-1" style="background:${SERIES[0]}"></span>متكررات <b>${retN}</b></span></div>
+      <p class="text-[11px] font-bold muted mb-1">الأعلى إنفاقاً</p>${topCust.map(c => `<div class="flex justify-between text-[.82rem] py-1.5 border-t border-[color:var(--line)]"><span class="truncate">${esc(c.name)}</span><b>${money(c.v)}</b></div>`).join('')}` : '<p class="text-xs muted text-center py-6">لا توجد بيانات</p>'}
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-5">
+    <div class="card card-pad"><div class="flex items-center justify-between mb-4"><p class="card-title"><i class="fa-solid fa-boxes-stacked"></i> صحة المخزون</p><button class="text-xs text-mauve font-bold" data-act="goTab" data-tab="inventory">التفاصيل</button></div>
+      ${trk.length ? `<div class="flex h-3 rounded-full overflow-hidden mb-3" style="gap:2px"><span style="width:${stc.out / stTot * 100}%;background:#D03B3B"></span><span style="width:${stc.low / stTot * 100}%;background:#FAB219"></span><span style="width:${stc.soon / stTot * 100}%;background:#EC835A"></span><span style="width:${stc.ok / stTot * 100}%;background:#0CA30C"></span></div>
+      <div class="grid grid-cols-2 gap-2 text-xs"><span class="pill p-crit"><i class="fa-solid fa-ban"></i> نافد ${stc.out}</span><span class="pill p-warn"><i class="fa-solid fa-triangle-exclamation"></i> منخفض ${stc.low}</span><span class="pill p-warn"><i class="fa-solid fa-hourglass-end"></i> قارب ${stc.soon}</span><span class="pill p-good"><i class="fa-solid fa-circle-check"></i> متوفر ${stc.ok}</span></div>
+      <div class="mt-4 pt-3 border-t border-[color:var(--line)] text-xs space-y-1.5"><div class="flex justify-between"><span class="muted">قيمة المخزون (بالتكلفة)</span><b>${costVal ? money(costVal) : '—'}</b></div><div class="flex justify-between"><span class="muted">قيمته بسعر البيع</span><b>${money(retailVal)}</b></div></div>`
+      : `<p class="text-xs muted leading-6">لم تبدئي تتبع المخزون بعد. افتحي أي منتج وفعّلي "تتبع المخزون" لتظهر هنا تنبيهات النفاد وتوقعات إعادة التخزين.</p>`}
+    </div>
+    <div class="card card-pad"><div class="flex items-center justify-between mb-3"><p class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> أحدث الطلبات</p><button class="text-xs text-mauve font-bold" data-act="goTab" data-tab="orders">الكل</button></div>
+      ${orders.slice(0, 6).map(o => `<button class="w-full flex items-center justify-between gap-2 py-2 border-t border-[color:var(--line)] first:border-0 text-right" data-act="openOrder" data-id="${esc(o.id)}"><span class="min-w-0"><b class="text-[.82rem] block truncate">${esc(o.customer)}</b><span class="text-[11px] muted">${code(o)} • ${ago(o.createdAt)}</span></span><span class="text-left shrink-0"><b class="text-[.82rem] block">${money(o.total)}</b>${pill(o.status)}</span></button>`).join('') || '<p class="text-xs muted text-center py-6">لا توجد طلبات بعد</p>'}
+    </div>
+    <div class="card card-pad"><div class="flex items-center justify-between mb-3"><p class="card-title"><i class="fa-solid fa-calendar-day"></i> مناسبات قادمة</p><button class="text-xs text-mauve font-bold" data-act="goTab" data-tab="custom">الكل</button></div>
+      ${evs.length ? evs.map(({ c, d }) => `<div class="flex items-center gap-3 py-2 border-t border-[color:var(--line)] first:border-0"><span class="w-11 h-11 rounded-xl flex flex-col items-center justify-center shrink-0 ${d <= 5 ? 'ic-crit' : d <= 14 ? 'ic-warn' : 'ic-info'}"><b class="text-sm leading-none">${d}</b><span class="text-[9px]">يوم</span></span><div class="min-w-0"><b class="text-[.82rem] block truncate">${esc(c.name)} — ${esc(c.occasion || '')}</b><span class="text-[11px] muted">${esc(c.pieces || '—')} قطعة • ${fmtDate(new Date(c.eventDate + 'T00:00:00').getTime())}</span></div></div>`).join('') : '<p class="text-xs muted text-center py-6">لا توجد مناسبات خلال 30 يوم</p>'}
+    </div>
+  </div>`;
+
+  /* chart */
+  const cv = $('#trendChart');
+  if (cv) {
+    const labels = buckets.map(b => fmtShort(b.t)); const isSales = trendMetric === 'sales';
+    const grid = { color:'rgba(154,92,109,.10)' };
+    const tick = { callback:(v) => isSales ? (v >= 1000 ? (v / 1000) + 'k' : v) : v, maxTicksLimit:5 };
+    const tooltip = { rtl:true, backgroundColor:'#3B2A2F', titleFont:{ family:'Cairo' }, bodyFont:{ family:'Cairo' }, padding:10, cornerRadius:10, displayColors:false,
+      callbacks:{ label:(c) => isSales ? `${c.dataset.label}: ${money(c.parsed.y)}` : `${c.parsed.y} طلب` } };
+    if (isSales) {
+      const dsActual = [...salesSeries, ...fcVals.map(() => null)];
+      const datasets = [{ label:'المبيعات', data:dsActual, borderColor:SERIES[0], backgroundColor:'rgba(178,74,123,.10)', fill:true, tension:.35, pointRadius:0, pointHoverRadius:5, borderWidth:2.5 }];
+      let lbls = labels;
+      if (fcVals.length) { lbls = [...labels, ...fcVals.map((_, i) => fmtShort(startDay + (nDays + i) * DAY))];
+        datasets.push({ label:'توقّع', data:[...salesSeries.map((_, i) => (i === nDays - 1 ? salesSeries[i] : null)), ...fcVals], borderColor:SERIES[0], borderDash:[6, 5], fill:false, tension:.35, pointRadius:0, pointHoverRadius:4, borderWidth:2 }); }
+      charts.trend = new Chart(cv, { type:'line', data:{ labels:lbls, datasets }, options:{ maintainAspectRatio:false, interaction:{ mode:'index', intersect:false }, plugins:{ legend:{ display:fcVals.length > 0, position:'top', align:'end', labels:{ boxWidth:14, boxHeight:2, usePointStyle:false, font:{ size:11 } } }, tooltip }, scales:{ x:{ grid:{ display:false }, ticks:{ maxTicksLimit:8 } }, y:{ beginAtZero:true, grid, ticks:tick } } } });
+    } else {
+      charts.trend = new Chart(cv, { type:'bar', data:{ labels, datasets:[{ label:'الطلبات', data:countSeries, backgroundColor:SERIES[1], borderRadius:{ topLeft:4, topRight:4 }, borderSkipped:'bottom', maxBarThickness:18 }] }, options:{ maintainAspectRatio:false, interaction:{ mode:'index', intersect:false }, plugins:{ legend:{ display:false }, tooltip }, scales:{ x:{ grid:{ display:false }, ticks:{ maxTicksLimit:8 } }, y:{ beginAtZero:true, grid, ticks:{ precision:0, maxTicksLimit:5 } } } } });
+    }
+  }
+}
+
+/* =========================================================================
+   ORDERS — list, kanban board, detail panel, manual orders
+========================================================================= */
+let ordersView = 'list'; const oFilter = { status:'all', q:'', period:'all' };
+actions.noop = () => {};
+const itemsSummary = (o) => { const it = o.items || []; if (!it.length) return '—'; return esc(it[0].name) + (it.length > 1 ? ` <span class="muted">+${it.length - 1}</span>` : ''); };
+const srcBadge = (o) => { const s = o.source || 'web'; return `<span class="pill p-gray">${esc(SOURCES[s] || s)}</span>`; };
+
+function filteredOrders(ignoreStatus){
+  const q = oFilter.q.trim().toLowerCase(); const from = oFilter.period === 'all' ? 0 : startOfDay(Date.now()) - (Number(oFilter.period) - 1) * DAY;
+  return orders.filter(o => {
+    if ((o.createdAt || 0) < from) return false;
+    if (!ignoreStatus && oFilter.status !== 'all' && o.status !== oFilter.status) return false;
+    if (q && !(code(o).toLowerCase().includes(q) || String(o.id).toLowerCase().includes(q) || (o.customer || '').toLowerCase().includes(q) || String(o.phone || '').includes(q))) return false;
+    return true;
+  });
+}
+views.orders = {
+  mount(){
+    const p = takeParams('orders'); oFilter.status = p.status || 'all';
+    $('#adminContent').innerHTML = `
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <div class="relative flex-1 min-w-[210px] max-w-sm"><i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 muted text-xs"></i><input id="oSearch" class="input !pr-9" data-input="oSearch" placeholder="رقم الطلب، اسم العميلة أو الهاتف" value="${esc(oFilter.q)}"></div>
+        <select id="oPeriod" class="input !w-auto" data-change="oPeriod"><option value="all">كل الفترات</option><option value="1">اليوم</option><option value="7">آخر 7 أيام</option><option value="30">آخر 30 يوم</option><option value="90">آخر 90 يوم</option></select>
+        <div class="flex gap-1 bg-white border border-[color:var(--line)] rounded-full p-1" role="group" aria-label="طريقة العرض"><button class="chip !border-0 !py-1 ${ordersView === 'list' ? 'on' : ''}" data-act="oView" data-v="list"><i class="fa-solid fa-list ml-1"></i> قائمة</button><button class="chip !border-0 !py-1 ${ordersView === 'board' ? 'on' : ''}" data-act="oView" data-v="board"><i class="fa-solid fa-table-columns ml-1"></i> لوحة</button></div>
+        <button class="btn btn-soft btn-sm" data-act="exportOrders"><i class="fa-solid fa-download"></i> CSV</button>
+        <button class="btn btn-sm" data-act="newOrder"><i class="fa-solid fa-plus"></i> طلب يدوي</button>
+      </div>
+      <div id="oChips" class="flex gap-2 flex-wrap mb-4"></div><div id="oRegion"></div>`;
+    $('#oPeriod').value = oFilter.period; updateOrders();
+    if (p.open) openOrderPanel(p.open);
+    setTimeout(markOrdersSeen, 3500);
+  },
+  update(){ if ($('#oRegion')) updateOrders(); }
+};
+async function markOrdersSeen(){
+  if (activeTab !== 'orders') return; const un = orders.filter(o => o.seen === false); if (!un.length) return;
+  try { const b = writeBatch(db); un.slice(0, 400).forEach(o => b.update(doc(db, 'orders', o.id), { seen:true })); await b.commit(); } catch (e) {}
+}
+actions.oSearch = (d, t) => { oFilter.q = t.value; updateOrders(); };
+actions.oPeriod = (d, t) => { oFilter.period = t.value; updateOrders(); };
+actions.oChip = (d) => { oFilter.status = d.v; updateOrders(); };
+actions.oView = (d) => { ordersView = d.v; views.orders.mount(); };
+actions.openOrder = (d) => openOrderPanel(d.id);
+actions.oStatus = (d, t) => { setOrderStatus(d.id, t.value).then(ok => { if (!ok) updateOrders(); }); };
+
+function updateOrders(){
+  const region = $('#oRegion'); if (!region) return;
+  if (!ready.orders) { region.innerHTML = skeleton(); return; }
+  const base = filteredOrders(true), list = filteredOrders(false).sort((a, b) => b.createdAt - a.createdAt);
+  $('#oChips').innerHTML = [['all', 'الكل'], ...ORDER_STATUSES.map(s => [s, s])].map(([k, l]) => { const n = k === 'all' ? base.length : base.filter(o => o.status === k).length;
+    return `<button class="chip ${oFilter.status === k ? 'on' : ''}" data-act="oChip" data-v="${k}">${l}<span class="n">${n}</span></button>`; }).join('');
+  if (ordersView === 'board') {
+    region.innerHTML = `<div class="board">${ORDER_STATUSES.map(s => { const col = base.filter(o => o.status === s).sort((a, b) => b.createdAt - a.createdAt);
+      return `<div class="col" data-status="${s}"><div class="flex items-center justify-between mb-3 px-1">${pill(s)}<span class="text-[11px] muted font-bold">${col.length} • ${money(sum(col, o => o.total))}</span></div>
+      ${col.map(o => `<div class="ocard" draggable="true" data-id="${esc(o.id)}" data-act="openOrder"><div class="flex items-center justify-between mb-1"><b class="text-[.8rem]">${code(o)}</b><span class="text-[11px] muted">${ago(o.createdAt)}</span></div>
+        <p class="text-[.85rem] font-semibold truncate">${o.seen === false ? '<span class="inline-block w-2 h-2 rounded-full ml-1" style="background:var(--mauve)"></span>' : ''}${esc(o.customer)}</p><p class="text-[11px] muted truncate">${itemsSummary(o)}</p>
+        <div class="flex items-center justify-between mt-2"><b class="text-[.85rem]" style="color:var(--mauveD)">${money(o.total)}</b><span data-act="noop"><a class="btn-icon" style="width:28px;height:28px" href="${waLink(o.phone)}" target="_blank" rel="noopener" aria-label="واتساب"><i class="fa-brands fa-whatsapp"></i></a></span></div>
+        <div class="mt-2" data-act="noop"><select class="input !py-1 !text-[11px]" data-change="oStatus" data-id="${esc(o.id)}" aria-label="تغيير الحالة">${ORDER_STATUSES.map(x => `<option ${o.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div></div>`).join('') || '<p class="text-center text-[11px] muted py-8">اسحبي طلباً إلى هنا</p>'}</div>`; }).join('')}</div>
+      <p class="text-[11px] muted mt-1">اسحبي البطاقة بين الأعمدة لتغيير حالة الطلب — خصم المخزون وإرجاعه يتمان تلقائياً.</p>`;
+    return;
+  }
+  region.innerHTML = `<div class="card overflow-x-auto"><table class="tbl min-w-[860px]"><thead><tr><th>الطلب</th><th>العميلة</th><th>المنتجات</th><th>الإجمالي</th><th>الوقت</th><th>المصدر</th><th>الحالة</th><th></th></tr></thead><tbody>
+    ${list.map(o => `<tr class="row-click ${o.seen === false ? 'unseen' : ''}" data-act="openOrder" data-id="${esc(o.id)}"><td><b>${code(o)}</b></td>
+      <td><b class="block">${esc(o.customer)}</b><span class="text-[11px] muted" dir="ltr">${esc(o.phone)}</span></td><td class="max-w-[200px] truncate">${itemsSummary(o)}</td><td><b>${money(o.total)}</b></td>
+      <td title="${fmtDT(o.createdAt)}"><span class="text-xs">${ago(o.createdAt)}</span></td><td>${srcBadge(o)}</td>
+      <td data-act="noop"><select class="input !py-1 !text-xs !w-auto" data-change="oStatus" data-id="${esc(o.id)}" aria-label="تغيير الحالة">${ORDER_STATUSES.map(s => `<option ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
+      <td data-act="noop" class="whitespace-nowrap"><a class="btn-icon" href="${waLink(o.phone)}" target="_blank" rel="noopener" title="واتساب"><i class="fa-brands fa-whatsapp"></i></a><button class="btn-icon" data-act="orderInvoice" data-id="${esc(o.id)}" title="فاتورة"><i class="fa-solid fa-file-invoice"></i></button></td></tr>`).join('')
+      || `<tr><td colspan="8" class="text-center muted py-12"><i class="fa-solid fa-inbox text-2xl mb-2 block"></i>${orders.length ? 'لا توجد طلبات مطابقة للفلتر' : 'لا توجد طلبات بعد — بمجرد وصول أول طلب من المتجر سيظهر هنا فوراً.'}</td></tr>`}</tbody></table></div>
+    <p class="text-[11px] muted mt-3">${list.length} طلب • إجمالي ${money(sum(list.filter(isLive), o => o.total))}</p>`;
+}
+document.addEventListener('dragstart', (e) => { const c = e.target.closest && e.target.closest('.ocard'); if (!c) return; e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move'; c.classList.add('dragging'); });
+document.addEventListener('dragend', () => { $$('.ocard.dragging').forEach(c => c.classList.remove('dragging')); $$('.col.over').forEach(c => c.classList.remove('over')); });
+document.addEventListener('dragover', (e) => { const col = e.target.closest && e.target.closest('.col'); if (col) { e.preventDefault(); col.classList.add('over'); } });
+document.addEventListener('dragleave', (e) => { const col = e.target.closest && e.target.closest('.col'); if (col && !col.contains(e.relatedTarget)) col.classList.remove('over'); });
+document.addEventListener('drop', (e) => { const col = e.target.closest && e.target.closest('.col'); if (!col) return; e.preventDefault(); col.classList.remove('over'); const id = e.dataTransfer.getData('text/plain'); if (id) setOrderStatus(id, col.dataset.status); });
+
+actions.exportOrders = () => {
+  const rows = [['رقم الطلب', 'التاريخ', 'العميلة', 'الهاتف', 'العنوان', 'المنتجات', 'الإجمالي', 'الحالة', 'المصدر']];
+  [...orders].sort((a, b) => a.createdAt - b.createdAt).forEach(o => rows.push([code(o), new Date(o.createdAt).toISOString().slice(0, 16).replace('T', ' '), o.customer, o.phone, o.address || '', (o.items || []).map(i => `${i.name}×${i.qty}`).join(' | '), o.total, o.status, SOURCES[o.source || 'web'] || o.source]));
+  downloadCSV('wishly-orders.csv', rows);
+};
+
+/* ---------- order detail panel ---------- */
+let orderPanel = null, orderPanelId = null;
+function statusMsg(o, st){
+  const n = o.customer || '';
+  return ({
+    'قيد الانتظار':`مرحباً ${n} 🤍\nوصلنا طلبك ${code(o)} من وشلي وسنتواصل معك لتأكيد التفاصيل.`,
+    'قيد التجهيز':`مرحباً ${n} 🤍\nتم تأكيد طلبك ${code(o)} وبدأنا في تجهيزه بكل حب. الإجمالي ${money(o.total)}.`,
+    'جاهز للتسليم':`مرحباً ${n} 🤍\nطلبك ${code(o)} جاهز للتسليم! متى يناسبك الاستلام؟`,
+    'تم التسليم':`شكراً لثقتك بوشلي يا ${n} 🤍\nنتمنى أن تكون التفاصيل عند حسن ظنك، ويسعدنا سماع رأيك.`,
+  })[st] || '';
+}
+function openOrderPanel(id){
+  const o = orders.find(x => x.id === id); if (!o) { toast('لم يتم العثور على الطلب', 'err'); return; }
+  if (o.seen === false) updateDoc(doc(db, 'orders', id), { seen:true }).catch(() => {});
+  if (orderPanel) orderPanel.close();
+  orderPanelId = id; orderPanel = openModal({ title:'', side:true, body:'', onClose:() => { orderPanel = null; orderPanelId = null; } });
+  renderOrderPanel(true);
+}
+function renderOrderPanel(force){
+  if (!orderPanel) return; const o = orders.find(x => x.id === orderPanelId); if (!o) { orderPanel.close(); return; }
+  const ae = document.activeElement; if (!force && ae && orderPanel.el.contains(ae) && /INPUT|TEXTAREA/.test(ae.tagName)) return;
+  orderPanel.setTitle(`<span class="flex items-center gap-2 flex-wrap">طلب ${code(o)} ${pill(o.status)}</span>`);
+  const idx = FLOW_STATUSES.indexOf(o.status), cancelled = o.status === 'ملغي';
+  const mism = (o.items || []).filter(it => { const p = productById(it.id); return p && Number(p.price) !== Number(it.price); });
+  const profit = (o.items || []).reduce((s, it) => { const c = costOf(it); return c == null ? s : s + (it.price - c) * it.qty; }, 0);
+  const hasCost = (o.items || []).some(it => costOf(it) != null);
+  const hist = [{ status:'وصل الطلب', at:o.createdAt }, ...((o.statusHistory || []).filter((h, i) => !(i === 0 && h.at === o.createdAt && h.status === 'قيد الانتظار')))];
+  const wa = ['قيد التجهيز', 'جاهز للتسليم', 'تم التسليم'].map(s => `<a class="chip !text-[11px]" href="${waLink(o.phone, statusMsg(o, s))}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp ml-1"></i>${s === 'قيد التجهيز' ? 'تأكيد الطلب' : s === 'جاهز للتسليم' ? 'جاهز للاستلام' : 'شكراً بعد التسليم'}</a>`).join('');
+  orderPanel.setBody(`
+    <div class="space-y-4">
+      <div class="card card-pad">
+        <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="text-lg font-extrabold truncate">${esc(o.customer)}</p><p class="text-sm muted" dir="ltr" style="text-align:right">${esc(o.phone)}</p></div>
+          <div class="flex gap-1"><a class="btn-icon bg-[color:var(--blushL)]" href="${waLink(o.phone)}" target="_blank" rel="noopener" title="واتساب"><i class="fa-brands fa-whatsapp"></i></a><a class="btn-icon bg-[color:var(--blushL)]" href="tel:${esc(String(o.phone || '').replace(/[^\d+]/g, ''))}" title="اتصال"><i class="fa-solid fa-phone"></i></a></div></div>
+        <div class="mt-3"><label class="label" for="opAddr">العنوان</label><input id="opAddr" class="input" data-change="opAddr" value="${esc(o.address || '')}" placeholder="أضيفي عنوان التسليم"></div>
+        <p class="text-[11px] muted mt-2 flex items-center gap-2">${fmtDT(o.createdAt)} ${srcBadge(o)}</p>
+      </div>
+      <div class="card card-pad">
+        ${cancelled ? `<div class="rounded-xl p-3 text-sm flex items-center gap-2" style="background:var(--critBg);color:var(--crit)"><i class="fa-solid fa-ban"></i> هذا الطلب ملغي <button class="btn btn-soft btn-sm mr-auto" data-act="oStep" data-id="${esc(o.id)}" data-v="قيد الانتظار">استعادة</button></div>`
+        : `<div class="stepper">${FLOW_STATUSES.map((s, i) => `<div class="step ${i < idx ? 'done' : i === idx ? 'now' : ''}" data-act="oStep" data-id="${esc(o.id)}" data-v="${s}" role="button" tabindex="0"><div class="dot">${i < idx ? '<i class="fa-solid fa-check"></i>' : i + 1}</div>${s}</div>`).join('')}</div>
+        <div class="flex items-center justify-between mt-4"><p class="text-[11px] muted">${o.stockDeducted ? '<i class="fa-solid fa-box-open text-mauve ml-1"></i> تم خصم المخزون' : 'سيُخصم المخزون عند بدء التجهيز'}</p><button class="btn btn-danger btn-sm" data-act="oStep" data-id="${esc(o.id)}" data-v="ملغي">إلغاء الطلب</button></div>`}
+        <div class="flex gap-2 flex-wrap mt-3">${wa}</div>
+      </div>
+      <div class="card overflow-hidden"><table class="tbl"><thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>
+        ${(o.items || []).map(it => { const p = productById(it.id); const img = it.img || p?.img; return `<tr><td><div class="flex items-center gap-2">${img ? `<img src="${esc(img)}" alt="" class="w-9 h-9 rounded-lg object-cover bg-blushL" loading="lazy">` : ''}<span class="font-semibold">${esc(it.name)}</span></div></td><td>${num(it.qty)}</td><td>${money(it.price)}</td><td><b>${money(it.price * it.qty)}</b></td></tr>`; }).join('') || '<tr><td colspan="4" class="muted text-center py-6">لا توجد عناصر</td></tr>'}
+        </tbody></table>
+        <div class="p-4 flex items-center justify-between" style="background:var(--mauveD);color:#fff"><span class="font-bold">الإجمالي</span><span class="text-lg font-extrabold">${money(o.total)}</span></div></div>
+      ${mism.length ? `<div class="rounded-xl p-3 text-xs leading-6" style="background:var(--warnBg);color:var(--warn)"><i class="fa-solid fa-triangle-exclamation ml-1"></i> سعر ${mism.map(m => esc(m.name)).join('، ')} في الطلب يختلف عن سعره الحالي في المتجر (${mism.map(m => money(productById(m.id).price)).join('، ')}). تأكدي من السعر قبل التأكيد.</div>` : ''}
+      ${hasCost ? `<p class="text-xs muted"><i class="fa-solid fa-coins text-mauve ml-1"></i> ربح تقديري لهذا الطلب: <b style="color:var(--mauveD)">${money(profit)}</b></p>` : ''}
+      <div><label class="label" for="opNotes">ملاحظات داخلية</label><textarea id="opNotes" class="input" rows="3" data-change="opNotes" placeholder="مثال: العميلة تريد الشريط ذهبياً، التسليم بعد العصر...">${esc(o.notes || '')}</textarea></div>
+      <div><p class="label">سجل الطلب</p><div class="space-y-2">${hist.map(h => `<div class="flex items-center gap-2 text-xs"><span class="w-2 h-2 rounded-full" style="background:var(--mauve)"></span><b>${esc(h.status)}</b><span class="muted">${fmtDT(h.at)}</span></div>`).join('')}</div></div>
+      <div class="flex gap-2 flex-wrap pt-2"><button class="btn flex-1" data-act="orderInvoice" data-id="${esc(o.id)}"><i class="fa-solid fa-file-invoice"></i> الفاتورة</button><button class="btn btn-danger" data-act="deleteOrder" data-id="${esc(o.id)}"><i class="fa-solid fa-trash"></i> حذف</button></div>
+    </div>`);
+}
+actions.oStep = (d) => { setOrderStatus(d.id, d.v); };
+actions.opAddr = async (d, t) => { if (!orderPanelId) return; try { await updateDoc(doc(db, 'orders', orderPanelId), { address:t.value.trim() }); toast('تم حفظ العنوان'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.opNotes = async (d, t) => { if (!orderPanelId) return; try { await updateDoc(doc(db, 'orders', orderPanelId), { notes:t.value.trim() }); toast('تم حفظ الملاحظة'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.deleteOrder = async (d) => {
+  const o = orders.find(x => x.id === d.id); if (!o) return;
+  const ok = await confirmBox({ title:'حذف الطلب', text:`سيتم حذف الطلب ${code(o)} نهائياً${o.stockDeducted ? ' وإرجاع الكميات المخصومة إلى المخزون' : ''}. هل أنتِ متأكدة؟`, okText:'احذفي', danger:true }); if (!ok) return;
+  try { const b = writeBatch(db); if (o.stockDeducted) addOps(b, stockOps(o.items, +1).ops, `إرجاع — حذف الطلب ${code(o)}`, o.id); b.delete(doc(db, 'orders', o.id)); await b.commit(); toast('تم حذف الطلب'); if (orderPanel) orderPanel.close(); }
+  catch (e) { toast('تعذر الحذف — ' + friendlyError(e), 'err'); }
+};
+const _refresh0 = refreshAll;
+refreshAll = function(){ _refresh0(); if (orderPanel) renderOrderPanel(); };
+actions.orderInvoice = (d) => {
+  const o = orders.find(x => x.id === d.id); if (!o) return;
+  openInvoice({ label:code(o), date:o.createdAt, customer:o.customer, phone:o.phone, address:o.address || '', status:o.status, items:o.items || [], total:o.total, category:dominantCategory(o.items), file:'فاتورة-' + code(o).slice(1) });
+};
+function dominantCategory(items){
+  if (!items || !items.length) return 'general'; const c = {}; items.forEach(i => { c[i.cat] = (c[i.cat] || 0) + 1; });
+  return Object.entries(c).sort((a, b) => b[1] - a[1])[0][0];
+}
+
+/* ---------- shared line-items editor (manual orders + invoices) ---------- */
+const irRow = (it = {}) => `<div class="ir grid grid-cols-[1fr_62px_92px_30px] gap-2 items-center" ${it.id ? `data-pid="${esc(it.id)}"` : ''} data-cat="${esc(it.cat || '')}"><input class="input ir-name" list="prodList" value="${esc(it.name || '')}" placeholder="اسم المنتج / الخدمة" data-input="irName" aria-label="المنتج"><input class="input ir-qty" type="number" min="1" value="${it.qty || 1}" data-input="irCalc" aria-label="الكمية"><input class="input ir-price" type="number" min="0" value="${it.price || 0}" data-input="irCalc" aria-label="السعر"><button type="button" class="btn-icon danger" data-act="irRemove" aria-label="حذف"><i class="fa-solid fa-xmark"></i></button></div>`;
+const itemsEditor = (items) => `<datalist id="prodList">${products.map(p => `<option value="${esc(p.name)}"></option>`).join('')}</datalist>
+  <div data-items><div class="grid grid-cols-[1fr_62px_92px_30px] gap-2 text-[11px] font-bold muted mb-1 px-1"><span>المنتج</span><span>الكمية</span><span>السعر</span><span></span></div>
+  <div class="space-y-2 ir-list">${(items && items.length ? items : [{}]).map(irRow).join('')}</div>
+  <div class="flex items-center justify-between mt-3"><button type="button" class="text-xs font-bold text-mauve" data-act="irAdd"><i class="fa-solid fa-plus ml-1"></i> إضافة عنصر</button><span class="text-sm font-extrabold" style="color:var(--mauveD)">الإجمالي: <span class="ir-total">0 ج.س</span></span></div></div>`;
+const irCalcTotal = (scope) => { const box = scope.closest('[data-items]') || scope; let t = 0; $$('.ir', box).forEach(r => { t += (Number($('.ir-qty', r).value) || 0) * (Number($('.ir-price', r).value) || 0); }); const el = $('.ir-total', box); if (el) el.textContent = money(t); return t; };
+actions.irAdd = (d, t) => { const box = t.closest('[data-items]'); $('.ir-list', box).insertAdjacentHTML('beforeend', irRow()); };
+actions.irRemove = (d, t) => { const box = t.closest('[data-items]'); const rows = $$('.ir', box); if (rows.length > 1) t.closest('.ir').remove(); else { $('.ir-name', rows[0]).value = ''; $('.ir-price', rows[0]).value = 0; } irCalcTotal(box); };
+actions.irCalc = (d, t) => irCalcTotal(t);
+actions.irName = (d, t) => { const row = t.closest('.ir'); const p = products.find(x => x.name === t.value.trim()); if (p) { row.dataset.pid = p.id; row.dataset.cat = p.cat || ''; $('.ir-price', row).value = p.price; } else { delete row.dataset.pid; } irCalcTotal(t); };
+const readItems = (box, fallbackCat = 'general') => $$('.ir', box).map(r => ({ id:r.dataset.pid || '', name:$('.ir-name', r).value.trim(), qty:Number($('.ir-qty', r).value) || 0, price:Number($('.ir-price', r).value) || 0, cat:r.dataset.cat || fallbackCat })).filter(i => i.name && i.qty > 0);
+
+async function createOrder({ customer, phone, address = '', items, status = 'قيد الانتظار', source = 'other', notes = '' }){
+  const ref0 = doc(collection(db, 'orders')), b = writeBatch(db), total = sum(items, i => i.qty * i.price), now = Date.now();
+  const wantDeduct = !['قيد الانتظار', 'ملغي'].includes(status); let stockDeducted = false;
+  if (wantDeduct) {
+    const r = stockOps(items, -1);
+    if (r.short.length && !(await confirmBox({ title:'المخزون غير كافٍ', text:'بعض المنتجات لا تكفي: ' + r.short.join(' — ') + '. المتابعة ستجعل المخزون سالباً.', okText:'متابعة' }))) return null;
+    addOps(b, r.ops, `طلب #${ref0.id.slice(-6).toUpperCase()}`, ref0.id); stockDeducted = true;
+  }
+  b.set(ref0, { customer, phone, address, items, total, status, source, notes, createdAt:now, seen:true, stockDeducted, statusHistory:[{ status, at:now }] });
+  await b.commit(); return ref0.id;
+}
+actions.newOrder = () => {
+  const m = openModal({ title:'<i class="fa-solid fa-plus text-mauve ml-2"></i> طلب يدوي جديد', size:'lg', body: `
+    <p class="text-xs muted mb-4 leading-6">لتسجيل الطلبات التي تصل عبر واتساب أو إنستغرام أو الاتصال، حتى تظهر في التقارير والمخزون.</p>
+    <form id="noForm" class="space-y-4">
+      <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">اسم العميلة</label><input required id="noName" class="input"></div><div><label class="label">رقم الجوال</label><input required id="noPhone" class="input" dir="ltr" inputmode="tel" placeholder="09xxxxxxxx"></div></div>
+      <div><label class="label">العنوان (اختياري)</label><input id="noAddr" class="input"></div>
+      <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">مصدر الطلب</label><select id="noSource" class="input">${Object.entries(SOURCES).filter(([k]) => k !== 'web' && k !== 'special').map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></div>
+        <div><label class="label">حالة الطلب</label><select id="noStatus" class="input">${ORDER_STATUSES.filter(s => s !== 'ملغي').map(s => `<option ${s === 'قيد التجهيز' ? 'selected' : ''}>${s}</option>`).join('')}</select></div></div>
+      <div><p class="label">عناصر الطلب</p>${itemsEditor([])}</div>
+      <div><label class="label">ملاحظات</label><textarea id="noNotes" class="input" rows="2"></textarea></div>
+      <button class="btn w-full !py-3" id="noSubmit">حفظ الطلب</button>
+    </form>` });
+  $('#noForm', m.el).addEventListener('submit', async (e) => {
+    e.preventDefault(); const items = readItems(m.el); if (!items.length) { toast('أضيفي عنصراً واحداً على الأقل', 'err'); return; }
+    const btn = $('#noSubmit', m.el); btn.disabled = true; btn.textContent = 'جارِ الحفظ...';
+    try {
+      const id = await createOrder({ customer:$('#noName', m.el).value.trim(), phone:$('#noPhone', m.el).value.trim(), address:$('#noAddr', m.el).value.trim(), items, status:$('#noStatus', m.el).value, source:$('#noSource', m.el).value, notes:$('#noNotes', m.el).value.trim() });
+      if (id) { toast('تم حفظ الطلب'); m.close(); navTo('orders', { open:id }); } else { btn.disabled = false; btn.textContent = 'حفظ الطلب'; }
+    } catch (err) { toast('تعذر حفظ الطلب — ' + friendlyError(err), 'err'); console.error(err); btn.disabled = false; btn.textContent = 'حفظ الطلب'; }
+  });
+};
+
+/* =========================================================================
+   CUSTOM ORDERS
+========================================================================= */
+const occasionToCategory = (o) => ({ 'فرح':'wedding', 'خطوبة':'engagement', 'مولود':'baby', 'تخرج':'success', 'شركات':'corporate' }[o] || 'general');
+const cFilter = { status:'all', q:'' };
+const daysLeft = (c) => c.eventDate ? Math.ceil((new Date(c.eventDate + 'T00:00:00').getTime() - startOfDay(Date.now())) / DAY) : null;
+function dueChip(c){
+  const d = daysLeft(c); if (d == null) return '<span class="muted">—</span>';
+  if (d < 0) return `<span class="pill p-gray">انتهى</span>`;
+  return `<span class="pill ${d <= 5 ? 'p-crit' : d <= 14 ? 'p-warn' : 'p-gray'}"><i class="fa-solid fa-calendar-day"></i>${d === 0 ? 'اليوم' : 'بعد ' + d + ' يوم'}</span>`;
+}
+views.custom = {
+  mount(){
+    const p = takeParams('custom'); cFilter.status = p.status || 'all';
+    $('#adminContent').innerHTML = `<div class="flex flex-wrap items-center gap-2 mb-4"><div class="relative flex-1 min-w-[210px] max-w-sm"><i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 muted text-xs"></i><input class="input !pr-9" data-input="cSearch" placeholder="اسم العميلة أو الهاتف أو المناسبة" value="${esc(cFilter.q)}"></div></div>
+      <div id="cChips" class="flex gap-2 flex-wrap mb-4"></div><div id="cRegion"></div>`;
+    updateCustom(); setTimeout(markCustomSeen, 3500);
+  },
+  update(){ if ($('#cRegion')) updateCustom(); }
+};
+async function markCustomSeen(){
+  if (activeTab !== 'custom') return; const un = customOrders.filter(c => c.seen === false); if (!un.length) return;
+  try { const b = writeBatch(db); un.slice(0, 400).forEach(c => b.update(doc(db, 'customOrders', c.id), { seen:true })); await b.commit(); } catch (e) {}
+}
+actions.cSearch = (d, t) => { cFilter.q = t.value; updateCustom(); };
+actions.cChip = (d) => { cFilter.status = d.v; updateCustom(); };
+function updateCustom(){
+  const region = $('#cRegion'); if (!region) return; if (!ready.custom) { region.innerHTML = skeleton(); return; }
+  const q = cFilter.q.trim().toLowerCase();
+  const base = customOrders.filter(c => !q || (c.name || '').toLowerCase().includes(q) || String(c.phone || '').includes(q) || (c.occasion || '').includes(q));
+  const list = base.filter(c => cFilter.status === 'all' || (c.status || 'جديد') === cFilter.status);
+  $('#cChips').innerHTML = [['all', 'الكل'], ...CUSTOM_STATUSES.map(s => [s, s])].map(([k, l]) => `<button class="chip ${cFilter.status === k ? 'on' : ''}" data-act="cChip" data-v="${k}">${l}<span class="n">${k === 'all' ? base.length : base.filter(c => (c.status || 'جديد') === k).length}</span></button>`).join('');
+  region.innerHTML = `<div class="card overflow-x-auto"><table class="tbl min-w-[900px]"><thead><tr><th>العميلة</th><th>المناسبة</th><th>الموعد</th><th>القطع</th><th>الميزانية</th><th>الفكرة</th><th>الحالة</th><th></th></tr></thead><tbody>
+    ${list.map(c => `<tr class="row-click ${c.seen === false ? 'unseen' : ''}" data-act="openCustom" data-id="${esc(c.id)}"><td><b class="block">${esc(c.name)}</b><span class="text-[11px] muted" dir="ltr">${esc(c.phone)}</span></td><td>${esc(c.occasion || '—')}</td><td>${dueChip(c)}</td><td>${esc(c.pieces || '—')}</td><td>${esc(c.budget || '—')}</td>
+      <td class="max-w-[200px]"><p class="truncate muted text-xs" title="${esc(c.description || '')}">${esc(c.description || '—')}</p></td>
+      <td data-act="noop"><select class="input !py-1 !text-xs !w-auto" data-change="cStatus" data-id="${esc(c.id)}" aria-label="الحالة">${CUSTOM_STATUSES.map(s => `<option ${(c.status || 'جديد') === s ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
+      <td data-act="noop" class="whitespace-nowrap"><a class="btn-icon" href="${waLink(c.phone)}" target="_blank" rel="noopener" title="واتساب"><i class="fa-brands fa-whatsapp"></i></a></td></tr>`).join('')
+      || `<tr><td colspan="8" class="text-center muted py-12"><i class="fa-solid fa-palette text-2xl mb-2 block"></i>${customOrders.length ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات خاصة بعد — ستظهر هنا فور إرسال أي عميلة نموذج "اطلبي تصميماً" من المتجر.'}</td></tr>`}</tbody></table></div>`;
+}
+actions.cStatus = async (d, t) => { try { await updateDoc(doc(db, 'customOrders', d.id), { status:t.value, seen:true }); toast('تم تحديث حالة الطلب الخاص'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.openCustom = (d) => openCustomModal(d.id);
+function openCustomModal(id){
+  const c = customOrders.find(x => x.id === id); if (!c) return;
+  if (c.seen === false) updateDoc(doc(db, 'customOrders', id), { seen:true }).catch(() => {});
+  const waMsg = `مرحباً ${c.name || ''} 🤍\nشكراً لاختيارك وشلي! استلمنا طلبك الخاص${c.occasion ? ' لمناسبة ' + c.occasion : ''} ونحب نعرف تفاصيل أكثر عن فكرتك لنجهز لك عرض السعر.`;
+  const linked = c.linkedOrderId && orders.find(o => o.id === c.linkedOrderId);
+  const m = openModal({ title:'<i class="fa-solid fa-palette text-mauve ml-2"></i> طلب خاص — ' + esc(c.name), size:'lg', body: `
+    <div class="grid sm:grid-cols-3 gap-3 mb-4">
+      <div class="card card-pad"><p class="label">رقم الجوال</p><p class="font-bold" dir="ltr" style="text-align:right">${esc(c.phone)}</p><a href="${waLink(c.phone, waMsg)}" target="_blank" rel="noopener" class="text-xs font-bold text-mauve mt-1 inline-block"><i class="fa-brands fa-whatsapp ml-1"></i> ابدئي المحادثة</a></div>
+      <div class="card card-pad"><p class="label">المناسبة والموعد</p><p class="font-bold">${esc(c.occasion || '—')}</p><p class="text-xs muted mt-1">${c.eventDate ? fmtDate(new Date(c.eventDate + 'T00:00:00').getTime(), { day:'numeric', month:'long', year:'numeric' }) : '—'} ${dueChip(c)}</p></div>
+      <div class="card card-pad"><p class="label">القطع والميزانية</p><p class="font-bold">${esc(c.pieces || '—')} قطعة</p><p class="text-xs muted mt-1">${esc(c.budget || 'بدون ميزانية محددة')}</p></div>
+    </div>
+    <div class="card card-pad mb-4"><p class="label">فكرة العميلة</p><p class="leading-7 text-sm">${esc(c.description || 'لم تكتب تفاصيل إضافية')}</p><p class="text-[11px] muted mt-3">وصل ${fmtDT(c.createdAt)}</p></div>
+    <div class="card card-pad mb-4"><div class="grid sm:grid-cols-2 gap-3"><div><label class="label">الحالة</label><select class="input" data-change="cStatus" data-id="${esc(c.id)}">${CUSTOM_STATUSES.map(s => `<option ${(c.status || 'جديد') === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+      <div><label class="label">سعر القطعة المتفق عليه (ج.س)</label><input id="cqPrice" type="number" min="0" class="input" placeholder="0"></div></div>
+      ${linked ? `<button class="btn btn-soft w-full mt-3" data-act="openOrderFromCustom" data-id="${esc(linked.id)}"><i class="fa-solid fa-link"></i> مرتبط بالطلب ${code(linked)} — فتح</button>` : `<button class="btn w-full mt-3" data-act="cConvert" data-id="${esc(c.id)}"><i class="fa-solid fa-arrow-right-arrow-left"></i> تحويل إلى طلب (يدخل في التقارير)</button>`}
+    </div>
+    <div class="flex gap-2 flex-wrap"><button class="btn btn-ghost" data-act="cInvoice" data-id="${esc(c.id)}"><i class="fa-solid fa-file-invoice"></i> عرض سعر / فاتورة</button><button class="btn btn-danger" data-act="cDelete" data-id="${esc(c.id)}"><i class="fa-solid fa-trash"></i> حذف</button></div>` });
+  m.el.dataset.custom = id;
+}
+actions.openOrderFromCustom = (d) => { while (modalStack.length) modalStack[modalStack.length - 1].close(); navTo('orders', { open:d.id }); };
+actions.cConvert = async (d, t) => {
+  const c = customOrders.find(x => x.id === d.id); if (!c) return; const price = Number($('#cqPrice')?.value) || 0;
+  if (price <= 0) { toast('اكتبي سعر القطعة المتفق عليه أولاً', 'err'); return; }
+  t.disabled = true;
+  try {
+    const id = await createOrder({ customer:c.name, phone:c.phone, items:[{ id:'', name:`تصميم خاص${c.occasion ? ' — ' + c.occasion : ''}`, qty:Number(c.pieces) || 1, price, cat:occasionToCategory(c.occasion) }], status:'قيد الانتظار', source:'special', notes:c.description || '' });
+    if (id) { await updateDoc(doc(db, 'customOrders', c.id), { status:'مؤكد', linkedOrderId:id }); toast('تم تحويل الطلب الخاص إلى طلب'); while (modalStack.length) modalStack[modalStack.length - 1].close(); navTo('orders', { open:id }); } else t.disabled = false;
+  } catch (e) { toast('تعذر التحويل — ' + friendlyError(e), 'err'); t.disabled = false; }
+};
+actions.cInvoice = (d) => { const c = customOrders.find(x => x.id === d.id); if (!c) return; const price = Number($('#cqPrice')?.value) || 0;
+  openInvoiceBuilder({ name:c.name, phone:c.phone, category:occasionToCategory(c.occasion), items:[{ id:'', name:`تصميم خاص${c.occasion ? ' — ' + c.occasion : ''}`, qty:Number(c.pieces) || 1, price, cat:occasionToCategory(c.occasion) }] }); };
+actions.cDelete = async (d) => { const ok = await confirmBox({ title:'حذف الطلب الخاص', text:'سيتم حذف هذا الطلب الخاص نهائياً.', okText:'احذفي', danger:true }); if (!ok) return;
+  try { await deleteDoc(doc(db, 'customOrders', d.id)); toast('تم حذف الطلب الخاص'); while (modalStack.length) modalStack[modalStack.length - 1].close(); } catch (e) { toast(friendlyError(e), 'err'); } };
+
+/* =========================================================================
+   PRODUCTS
+========================================================================= */
+const pFilter = { q:'', cat:'all' }; let pfFile = null;
+views.products = {
+  mount(){
+    const p = takeParams('products');
+    $('#adminContent').innerHTML = `<div class="flex flex-wrap items-center gap-2 mb-5">
+      <div class="relative flex-1 min-w-[200px] max-w-sm"><i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 muted text-xs"></i><input class="input !pr-9" data-input="pSearch" placeholder="ابحثي عن منتج" value="${esc(pFilter.q)}"></div>
+      <select class="input !w-auto" data-change="pCat" id="pCatSel"><option value="all">كل الأقسام</option>${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select>
+      <button class="btn btn-soft btn-sm" data-act="exportProducts"><i class="fa-solid fa-download"></i> CSV</button>
+      <button class="btn btn-sm" data-act="pNew"><i class="fa-solid fa-plus"></i> منتج جديد</button></div><div id="pRegion"></div>`;
+    $('#pCatSel').value = pFilter.cat; updateProducts();
+    if (p.newProduct) openProductPanel(); else if (p.edit) openProductPanel(p.edit);
+  },
+  update(){ if ($('#pRegion')) updateProducts(); }
+};
+actions.pSearch = (d, t) => { pFilter.q = t.value; updateProducts(); };
+actions.pCat = (d, t) => { pFilter.cat = t.value; updateProducts(); };
+actions.pNew = () => openProductPanel();
+actions.pEdit = (d) => openProductPanel(d.id);
+actions.exportProducts = () => downloadCSV('wishly-products.csv', [['الاسم', 'القسم', 'السعر', 'قبل الخصم', 'التكلفة', 'المخزون', 'الحد الأدنى', 'الوسم'], ...products.map(p => [p.name, catName(p.cat), p.price, p.old || '', p.cost || '', tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.tag || ''])]);
+function updateProducts(){
+  const region = $('#pRegion'); if (!region) return; if (!ready.products) { region.innerHTML = skeleton(); return; }
+  const q = pFilter.q.trim().toLowerCase(), sold30 = soldUnits(30);
+  const list = products.filter(p => (pFilter.cat === 'all' || p.cat === pFilter.cat) && (!q || (p.name || '').toLowerCase().includes(q)));
+  region.innerHTML = list.length ? `<div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">${list.map(p => { const st = stockState(p, sold30); const mg = p.cost > 0 && p.price > 0 ? Math.round((p.price - p.cost) / p.price * 100) : null;
+    return `<div class="card overflow-hidden"><div class="relative aspect-[4/3] bg-blushL cursor-pointer" data-act="pEdit" data-id="${esc(p.id)}"><img src="${esc(p.img || fallbackImg())}" alt="${esc(p.name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='${fallbackImg()}'">
+      ${p.badge ? `<span class="absolute top-2.5 right-2.5 pill p-mauve" style="background:var(--mauve);color:#fff">${esc(p.badge)}</span>` : ''}<span class="absolute bottom-2.5 left-2.5 pill ${st.cls}" style="box-shadow:0 2px 8px rgba(0,0,0,.12)"><i class="fa-solid ${st.icon}"></i>${tracked(p) ? (st.key === 'out' ? 'نافد' : p.stock + ' قطعة') : 'بدون تتبع'}</span></div>
+      <div class="p-4"><p class="text-[11px] font-bold text-mauve">${catName(p.cat)}</p><p class="font-bold truncate mt-0.5">${esc(p.name)}</p>
+      <div class="flex items-center gap-2 mt-1"><b style="color:var(--mauveD)">${money(p.price)}</b>${p.old ? `<span class="text-xs muted line-through">${num(p.old)}</span>` : ''}${mg != null ? `<span class="delta ${mg >= 30 ? 'up' : 'flat'} mr-auto">هامش ${mg}%</span>` : ''}</div>
+      <div class="flex gap-1 mt-3 pt-3 border-t border-[color:var(--line)]"><button class="btn-icon" data-act="pEdit" data-id="${esc(p.id)}" title="تعديل"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" data-act="pDup" data-id="${esc(p.id)}" title="نسخ"><i class="fa-regular fa-copy"></i></button><button class="btn-icon" data-act="pInvoice" data-id="${esc(p.id)}" title="فاتورة سريعة"><i class="fa-solid fa-file-invoice"></i></button><button class="btn-icon danger mr-auto" data-act="pDel" data-id="${esc(p.id)}" title="حذف"><i class="fa-solid fa-trash"></i></button></div></div></div>`; }).join('')}</div>`
+    : `<div class="card text-center py-16 muted"><i class="fa-solid fa-gift text-3xl text-mauve mb-3"></i><p class="font-bold">${products.length ? 'لا توجد منتجات مطابقة' : 'لا توجد منتجات بعد'}</p><p class="text-xs mt-1">${products.length ? 'جربي كلمة بحث أو قسماً آخر.' : 'أضيفي أول منتج ليظهر في المتجر فوراً.'}</p>${products.length ? '' : '<button class="btn mt-4" data-act="pNew"><i class="fa-solid fa-plus"></i> منتج جديد</button>'}</div>`;
+}
+actions.pInvoice = (d) => { const p = productById(d.id); if (!p) return; openInvoiceBuilder({ category:p.cat, items:[{ id:p.id, name:p.name, qty:1, price:p.price, cat:p.cat }] }); };
+actions.pDup = async (d) => { const p = productById(d.id); if (!p) return; const { id, ...rest } = p; try { await addDoc(collection(db, 'products'), { ...rest, name:p.name + ' (نسخة)', createdAt:Date.now(), ...(tracked(p) ? { stock:0 } : {}) }); toast('تم نسخ المنتج'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.pDel = async (d) => { const p = productById(d.id); if (!p) return; const ok = await confirmBox({ title:'حذف المنتج', text:`سيتم حذف "${p.name}" من المتجر نهائياً.`, okText:'احذفي', danger:true }); if (!ok) return;
+  try { await deleteDoc(doc(db, 'products', d.id)); toast('تم حذف المنتج'); } catch (e) { toast(friendlyError(e), 'err'); } };
+
+function openProductPanel(id){
+  const p = id ? productById(id) : null; if (id && !p) return; pfFile = null;
+  const m = openModal({ title: p ? '<i class="fa-solid fa-pen text-mauve ml-2"></i> تعديل المنتج' : '<i class="fa-solid fa-plus text-mauve ml-2"></i> منتج جديد', side:true, body: `
+    <form id="pfForm" class="space-y-4">
+      <div><label class="label">اسم المنتج</label><input required id="pfName" class="input" value="${esc(p?.name || '')}"></div>
+      <div class="grid grid-cols-2 gap-3"><div><label class="label">القسم</label><select id="pfCat" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}" ${p?.cat === c.key ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div>
+        <div><label class="label">الوسم</label><select id="pfTag" class="input"><option value="new" ${p?.tag === 'new' ? 'selected' : ''}>وصل حديثاً</option><option value="bestseller" ${p?.tag === 'bestseller' ? 'selected' : ''}>الأكثر مبيعاً</option><option value="sale" ${p?.tag === 'sale' ? 'selected' : ''}>عرض</option></select></div></div>
+      <div class="grid grid-cols-3 gap-3"><div><label class="label">السعر</label><input required id="pfPrice" type="number" min="0" class="input" data-input="pfCalc" value="${p?.price ?? ''}"></div><div><label class="label">قبل الخصم</label><input id="pfOld" type="number" min="0" class="input" value="${p?.old || ''}"></div><div><label class="label">التكلفة</label><input id="pfCost" type="number" min="0" class="input" data-input="pfCalc" value="${p?.cost || ''}"></div></div>
+      <p id="pfMargin" class="text-xs font-bold" style="color:var(--mauveD)"></p>
+      <div><label class="label">شارة (اختياري)</label><input id="pfBadge" class="input" placeholder="مثال: حصري" value="${esc(p?.badge || '')}"></div>
+      <div class="card card-pad"><label class="flex items-center justify-between gap-3 cursor-pointer"><span><b class="text-sm">تتبع المخزون</b><span class="block text-[11px] muted">يخصم الكمية تلقائياً عند تجهيز الطلب ويمنع الطلب عند النفاد</span></span><input type="checkbox" id="pfTrack" class="sr-only" ${tracked(p) ? 'checked' : ''} data-change="pfTrack"><span class="tg"></span></label>
+        <div id="pfStockBox" class="grid grid-cols-2 gap-3 mt-3 ${tracked(p) ? '' : 'hidden'}"><div><label class="label">الكمية الحالية</label><input id="pfStock" type="number" min="0" class="input" value="${tracked(p) ? p.stock : 0}"></div><div><label class="label">تنبيه عند أقل من</label><input id="pfMin" type="number" min="0" class="input" placeholder="${Number(settings.defaultMinStock) || 3}" value="${typeof p?.minStock === 'number' ? p.minStock : ''}"></div></div></div>
+      <div class="card card-pad"><p class="label"><i class="fa-solid fa-image ml-1"></i> صورة الغلاف</p>
+        <input type="file" accept="image/*" id="pfFile" data-change="pfFile" class="w-full text-xs file:ml-2 file:rounded-full file:border-0 file:bg-[color:var(--blushL)] file:text-[color:var(--mauveD)] file:px-3 file:py-1.5 file:font-bold">
+        <div class="flex items-center gap-2 my-2"><span class="flex-1 h-px bg-[color:var(--line)]"></span><span class="text-[11px] muted">أو</span><span class="flex-1 h-px bg-[color:var(--line)]"></span></div>
+        <input id="pfUrl" class="input !text-xs" dir="ltr" data-input="pfUrl" placeholder="رابط صورة (جوجل درايف أو رابط مباشر)" value="${p?.img && p.img.startsWith('http') && !p.img.includes('firebasestorage') ? esc(p.img) : ''}">
+        <img id="pfPrev" alt="معاينة" class="${p?.img ? '' : 'hidden'} w-full h-36 object-cover rounded-xl mt-3" src="${esc(p?.img || '')}"><p id="pfImgErr" class="hidden text-[11px] mt-1" style="color:var(--crit)">تعذر تحميل الصورة من الرابط — تأكدي أنه عام (Public).</p></div>
+      <div class="card card-pad"><p class="label"><i class="fa-solid fa-images ml-1"></i> صور إضافية (رابط في كل سطر)</p><textarea id="pfGallery" rows="3" class="input !text-xs" dir="ltr">${esc((p?.gallery || []).join('\n'))}</textarea></div>
+      <button class="btn w-full !py-3" id="pfSubmit">${p ? 'حفظ التعديلات' : 'إضافة المنتج'}</button>
+    </form>` });
+  actions.pfCalc();
+  $('#pfForm', m.el).addEventListener('submit', (e) => { e.preventDefault(); saveProduct(m, p); });
+}
+actions.pfCalc = () => { const pr = Number($('#pfPrice')?.value) || 0, c = Number($('#pfCost')?.value) || 0, el = $('#pfMargin'); if (!el) return; el.textContent = pr > 0 && c > 0 ? `الربح للقطعة: ${money(pr - c)} • الهامش ${Math.round((pr - c) / pr * 100)}%` : 'أضيفي التكلفة لحساب الربح والهامش'; };
+actions.pfTrack = (d, t) => $('#pfStockBox').classList.toggle('hidden', !t.checked);
+actions.pfFile = (d, t) => { const f = t.files[0]; if (!f) return; pfFile = f; $('#pfUrl').value = ''; const pv = $('#pfPrev'); pv.src = URL.createObjectURL(f); pv.classList.remove('hidden'); $('#pfImgErr').classList.add('hidden'); };
+actions.pfUrl = (d, t) => { const u = t.value.trim(), pv = $('#pfPrev'), er = $('#pfImgErr'); if (!u) { pv.classList.add('hidden'); er.classList.add('hidden'); return; } pfFile = null; $('#pfFile').value = ''; er.classList.add('hidden'); pv.onerror = () => { pv.classList.add('hidden'); er.classList.remove('hidden'); }; pv.src = normalizeImageUrl(u); pv.classList.remove('hidden'); };
+async function saveProduct(m, p){
+  const btn = $('#pfSubmit', m.el), label = btn.textContent; btn.disabled = true; btn.textContent = 'جارِ الحفظ...';
+  try {
+    const v = (id) => $('#' + id, m.el).value; const name = v('pfName').trim();
+    let img = p?.img || ''; const url = v('pfUrl').trim();
+    if (url) img = normalizeImageUrl(url);
+    else if (pfFile) { try { img = await uploadImage(pfFile, 'products'); } catch (e) { console.error(e); toast('تعذر رفع الصورة — ' + friendlyError(e) + '. تم حفظ المنتج بصورة مؤقتة.', 'err'); } }
+    if (!img) img = fallbackImg();
+    const data = { name, cat:v('pfCat'), tag:v('pfTag'), badge:v('pfBadge').trim(), price:Number(v('pfPrice')) || 0, old:Number(v('pfOld')) || 0, cost:Number(v('pfCost')) || 0, img, gallery:v('pfGallery').split('\n').map(x => x.trim()).filter(Boolean).map(normalizeImageUrl) };
+    const track = $('#pfTrack', m.el).checked, stock = Math.max(0, Number(v('pfStock')) || 0), minRaw = v('pfMin').trim();
+    const b = writeBatch(db); const ref0 = p ? doc(db, 'products', p.id) : doc(collection(db, 'products'));
+    if (track) { data.stock = stock; if (minRaw !== '') data.minStock = Math.max(0, Number(minRaw)); else if (p) data.minStock = deleteField(); }
+    else if (p) { data.stock = deleteField(); data.minStock = deleteField(); }
+    if (p) b.update(ref0, data); else b.set(ref0, { ...data, createdAt:Date.now() });
+    const before = tracked(p) ? p.stock : 0;
+    if (track && stock !== before) b.set(doc(collection(db, 'stockLogs')), { productId:ref0.id, name, delta:stock - before, before, after:stock, reason: p ? 'تعديل من صفحة المنتج' : 'مخزون افتتاحي', orderId:'', at:Date.now() });
+    await b.commit(); toast(p ? `تم تحديث "${name}"` : `تمت إضافة "${name}" للمتجر`); m.close();
+  } catch (err) { toast('تعذر حفظ المنتج — ' + friendlyError(err), 'err'); console.error(err); btn.disabled = false; btn.textContent = label; }
+}
+
+/* =========================================================================
+   INVENTORY
+========================================================================= */
+const iFilter = { f:'all', q:'', sort:'urgent' };
+views.inventory = {
+  mount(){
+    const p = takeParams('inventory'); iFilter.f = p.filter || 'all';
+    $('#adminContent').innerHTML = `<div id="iTiles" class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-5"></div>
+      <div class="flex flex-wrap items-center gap-2 mb-3"><div class="relative flex-1 min-w-[200px] max-w-xs"><i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 muted text-xs"></i><input class="input !pr-9" data-input="iSearch" placeholder="ابحثي عن منتج" value="${esc(iFilter.q)}"></div>
+        <select class="input !w-auto" data-change="iSort" id="iSortSel"><option value="urgent">الأحوج أولاً</option><option value="name">الاسم</option><option value="stock">الأقل مخزوناً</option><option value="value">الأعلى قيمة</option></select>
+        <button class="btn btn-soft btn-sm" data-act="exportInventory"><i class="fa-solid fa-download"></i> CSV</button></div>
+      <div id="iChips" class="flex gap-2 flex-wrap mb-4"></div>
+      <div class="grid xl:grid-cols-3 gap-5 items-start"><div class="xl:col-span-2 min-w-0" id="iTable"></div><div class="space-y-5 min-w-0" id="iSide"></div></div>`;
+    $('#iSortSel').value = iFilter.sort; updateInventory();
+  },
+  update(){ if ($('#iTable')) updateInventory(); }
+};
+actions.iSearch = (d, t) => { iFilter.q = t.value; updateInventory(); };
+actions.iSort = (d, t) => { iFilter.sort = t.value; updateInventory(); };
+actions.iChip = (d) => { iFilter.f = d.v; updateInventory(); };
+actions.iAdj = async (d) => { await adjustStock(d.id, { delta:Number(d.v), reason:'تعديل يدوي' }); };
+actions.iSet = async (d, t) => { const ok = await adjustStock(d.id, { set:t.value, reason:'تعديل يدوي' }); if (ok === false) updateInventory(); };
+actions.iTrack = async (d) => { try { await updateDoc(doc(db, 'products', d.id), { stock:0 }); toast('تم تفعيل تتبع المخزون — سجّلي الكمية الحالية'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.exportInventory = () => { const s30 = soldUnits(30); downloadCSV('wishly-inventory.csv', [['المنتج', 'القسم', 'المخزون', 'الحد الأدنى', 'التكلفة', 'السعر', 'مباع آخر 30 يوم', 'أيام متبقية', 'الحالة'], ...products.map(p => { const st = stockState(p, s30); return [p.name, catName(p.cat), tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.cost || '', p.price, s30[p.id] || 0, st.days != null ? Math.round(st.days) : '', st.label]; })]); };
+function updateInventory(){
+  if (!$('#iTable')) return; if (!ready.products) { $('#iTable').innerHTML = skeleton(); return; }
+  const s30 = soldUnits(30), trk = products.filter(tracked);
+  const rows = products.map(p => ({ p, st:stockState(p, s30), sold:s30[p.id] || 0 }));
+  const counts = { all:rows.length, out:0, low:0, soon:0, ok:0, none:0 }; rows.forEach(r => { counts[r.st.key]++; });
+  const costVal = sum(trk, p => (p.cost > 0 ? p.cost : 0) * Math.max(0, p.stock)), retail = sum(trk, p => (p.price || 0) * Math.max(0, p.stock));
+  const tile = (icon, l, v, sub) => `<div class="card card-pad"><p class="text-xs muted font-semibold flex items-center gap-2 mb-2"><i class="fa-solid ${icon} text-mauve"></i>${l}</p><p class="text-xl font-extrabold">${v}</p><p class="text-[11px] muted mt-1">${sub || '&nbsp;'}</p></div>`;
+  $('#iTiles').innerHTML = tile('fa-boxes-stacked', 'منتجات متتبعة', `${trk.length} <span class="text-sm muted font-semibold">من ${products.length}</span>`, sum(trk, p => Math.max(0, p.stock)) + ' قطعة في المخزون') + tile('fa-coins', 'قيمة المخزون (تكلفة)', costVal ? money(costVal) : '—', costVal ? '' : 'أضيفي سعر التكلفة') + tile('fa-tag', 'قيمته بسعر البيع', money(retail), costVal ? 'ربح محتمل ' + money(retail - costVal) : '')
+    + tile('fa-ban', 'نافد', `<span style="color:var(--crit)">${counts.out}</span>`, 'غير متاح للطلب') + tile('fa-triangle-exclamation', 'منخفض / قارب النفاد', `<span style="color:var(--warn)">${counts.low + counts.soon}</span>`, 'يحتاج توريد');
+  const chips = [['all', 'الكل'], ['out', 'نافد'], ['low', 'منخفض'], ['soon', 'قارب على النفاد'], ['ok', 'متوفر'], ['none', 'غير متتبع']];
+  $('#iChips').innerHTML = chips.map(([k, l]) => `<button class="chip ${iFilter.f === k ? 'on' : ''}" data-act="iChip" data-v="${k}">${l}<span class="n">${counts[k]}</span></button>`).join('');
+  const q = iFilter.q.trim().toLowerCase(); const rank = { out:0, low:1, soon:2, ok:3, none:4 };
+  let list = rows.filter(r => (iFilter.f === 'all' || r.st.key === iFilter.f) && (!q || (r.p.name || '').toLowerCase().includes(q)));
+  list.sort((a, b) => iFilter.sort === 'name' ? (a.p.name || '').localeCompare(b.p.name || '', 'ar') : iFilter.sort === 'stock' ? (tracked(a.p) ? a.p.stock : 1e9) - (tracked(b.p) ? b.p.stock : 1e9) : iFilter.sort === 'value' ? ((b.p.stock || 0) * (b.p.price || 0)) - ((a.p.stock || 0) * (a.p.price || 0)) : (rank[a.st.key] - rank[b.st.key]) || ((a.st.days ?? 1e9) - (b.st.days ?? 1e9)));
+  $('#iTable').innerHTML = `<div class="card overflow-x-auto"><table class="tbl min-w-[820px]"><thead><tr><th>المنتج</th><th>المخزون</th><th>مباع/30ي</th><th>يكفي</th><th>الهامش</th><th>الحالة</th><th></th></tr></thead><tbody>
+    ${list.map(({ p, st, sold }) => { const mg = p.cost > 0 && p.price > 0 ? Math.round((p.price - p.cost) / p.price * 100) + '%' : '—';
+      return `<tr><td><div class="flex items-center gap-3 min-w-[170px]"><img src="${esc(p.img || fallbackImg())}" alt="" class="w-10 h-10 rounded-xl object-cover bg-blushL" loading="lazy"><div class="min-w-0"><b class="block truncate text-[.84rem]">${esc(p.name)}</b><span class="text-[11px] muted">${catName(p.cat)}${tracked(p) ? ' • حد أدنى ' + minStockOf(p) : ''}</span></div></div></td>
+      <td>${tracked(p) ? `<div class="inline-flex items-center gap-1 bg-white border border-[#E6CFD1] rounded-full p-0.5"><button class="btn-icon" style="width:28px;height:28px" data-act="iAdj" data-id="${esc(p.id)}" data-v="-1" aria-label="إنقاص"><i class="fa-solid fa-minus"></i></button><input type="number" min="0" class="w-14 text-center font-extrabold bg-transparent focus:outline-none" value="${p.stock}" data-change="iSet" data-id="${esc(p.id)}" aria-label="الكمية"><button class="btn-icon" style="width:28px;height:28px" data-act="iAdj" data-id="${esc(p.id)}" data-v="1" aria-label="زيادة"><i class="fa-solid fa-plus"></i></button></div>` : `<button class="btn btn-soft btn-sm" data-act="iTrack" data-id="${esc(p.id)}">ابدأ التتبع</button>`}</td>
+      <td>${tracked(p) ? num(sold) : '—'}</td><td class="text-xs">${st.key === 'none' ? '—' : st.key === 'out' ? '0' : st.days == null ? '<span class="muted">لا مبيعات</span>' : Math.round(st.days) + ' يوم'}</td><td class="text-xs">${mg}</td>
+      <td><span class="pill ${st.cls}"><i class="fa-solid ${st.icon}"></i>${st.label}</span></td>
+      <td>${tracked(p) ? `<button class="btn btn-ghost btn-sm" data-act="iRestock" data-id="${esc(p.id)}"><i class="fa-solid fa-truck-ramp-box"></i> توريد</button>` : ''}</td></tr>`; }).join('')
+      || `<tr><td colspan="7" class="text-center muted py-12"><i class="fa-solid fa-boxes-stacked text-2xl mb-2 block"></i>${products.length ? 'لا توجد منتجات في هذا التصنيف' : 'أضيفي منتجات أولاً من تبويب المنتجات'}</td></tr>`}</tbody></table></div>`;
+  /* side: smart reorder + movement log */
+  const need = rows.filter(r => tracked(r.p)).map(r => { const vel = r.st.vel || 0; const target = vel > 0 ? Math.ceil(vel * 21) : minStockOf(r.p) * 2; return { ...r, qty: Math.max(0, target - r.p.stock) }; })
+    .filter(r => r.qty > 0 && (r.st.key === 'out' || r.st.key === 'low' || r.st.key === 'soon')).sort((a, b) => (a.st.days ?? 0) - (b.st.days ?? 0)).slice(0, 6);
+  $('#iSide').innerHTML = `<div class="card card-pad"><p class="card-title mb-1"><i class="fa-solid fa-wand-magic-sparkles"></i> اقتراحات إعادة التخزين</p><p class="text-[11px] muted mb-3">تكفي ~3 أسابيع حسب معدل البيع الحالي</p>
+      ${need.map(r => `<div class="flex items-center gap-3 py-2 border-t border-[color:var(--line)] first:border-0"><div class="min-w-0 flex-1"><b class="text-[.82rem] block truncate">${esc(r.p.name)}</b><span class="text-[11px] muted">متبقي ${r.p.stock} • ${r.st.vel ? (r.st.vel * 7).toFixed(1) + ' قطعة/أسبوع' : 'بدون مبيعات حديثة'}</span></div><button class="btn btn-soft btn-sm" data-act="iRestock" data-id="${esc(r.p.id)}" data-qty="${r.qty}">+${r.qty}</button></div>`).join('') || '<p class="text-xs muted text-center py-5"><i class="fa-solid fa-circle-check text-lg block mb-1" style="color:var(--good)"></i>لا توجد منتجات تحتاج توريداً الآن</p>'}</div>
+    <div class="card card-pad"><p class="card-title mb-3"><i class="fa-solid fa-clock-rotate-left"></i> آخر حركات المخزون</p>
+      ${stockLogs.slice(0, 12).map(l => `<div class="flex items-center gap-3 py-2 border-t border-[color:var(--line)] first:border-0"><span class="pill ${l.delta >= 0 ? 'p-good' : 'p-crit'}" style="min-width:48px;justify-content:center" dir="ltr">${l.delta >= 0 ? '+' : ''}${l.delta}</span><div class="min-w-0 flex-1"><b class="text-[.8rem] block truncate">${esc(l.name)}</b><span class="text-[11px] muted truncate block">${esc(l.reason || '')}</span></div><span class="text-[11px] muted shrink-0">${ago(l.at)}</span></div>`).join('') || '<p class="text-xs muted text-center py-5">لا توجد حركات بعد</p>'}</div>`;
+}
+actions.iRestock = (d) => {
+  const p = productById(d.id); if (!p) return; const sugg = Number(d.qty) || '';
+  const m = openModal({ title:'<i class="fa-solid fa-truck-ramp-box text-mauve ml-2"></i> توريد — ' + esc(p.name), size:'sm', body: `<form id="rsForm" class="space-y-3">
+    <p class="text-xs muted">المخزون الحالي: <b>${tracked(p) ? p.stock : 0}</b> قطعة</p>
+    <div><label class="label">الكمية الواردة</label><input required id="rsQty" type="number" min="1" class="input" value="${sugg}"></div>
+    <div><label class="label">سعر التكلفة الجديد (اختياري)</label><input id="rsCost" type="number" min="0" class="input" placeholder="${p.cost || ''}"></div>
+    <div><label class="label">ملاحظة</label><input id="rsNote" class="input" placeholder="مثال: من المورّد فلان"></div>
+    <button class="btn w-full" id="rsGo">تسجيل التوريد</button></form>` });
+  $('#rsQty', m.el).focus();
+  $('#rsForm', m.el).addEventListener('submit', async (e) => { e.preventDefault(); const q = Number($('#rsQty', m.el).value); if (!(q > 0)) return; const note = $('#rsNote', m.el).value.trim(); const c = Number($('#rsCost', m.el).value) || null;
+    const ok = await adjustStock(p.id, { delta:q, reason:'توريد' + (note ? ' — ' + note : ''), cost:c }); if (ok) { toast(`تمت إضافة ${q} قطعة إلى "${p.name}"`); m.close(); } });
+};
+
+/* =========================================================================
+   CUSTOMERS (CRM built from orders)
+========================================================================= */
+const kFilter = { q:'', seg:'all' };
+views.customers = {
+  mount(){
+    const p = takeParams('customers'); kFilter.seg = p.seg || 'all';
+    $('#adminContent').innerHTML = `<div class="flex flex-wrap items-center gap-2 mb-4"><div class="relative flex-1 min-w-[200px] max-w-sm"><i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 muted text-xs"></i><input class="input !pr-9" data-input="kSearch" placeholder="اسم أو رقم هاتف" value="${esc(kFilter.q)}"></div><button class="btn btn-soft btn-sm" data-act="exportCustomers"><i class="fa-solid fa-download"></i> CSV</button></div><div id="kChips" class="flex gap-2 flex-wrap mb-4"></div><div id="kRegion"></div>`;
+    updateCustomers();
+  },
+  update(){ if ($('#kRegion')) updateCustomers(); }
+};
+actions.kSearch = (d, t) => { kFilter.q = t.value; updateCustomers(); };
+actions.kChip = (d) => { kFilter.seg = d.v; updateCustomers(); };
+function segMsg(c){
+  const n = c.name || ''; const s = c.seg[0];
+  if (s === 'VIP') return `مرحباً ${n} 🤍\nاشتقنا لكِ في وشلي! جهّزنا تشكيلة جديدة وبنحب تكوني أول من يشوفها. تحبي نرسل لك الصور؟`;
+  if (s === 'خاملة' || s === 'تحتاج متابعة') return `مرحباً ${n} 🤍\nوحشتينا! عندنا تصاميم جديدة لمناسباتك القادمة، ويسعدنا نجهّز لك خصم خاص على طلبك الجاي.`;
+  return `شكراً لثقتك بوشلي يا ${n} 🤍\nيسعدنا نسمع رأيك في طلبك، وجاهزين لأي مناسبة جاية.`;
+}
+function updateCustomers(){
+  const region = $('#kRegion'); if (!region) return; if (!ready.orders) { region.innerHTML = skeleton(); return; }
+  const all = customersAgg(), q = kFilter.q.trim().toLowerCase();
+  const base = all.filter(c => !q || (c.name || '').toLowerCase().includes(q) || String(c.phone || '').includes(q));
+  const list = base.filter(c => kFilter.seg === 'all' || c.seg[0] === kFilter.seg);
+  const segs = ['VIP', 'جديدة', 'نشطة', 'تحتاج متابعة', 'خاملة'];
+  $('#kChips').innerHTML = [['all', 'الكل'], ...segs.map(s => [s, s])].map(([k, l]) => `<button class="chip ${kFilter.seg === k ? 'on' : ''}" data-act="kChip" data-v="${k}">${l}<span class="n">${k === 'all' ? base.length : base.filter(c => c.seg[0] === k).length}</span></button>`).join('');
+  region.innerHTML = `<div class="card overflow-x-auto"><table class="tbl min-w-[760px]"><thead><tr><th>العميلة</th><th>التصنيف</th><th>الطلبات</th><th>إجمالي الإنفاق</th><th>متوسط الطلب</th><th>آخر طلب</th><th></th></tr></thead><tbody>
+    ${list.map(c => `<tr class="row-click" data-act="openCustomer" data-key="${esc(c.key)}"><td><b class="block">${esc(c.name)}</b><span class="text-[11px] muted" dir="ltr">${esc(c.phone)}</span></td><td>${segPill(c)}</td><td>${c.count}</td><td><b>${money(c.total)}</b></td><td>${money(c.total / c.count)}</td><td class="text-xs">${ago(c.last)}</td>
+      <td data-act="noop"><a class="btn-icon" href="${waLink(c.phone, segMsg(c))}" target="_blank" rel="noopener" title="رسالة ذكية على واتساب"><i class="fa-brands fa-whatsapp"></i></a></td></tr>`).join('')
+      || `<tr><td colspan="7" class="text-center muted py-12"><i class="fa-solid fa-users text-2xl mb-2 block"></i>${all.length ? 'لا توجد عميلات مطابقة' : 'ستظهر العميلات هنا تلقائياً بعد أول طلب.'}</td></tr>`}</tbody></table></div>
+    <p class="text-[11px] muted mt-3">يتم تجميع العميلات حسب رقم الجوال. تصنيف VIP = 3 طلبات فأكثر أو من أعلى 10% إنفاقاً.</p>`;
+}
+actions.openCustomer = (d) => openCustomerModal(d.key);
+actions.exportCustomers = () => downloadCSV('wishly-customers.csv', [['الاسم', 'الهاتف', 'التصنيف', 'عدد الطلبات', 'إجمالي الإنفاق', 'آخر طلب'], ...customersAgg().map(c => [c.name, c.phone, c.seg[0], c.count, c.total, new Date(c.last).toISOString().slice(0, 10)])]);
+function openCustomerModal(key){
+  const c = customersAgg().find(x => x.key === key); if (!c) return;
+  openModal({ title:'<i class="fa-solid fa-user text-mauve ml-2"></i> ' + esc(c.name), size:'md', body: `
+    <div class="flex items-center justify-between mb-4"><div><p class="text-sm muted" dir="ltr" style="text-align:right">${esc(c.phone)}</p><div class="mt-1">${segPill(c)}</div></div><a class="btn" href="${waLink(c.phone, segMsg(c))}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> رسالة ذكية</a></div>
+    <div class="grid grid-cols-3 gap-3 mb-4"><div class="card card-pad text-center"><p class="text-lg font-extrabold">${c.count}</p><p class="text-[11px] muted">طلب</p></div><div class="card card-pad text-center"><p class="text-lg font-extrabold">${money(c.total)}</p><p class="text-[11px] muted">إجمالي</p></div><div class="card card-pad text-center"><p class="text-lg font-extrabold">${money(c.total / c.count)}</p><p class="text-[11px] muted">متوسط</p></div></div>
+    <p class="label">أول طلب ${fmtDate(c.first, { day:'numeric', month:'long', year:'numeric' })} • آخر طلب ${ago(c.last)}</p>
+    <div class="card overflow-hidden mt-2"><table class="tbl"><tbody>${[...c.orders].sort((a, b) => b.createdAt - a.createdAt).map(o => `<tr class="row-click" data-act="openOrder" data-id="${esc(o.id)}"><td><b>${code(o)}</b></td><td class="text-xs">${fmtDate(o.createdAt)}</td><td>${money(o.total)}</td><td>${pill(o.status)}</td></tr>`).join('')}</tbody></table></div>` });
+}
+
+/* =========================================================================
+   OFFERS
+========================================================================= */
+let editingOfferId = null;
+views.offers = {
+  mount(){
+    editingOfferId = null;
+    $('#adminContent').innerHTML = `<div class="grid lg:grid-cols-3 gap-5 items-start">
+      <div class="lg:col-span-2 min-w-0 card overflow-x-auto"><table class="tbl min-w-[620px]"><thead><tr><th>العرض</th><th>الخصم</th><th>القسم</th><th>ينتهي</th><th>مفعّل</th><th></th></tr></thead><tbody id="offerRows"></tbody></table></div>
+      <form id="offerForm" class="card card-pad space-y-3">
+        <p class="font-bold" id="offerFormTitle"><i class="fa-solid fa-plus text-mauve ml-1"></i> إنشاء عرض جديد</p>
+        <div><label class="label">عنوان العرض</label><input required id="ofTitle" class="input" placeholder="خصم 25% على بوكسات الأفراح"></div>
+        <div class="grid grid-cols-2 gap-3"><div><label class="label">نسبة الخصم %</label><input required id="ofDiscount" type="number" min="1" max="90" class="input"></div><div><label class="label">ينتهي في</label><input required id="ofEnds" type="datetime-local" class="input"></div></div>
+        <div><label class="label">القسم</label><select id="ofCategory" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
+        <label class="flex items-center justify-between gap-3 cursor-pointer text-sm font-semibold">عرض مفعّل حالياً<input type="checkbox" id="ofActive" class="sr-only" checked><span class="tg"></span></label>
+        <p class="text-[11px] muted leading-5">العرض المفعّل يظهر في المتجر بعدّاد تنازلي. يُفعَّل عرض واحد فقط في كل وقت.</p>
+        <div class="flex gap-2"><button class="btn flex-1" id="offerFormSubmit">حفظ العرض</button><button type="button" class="btn btn-soft hidden" id="offerFormCancel">إلغاء</button></div>
+      </form></div>`;
+    $('#offerForm').addEventListener('submit', saveOffer); $('#offerFormCancel').addEventListener('click', resetOfferForm); updateOffers();
+  },
+  update(){ updateOffers(); }
+};
+function updateOffers(){
+  const el = $('#offerRows'); if (!el) return;
+  el.innerHTML = offers.map(o => { const ended = o.endsAt < Date.now(); return `<tr><td><b>${esc(o.title)}</b></td><td>${esc(o.discount)}%</td><td>${catName(o.category)}</td><td class="text-xs">${fmtDT(o.endsAt)} ${ended ? '<span class="pill p-gray">انتهى</span>' : ''}</td>
+    <td><label class="cursor-pointer inline-block"><input type="checkbox" class="sr-only" ${o.active ? 'checked' : ''} data-change="oToggle" data-id="${esc(o.id)}" aria-label="تفعيل العرض"><span class="tg"></span></label></td>
+    <td class="whitespace-nowrap"><button class="btn-icon" data-act="oEdit" data-id="${esc(o.id)}" title="تعديل"><i class="fa-solid fa-pen"></i></button><button class="btn-icon danger" data-act="oDel" data-id="${esc(o.id)}" title="حذف"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join('')
+    || '<tr><td colspan="6" class="text-center muted py-10">لا توجد عروض بعد</td></tr>';
+}
+actions.oToggle = async (d, t) => { try { if (t.checked) await Promise.all(offers.filter(o => o.active && o.id !== d.id).map(o => updateDoc(doc(db, 'offers', o.id), { active:false }))); await updateDoc(doc(db, 'offers', d.id), { active:t.checked }); toast(t.checked ? 'تم تفعيل العرض في المتجر' : 'تم إيقاف العرض'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.oEdit = (d) => {
+  const o = offers.find(x => x.id === d.id); if (!o) return; editingOfferId = o.id;
+  $('#ofTitle').value = o.title; $('#ofDiscount').value = o.discount; $('#ofEnds').value = new Date(o.endsAt - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  $('#ofCategory').value = o.category; $('#ofActive').checked = !!o.active;
+  $('#offerFormTitle').innerHTML = '<i class="fa-solid fa-pen text-mauve ml-1"></i> تعديل العرض'; $('#offerFormSubmit').textContent = 'حفظ التعديلات'; $('#offerFormCancel').classList.remove('hidden');
+  $('#offerForm').scrollIntoView({ behavior:'smooth', block:'center' });
+};
+function resetOfferForm(){ editingOfferId = null; $('#offerForm').reset(); $('#ofActive').checked = true; $('#offerFormTitle').innerHTML = '<i class="fa-solid fa-plus text-mauve ml-1"></i> إنشاء عرض جديد'; $('#offerFormSubmit').textContent = 'حفظ العرض'; $('#offerFormCancel').classList.add('hidden'); }
+async function saveOffer(e){
+  e.preventDefault();
+  try {
+    const data = { title:$('#ofTitle').value.trim(), discount:Number($('#ofDiscount').value), endsAt:new Date($('#ofEnds').value).getTime(), category:$('#ofCategory').value, active:$('#ofActive').checked };
+    if (data.active) await Promise.all(offers.filter(o => o.active && o.id !== editingOfferId).map(o => updateDoc(doc(db, 'offers', o.id), { active:false })));
+    if (editingOfferId) await updateDoc(doc(db, 'offers', editingOfferId), data); else await addDoc(collection(db, 'offers'), data);
+    toast(editingOfferId ? 'تم تحديث العرض' : 'تم إنشاء العرض ونشره في المتجر'); resetOfferForm();
+  } catch (err) { toast('تعذر حفظ العرض — ' + friendlyError(err), 'err'); console.error(err); }
+}
+actions.oDel = async (d) => { const ok = await confirmBox({ title:'حذف العرض', text:'سيتم حذف هذا العرض نهائياً.', okText:'احذفي', danger:true }); if (!ok) return; try { await deleteDoc(doc(db, 'offers', d.id)); toast('تم حذف العرض'); } catch (e) { toast(friendlyError(e), 'err'); } };
+
+/* =========================================================================
+   MESSAGES (templates attached to invoices)
+========================================================================= */
+let editingTplId = null;
+const SEED_MSGS = [
+  { category:'wedding', title:'تهنئة فرح', text:'مبروك الفرح الجميل يا {name} 🤍 نتمنى لكما حياة مليئة بالسعادة والمحبة.' },
+  { category:'engagement', title:'تهنئة خطوبة', text:'ألف مبروك الخطوبة يا {name} 🤍 الله يتمم لكم على خير.' },
+  { category:'baby', title:'تهنئة مولود', text:'ألف مبروك السلامة يا {name} 🤍 الله يجعله قرة عين لكم.' },
+  { category:'success', title:'تهنئة نجاح', text:'مبروك النجاح يا {name} 🎓 فخورين بك ونتمنى لك مستقبلاً مشرقاً.' },
+  { category:'jertig', title:'تهنئة جرتق', text:'مبروك الجرتق يا {name} 🤍 أسعد الله أيامكم بكل خير.' },
+  { category:'birthday', title:'عيد ميلاد', text:'كل عام وأنتِ بخير يا {name} 🎂 أجمل الأمنيات في يومك.' },
+  { category:'corporate', title:'شكر الشركات', text:'شكراً لثقتكم بوشلي يا {name} 🤍 سعداء بخدمتكم دائماً.' },
+  { category:'general', title:'شكر عام', text:'شكراً لاختيارك وشلي يا {name} 🤍 يسعدنا أن نكون جزءاً من لحظاتك الجميلة.' },
+];
+const catLabelMsg = (k) => k === 'general' ? 'كل المناسبات' : catName(k);
+views.messages = {
+  mount(){
+    editingTplId = null;
+    $('#adminContent').innerHTML = `<div class="grid lg:grid-cols-3 gap-5 items-start">
+      <div class="lg:col-span-2 min-w-0 card overflow-x-auto"><table class="tbl min-w-[560px]"><thead><tr><th>المناسبة</th><th>العنوان</th><th>الرسالة</th><th></th></tr></thead><tbody id="tplRows"></tbody></table></div>
+      <form id="tplForm" class="card card-pad space-y-3">
+        <p class="font-bold" id="tplFormTitle"><i class="fa-solid fa-plus text-mauve ml-1"></i> إضافة رسالة</p>
+        <div><label class="label">المناسبة</label><select id="mfCategory" class="input"><option value="general">كل المناسبات (عامة)</option>${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
+        <div><label class="label">عنوان مختصر</label><input required id="mfTitle" class="input"></div>
+        <div><label class="label">نص الرسالة</label><textarea required id="mfText" rows="4" class="input" placeholder="مبروك الفرح يا {name} 🤍"></textarea></div>
+        <p class="text-[11px] muted">اكتبي {name} ليتحوّل تلقائياً إلى اسم العميلة على الفاتورة.</p>
+        <div class="flex gap-2"><button class="btn flex-1" id="tplSubmit">إضافة</button><button type="button" class="btn btn-soft hidden" id="tplCancel">إلغاء</button></div>
+      </form></div>`;
+    $('#tplForm').addEventListener('submit', saveTpl); $('#tplCancel').addEventListener('click', resetTplForm); updateMessages();
+  },
+  update(){ updateMessages(); }
+};
+function updateMessages(){
+  const el = $('#tplRows'); if (!el) return;
+  el.innerHTML = templates.map(t => `<tr><td>${esc(catLabelMsg(t.category))}</td><td><b>${esc(t.title)}</b></td><td class="max-w-[280px]"><p class="truncate text-xs muted" title="${esc(t.text)}">${esc(t.text)}</p></td><td class="whitespace-nowrap"><button class="btn-icon" data-act="tplEdit" data-id="${esc(t.id)}"><i class="fa-solid fa-pen"></i></button><button class="btn-icon danger" data-act="tplDel" data-id="${esc(t.id)}"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('')
+    || `<tr><td colspan="4" class="text-center py-10"><p class="muted mb-3">لا توجد رسائل بعد — تظهر في الفواتير حسب نوع المناسبة.</p><button class="btn btn-sm" data-act="tplSeed"><i class="fa-solid fa-wand-magic-sparkles"></i> إضافة رسائل جاهزة</button></td></tr>`;
+}
+actions.tplSeed = async () => { try { const b = writeBatch(db); SEED_MSGS.forEach(s => b.set(doc(collection(db, 'messageTemplates')), { ...s, createdAt:Date.now() })); await b.commit(); toast('تمت إضافة الرسائل الجاهزة'); } catch (e) { toast(friendlyError(e), 'err'); } };
+actions.tplEdit = (d) => { const t = templates.find(x => x.id === d.id); if (!t) return; editingTplId = t.id; $('#mfCategory').value = t.category; $('#mfTitle').value = t.title; $('#mfText').value = t.text; $('#tplFormTitle').innerHTML = '<i class="fa-solid fa-pen text-mauve ml-1"></i> تعديل الرسالة'; $('#tplSubmit').textContent = 'حفظ التعديلات'; $('#tplCancel').classList.remove('hidden'); };
+function resetTplForm(){ editingTplId = null; $('#tplForm').reset(); $('#tplFormTitle').innerHTML = '<i class="fa-solid fa-plus text-mauve ml-1"></i> إضافة رسالة'; $('#tplSubmit').textContent = 'إضافة'; $('#tplCancel').classList.add('hidden'); }
+async function saveTpl(e){
+  e.preventDefault();
+  try { const data = { category:$('#mfCategory').value, title:$('#mfTitle').value.trim(), text:$('#mfText').value.trim() };
+    if (editingTplId) await updateDoc(doc(db, 'messageTemplates', editingTplId), data); else await addDoc(collection(db, 'messageTemplates'), { ...data, createdAt:Date.now() });
+    toast(editingTplId ? 'تم تحديث الرسالة' : 'تمت إضافة الرسالة'); resetTplForm(); } catch (err) { toast('تعذر حفظ الرسالة — ' + friendlyError(err), 'err'); }
+}
+actions.tplDel = async (d) => { const ok = await confirmBox({ title:'حذف الرسالة', text:'سيتم حذف هذه الرسالة نهائياً.', okText:'احذفي', danger:true }); if (!ok) return; try { await deleteDoc(doc(db, 'messageTemplates', d.id)); toast('تم حذف الرسالة'); } catch (e) { toast(friendlyError(e), 'err'); } };
+
+/* =========================================================================
+   SETTINGS
+========================================================================= */
+let heroFile = null;
+views.settings = {
+  mount(){
+    heroFile = null;
+    $('#adminContent').innerHTML = `<div class="grid lg:grid-cols-2 gap-5 items-start">
+      <div class="card card-pad space-y-3"><p class="card-title"><i class="fa-solid fa-image"></i> صورة البانر الرئيسي في المتجر</p>
+        <img id="heroPrev" alt="معاينة البانر" src="${esc(settings.heroImage || fallbackImg())}" class="w-full h-44 object-cover rounded-xl bg-blushL">
+        <input type="file" accept="image/*" id="heroFileIn" data-change="heroFile" class="w-full text-xs file:ml-2 file:rounded-full file:border-0 file:bg-[color:var(--blushL)] file:text-[color:var(--mauveD)] file:px-3 file:py-1.5 file:font-bold">
+        <input id="heroUrl" class="input !text-xs" dir="ltr" placeholder="أو الصقي رابط صورة" data-input="heroUrl">
+        <p class="text-[11px] muted">تظهر في أعلى الصفحة الرئيسية فور الحفظ. الأفضل صورة أفقية بنسبة 3:1 تقريباً.</p></div>
+      <form id="setForm" class="card card-pad space-y-3"><p class="card-title"><i class="fa-solid fa-sliders"></i> إعدادات التشغيل</p>
+        <div class="grid grid-cols-2 gap-3"><div><label class="label">هاتف المتجر (يظهر في الفاتورة)</label><input id="stPhone" class="input" dir="ltr" value="${esc(settings.phone || '')}"></div><div><label class="label">البريد الإلكتروني</label><input id="stEmail" class="input" dir="ltr" value="${esc(settings.email || '')}"></div></div>
+        <div class="grid grid-cols-3 gap-3"><div><label class="label">كود الدولة للواتساب</label><input id="stCC" class="input" dir="ltr" value="${esc(settings.countryCode || '249')}"></div><div><label class="label">حد المخزون الافتراضي</label><input id="stMin" type="number" min="0" class="input" value="${Number(settings.defaultMinStock) || 3}"></div><div><label class="label">تأخير الرد (ساعات)</label><input id="stLate" type="number" min="1" class="input" value="${Number(settings.lateHours) || 24}"></div></div>
+        <p class="text-[11px] muted leading-5">كود الدولة يُستخدم لتحويل أرقام مثل 09xxxxxxxx إلى روابط واتساب صحيحة (السودان 249، مصر 20). الأرقام التي تبدأ بـ 01 وطولها 11 رقماً تُعامَل كأرقام مصرية.</p>
+        <button class="btn w-full" id="stSave">حفظ الإعدادات</button></form>
+      <div class="card card-pad space-y-3"><p class="card-title"><i class="fa-solid fa-shield-halved"></i> النسخ الاحتياطي</p><p class="text-xs muted leading-6">حمّلي نسخة كاملة من المنتجات والطلبات والعروض والرسائل (ملف JSON) واحتفظي بها في مكان آمن.</p><button class="btn btn-soft" data-act="backup"><i class="fa-solid fa-cloud-arrow-down"></i> تحميل نسخة احتياطية</button></div>
+      <div class="card card-pad space-y-3"><p class="card-title"><i class="fa-solid fa-bell"></i> إشعارات المتصفح</p><p class="text-xs muted leading-6">لتصلك إشعارات فورية عند وصول طلب جديد حتى لو كانت اللوحة في تبويب آخر.</p><button class="btn btn-soft" data-act="askNotif"><i class="fa-solid fa-bell"></i> تفعيل الإشعارات</button></div></div>`;
+    $('#setForm').addEventListener('submit', saveSettings);
+  },
+  update(){}
+};
+actions.heroFile = (d, t) => { const f = t.files[0]; if (!f) return; heroFile = f; $('#heroUrl').value = ''; $('#heroPrev').src = URL.createObjectURL(f); };
+actions.heroUrl = (d, t) => { const u = t.value.trim(); if (u) { heroFile = null; $('#heroFileIn').value = ''; $('#heroPrev').src = normalizeImageUrl(u); } };
+async function saveSettings(e){
+  e.preventDefault(); const btn = $('#stSave'); btn.disabled = true; btn.textContent = 'جارِ الحفظ...';
+  try {
+    const data = { phone:$('#stPhone').value.trim(), email:$('#stEmail').value.trim(), countryCode:($('#stCC').value.replace(/\D/g, '') || '249'), defaultMinStock:Number($('#stMin').value) || 0, lateHours:Number($('#stLate').value) || 24 };
+    const url = $('#heroUrl').value.trim();
+    if (url) data.heroImage = normalizeImageUrl(url); else if (heroFile) data.heroImage = await uploadImage(heroFile, 'settings');
+    await setDoc(doc(db, 'settings', 'store'), data, { merge:true }); toast('تم حفظ الإعدادات'); heroFile = null;
+  } catch (err) { toast('تعذر الحفظ — ' + friendlyError(err), 'err'); console.error(err); }
+  btn.disabled = false; btn.textContent = 'حفظ الإعدادات';
+}
+actions.backup = () => {
+  const blob = new Blob([JSON.stringify({ exportedAt:new Date().toISOString(), products, orders, customOrders, offers, messageTemplates:templates, stockLogs }, null, 2)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'wishly-backup-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+};
+actions.askNotif = async () => { if (!('Notification' in window)) { toast('المتصفح لا يدعم الإشعارات', 'err'); return; } const r = await Notification.requestPermission(); toast(r === 'granted' ? 'تم تفعيل الإشعارات' : 'لم يتم السماح بالإشعارات من المتصفح', r === 'granted' ? undefined : 'err'); };
+
+/* =========================================================================
+   INVOICE — preview / PDF / print / WhatsApp
+========================================================================= */
+let invData = null, invModal = null;
+const templatesFor = (cat) => { const ex = templates.filter(t => t.category === cat); return ex.length ? ex : templates.filter(t => t.category === 'general'); };
+function invoicePaperHTML(d, msg){
+  const rows = (d.items || []).map((it, i) => `<tr><td style="padding:10px 6px;text-align:center;color:#8E787D;font-size:13px">${i + 1}</td><td style="padding:10px 6px;font-weight:600">${esc(it.name)}</td><td style="padding:10px 6px;text-align:center">${num(it.qty)}</td><td style="padding:10px 6px;text-align:center">${money(it.price)}</td><td style="padding:10px 6px;text-align:center;font-weight:700">${money(it.price * it.qty)}</td></tr>`).join('');
+  return `<div style="padding:34px" dir="rtl">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #9A5C6D;padding-bottom:18px;margin-bottom:22px;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><svg width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="26" width="40" height="30" rx="2"/><rect x="8" y="20" width="48" height="9" rx="2"/><path d="M32 20v36"/><path d="M32 20c-6-12-18-10-14-3 3 5 14 3 14 3zM32 20c6-12 18-10 14-3-3 5-14 3-14 3z"/></svg>
+        <div><p style="font-family:'Great Vibes',cursive;font-size:36px;line-height:1;margin:0;color:#9A5C6D">Wishly</p><p style="font-size:10px;letter-spacing:.2em;color:#9A5C6D;margin:2px 0 0">GIFTS • TREATS • MEMORIES</p></div></div>
+      <div style="text-align:left"><p style="font-weight:800;font-size:20px;margin:0;color:#7A4455">فاتورة بيع</p><p style="font-size:12px;color:#8E787D;margin:4px 0 0">${esc(d.label)}</p><p style="font-size:12px;color:#8E787D;margin:2px 0 0">${fmtDate(d.date, { year:'numeric', month:'long', day:'numeric' })}</p></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:22px;gap:20px;flex-wrap:wrap"><div><p style="font-size:11px;color:#8E787D;margin:0 0 4px">فاتورة إلى</p><p style="font-weight:700;margin:0">${esc(d.customer || 'عميلة')}</p><p style="font-size:13px;color:#6B5459;margin:2px 0 0" dir="ltr">${esc(d.phone || '')}</p>${d.address ? `<p style="font-size:12px;color:#8E787D;margin:4px 0 0">📍 ${esc(d.address)}</p>` : ''}</div>
+      <div style="text-align:left"><p style="font-size:11px;color:#8E787D;margin:0 0 4px">الحالة</p><p style="font-weight:700;margin:0">${esc(d.status || '')}</p></div></div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:18px"><thead><tr style="background:#F6E9E8">${['#', 'المنتج', 'الكمية', 'السعر', 'الإجمالي'].map(h => `<th style="padding:10px 6px;font-size:12px;color:#7A4455">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="width:240px"><div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid #eee;font-size:14px"><span>الإجمالي الفرعي</span><span>${money(d.total)}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;background:#7A4455;color:#fff;border-radius:12px;padding:12px 14px;font-weight:800"><span>الإجمالي الكلي</span><span>${money(d.total)}</span></div></div></div>
+    ${msg ? `<div style="margin-bottom:22px;padding:16px 20px;background:#FBF6F3;border-right:3px solid #9A5C6D;border-radius:10px"><p style="font-size:13px;line-height:1.9;color:#3B2A2F;margin:0;white-space:pre-line">💌 ${esc(msg)}</p></div>` : ''}
+    <div style="text-align:center;border-top:1px dashed #ddd;padding-top:16px;color:#8E787D;font-size:12px;line-height:1.9">شكراً لثقتك في وشلي 🤍 — للاستفسار: <span dir="ltr">${esc(settings.phone || '')}</span> | ${esc(settings.email || '')}<br>السودان</div></div>`;
+}
+function openInvoice(data){
+  invData = { ...data, customer:data.customer || 'عميلة' }; const opts = templatesFor(data.category || 'general');
+  const first = opts[0]; const initMsg = first ? first.text.replace(/\{name\}/g, invData.customer) : '';
+  invModal = openModal({ title:'<i class="fa-solid fa-file-invoice text-mauve ml-2"></i> معاينة الفاتورة', size:'lg',
+    headExtra:`<button class="btn btn-sm" data-act="invPdf"><i class="fa-solid fa-download"></i> PDF</button><button class="btn btn-ghost btn-sm" data-act="invPrint"><i class="fa-solid fa-print"></i> طباعة</button><a id="invWa" class="btn btn-soft btn-sm ${waNumber(data.phone) ? '' : 'hidden'}" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> إرسال</a>`,
+    body: `<div class="card card-pad mb-4 no-print"><p class="label"><i class="fa-solid fa-heart text-mauve ml-1"></i> رسالة على الفاتورة</p><div class="flex flex-col sm:flex-row gap-2"><select id="invSel" class="input sm:!max-w-[210px]" data-change="invSel"><option value="">بدون رسالة</option>${opts.map(t => `<option value="${esc(t.id)}" ${first && t.id === first.id ? 'selected' : ''}>${esc(t.title)}</option>`).join('')}</select><textarea id="invTxt" rows="2" class="input flex-1" data-input="invTxt" placeholder="اختاري رسالة أو اكتبي رسالة خاصة...">${esc(initMsg)}</textarea></div></div>
+      <div class="card overflow-hidden"><div id="invoicePaper"></div></div>` });
+  invRefresh();
+}
+function invRefresh(){
+  if (!invModal) return; const msg = ($('#invTxt', invModal.el)?.value || '').trim();
+  $('#invoicePaper', invModal.el).innerHTML = invoicePaperHTML(invData, msg);
+  const wa = $('#invWa', invModal.el); if (wa) wa.href = waLink(invData.phone, `مرحباً ${invData.customer} 🤍\nفاتورتك من وشلي جاهزة (${invData.label})\nالإجمالي: ${money(invData.total)}${msg ? '\n\n' + msg : ''}`);
+}
+actions.invSel = (d, t) => { const tp = templates.find(x => x.id === t.value); $('#invTxt', invModal.el).value = tp ? tp.text.replace(/\{name\}/g, invData.customer) : ''; invRefresh(); };
+actions.invTxt = () => invRefresh();
+actions.invPrint = () => window.print();
+actions.invPdf = async (d, t) => {
+  if (!invModal) return; t.disabled = true;
+  try {
+    const el = $('#invoicePaper', invModal.el); const cv = await html2canvas(el, { scale:2, backgroundColor:'#ffffff', useCORS:true }); const img = cv.toDataURL('image/png');
+    const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'pt', 'a4'); const pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight(); const ih = cv.height * pw / cv.width;
+    let left = ih, pos = 0; pdf.addImage(img, 'PNG', 0, pos, pw, ih); left -= ph; while (left > 0) { pos -= ph; pdf.addPage(); pdf.addImage(img, 'PNG', 0, pos, pw, ih); left -= ph; }
+    pdf.save((invData.file || 'فاتورة') + '.pdf'); toast('تم تحميل الفاتورة PDF');
+  } catch (e) { toast('تعذر إنشاء ملف PDF', 'err'); console.error(e); }
+  t.disabled = false;
+};
+function openInvoiceBuilder({ name = '', phone = '', address = '', category = 'general', items = [] } = {}){
+  const m = openModal({ title:'<i class="fa-solid fa-file-invoice text-mauve ml-2"></i> إنشاء فاتورة', size:'lg', body: `<form id="ibForm" class="space-y-4">
+    <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">اسم العميلة</label><input id="ibName" class="input" value="${esc(name)}"></div><div><label class="label">رقم الجوال</label><input id="ibPhone" class="input" dir="ltr" value="${esc(phone)}"></div></div>
+    <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">العنوان (اختياري)</label><input id="ibAddr" class="input" value="${esc(address)}"></div><div><label class="label">المناسبة (لاختيار رسالة مناسبة)</label><select id="ibCat" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}" ${c.key === category ? 'selected' : ''}>${c.name}</option>`).join('')}<option value="general" ${category === 'general' ? 'selected' : ''}>أخرى / عامة</option></select></div></div>
+    <div><p class="label">عناصر الفاتورة</p>${itemsEditor(items)}</div><button class="btn w-full !py-3"><i class="fa-solid fa-eye"></i> معاينة الفاتورة</button></form>` });
+  irCalcTotal(m.el);
+  $('#ibForm', m.el).addEventListener('submit', (e) => {
+    e.preventDefault(); const cat = $('#ibCat', m.el).value, its = readItems(m.el, cat); if (!its.length) { toast('أضيفي عنصراً واحداً على الأقل', 'err'); return; }
+    const customer = $('#ibName', m.el).value.trim() || 'عميلة'; m.close();
+    openInvoice({ label:'فاتورة يدوية', date:Date.now(), customer, phone:$('#ibPhone', m.el).value.trim(), address:$('#ibAddr', m.el).value.trim(), status:'فاتورة يدوية', items:its, total:sum(its, i => i.qty * i.price), category:cat, file:'فاتورة-يدوية-' + Date.now() });
+  });
+}
+actions.newInvoice = () => openInvoiceBuilder({});
+
+</script>
+</body>
+</html>

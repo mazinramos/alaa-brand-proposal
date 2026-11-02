@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وشلي | Wishly — Gifts • Treats • Memories</title>
+<meta name="description" content="Wishly (وشلي) متجر متخصص في توزيعات وباقات المناسبات: خطوبة، تخرج، عرس، ولادة وجرتق بتفاصيل أنيقة تحكي قصة فرحتك.">
+<meta name="google-site-verification" content="IH_dYUXH_BQW7TR7uUDlCoLQvJy0kQdNy503aXl8W8w" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%239A5C6D'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='Georgia,serif'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { cream:'#FBF6F3', blush:'#EBD6D5', blushL:'#F6E9E8', mauve:'#9A5C6D', mauveD:'#7A4455', ink:'#3B2A2F' },
+    fontFamily: { body:['Cairo','sans-serif'], script:['"Great Vibes"','cursive'] },
+  } } }
+</script>
+<style>
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Cairo',sans-serif; background:#FBF6F3; color:#3B2A2F; overflow-x:hidden; }
+  .logo-script{ font-family:'Great Vibes',cursive; }
+  .btn{ background:#9A5C6D; color:#fff; border-radius:999px; padding:.55rem 1.8rem; font-weight:600; font-size:.9rem; display:inline-flex; align-items:center; justify-content:center; gap:.4rem; transition:.3s; box-shadow:0 6px 16px -8px rgba(154,92,109,.7); }
+  .btn:hover{ background:#7A4455; transform:translateY(-2px); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .btn.ghost{ background:transparent; color:#9A5C6D; border:1.5px solid #9A5C6D; box-shadow:none; }
+  .btn.ghost:hover{ background:#9A5C6D; color:#fff; }
+  .sec-title{ display:flex; align-items:center; justify-content:center; gap:1rem; font-weight:700; font-size:1.05rem; color:#3B2A2F; }
+  .sec-title::before,.sec-title::after{ content:''; height:1px; width:min(18vw,170px); background:#C9A3A8; }
+  .nav-link{ position:relative; font-weight:600; font-size:.82rem; padding:.4rem 0; transition:color .2s; white-space:nowrap; }
+  .nav-link:hover,.nav-link.active{ color:#9A5C6D; }
+  .nav-link.active::after{ content:''; position:absolute; inset-inline:0; bottom:-6px; height:2px; background:#9A5C6D; border-radius:2px; }
+  .dd{ position:relative; }
+  .dd-menu{ position:absolute; top:100%; right:0; min-width:170px; background:#fff; border:1px solid #EBD6D5; border-radius:14px; padding:.5rem; box-shadow:0 18px 40px -18px rgba(122,68,85,.35); opacity:0; visibility:hidden; transform:translateY(8px); transition:.25s; z-index:140; }
+  .dd:hover .dd-menu{ opacity:1; visibility:visible; transform:none; }
+  .dd-menu a,.dd-menu button{ display:block; width:100%; text-align:right; padding:.5rem .8rem; border-radius:10px; font-size:.82rem; font-weight:500; }
+  .dd-menu a:hover,.dd-menu button:hover{ background:#F6E9E8; color:#9A5C6D; }
+  .pkg-card{ background:#fff; border:1px solid #EBD6D5; border-radius:14px; transition:.4s; }
+  .pkg-card:hover{ transform:translateY(-6px); box-shadow:0 24px 40px -22px rgba(122,68,85,.4); }
+  .pkg-img{ border-radius:14px 14px 0 0; overflow:hidden; height:115px; }
+  .pkg-img img{ width:100%; height:100%; object-fit:cover; transition:transform 1s; }
+  .pkg-card:hover .pkg-img img{ transform:scale(1.08); }
+  .pkg-ico{ width:42px; height:42px; border-radius:50%; background:#fff; border:3px solid #F6E9E8; color:#9A5C6D; display:flex; align-items:center; justify-content:center; margin:-22px auto 0; position:relative; box-shadow:0 4px 10px -4px rgba(0,0,0,.15); }
+  .gen-card{ background:#fff; border:1px solid #EBD6D5; border-radius:10px; overflow:hidden; transition:.35s; }
+  .gen-card:hover{ transform:translateY(-5px); box-shadow:0 18px 30px -18px rgba(122,68,85,.45); }
+  .gen-card img{ height:70px; width:100%; object-fit:cover; }
+  .product-card{ transition:.45s; }
+  .product-card:hover{ transform:translateY(-8px); box-shadow:0 28px 50px -24px rgba(122,68,85,.45); }
+  .product-card .img-wrap{ overflow:hidden; }
+  .product-card .img-wrap img{ transition:transform 1s; }
+  .product-card:hover .img-wrap img{ transform:scale(1.08); }
+  .quick-actions{ opacity:0; transform:translateY(10px); transition:.35s; }
+  .product-card:hover .quick-actions{ opacity:1; transform:none; }
+  @media (hover:none){ .quick-actions{ opacity:1; transform:none; } }
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+  .strip{ background:#EBD6D5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%23d9b9bb' stroke-width='1' opacity='.7'%3E%3Cpath d='M45 10c8 8 8 18 0 26-8-8-8-18 0-26z'/%3E%3Cpath d='M45 36c10-4 20 0 24 10-10 4-20 0-24-10z'/%3E%3Cpath d='M45 36c-10-4-20 0-24 10 10 4 20 0 24-10z'/%3E%3C/g%3E%3C/svg%3E"); }
+  .drawer{ transform:translateX(100%); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .drawer.open{ transform:none; }
+  #toast{ opacity:0; visibility:hidden; transform:translateY(24px); transition:transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s, visibility 0s .5s; }
+  #toast.show{ opacity:1; visibility:visible; transform:none; transition:transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s, visibility 0s; }
+  .acc-body{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
+  .skel{ background:linear-gradient(90deg,#f1e2e1 25%,#f8eeed 37%,#f1e2e1 63%); background-size:400% 100%; animation:skel 1.4s ease infinite; }
+  @keyframes skel{ 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+  .field{ width:100%; border-radius:12px; border:1px solid #DDBFC1; background:#fff; padding:.7rem 1rem; font-size:.9rem; }
+  .field:focus{ outline:none; border-color:#9A5C6D; }
+  ::-webkit-scrollbar{ width:9px; } ::-webkit-scrollbar-thumb{ background:#C9A3A8; border-radius:10px; }
+  .hero-fade{ background:linear-gradient(to right,#F6E9E8 0%,#F6E9E8 36%,rgba(246,233,232,.75) 50%,rgba(246,233,232,0) 72%); }
+  @media (max-width:767px){ .hero-fade{ background:linear-gradient(to top,rgba(246,233,232,.97) 0%,rgba(246,233,232,.85) 55%,rgba(246,233,232,.2) 100%); } }
+</style>
+</head>
+<body class="antialiased">
+
+<div class="fixed bottom-24 inset-x-0 z-[160] flex justify-center px-4 pointer-events-none">
+  <div id="toast" class="bg-white border border-blush rounded-2xl px-6 py-4 shadow-2xl flex items-center gap-3 max-w-[92vw]">
+    <i class="fa-solid fa-circle-check text-mauve text-lg"></i><span id="toastMsg" class="text-sm font-semibold">تم بنجاح</span>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="bg-blush text-center text-[12px] py-2 font-medium text-ink/80"><i class="fa-solid fa-heart text-mauve text-[10px] ml-1"></i> توزيعات مميزة .. للحظات أجمل</div>
+
+<!-- HEADER -->
+<header class="bg-cream sticky top-0 z-[120] shadow-[0_1px_0_#f0e1e0]" id="siteHeader">
+  <div class="max-w-[1180px] mx-auto px-5 md:px-8 py-3 flex items-center justify-between gap-4">
+    <!-- logo (right in RTL) -->
+    <a href="#home" class="flex flex-col items-center leading-none shrink-0" aria-label="Wishly">
+      <span class="flex items-end gap-1">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="26" width="40" height="30" rx="2"/><rect x="8" y="20" width="48" height="9" rx="2"/><path d="M32 20v36"/><path d="M32 20c-6-12-18-10-14-3 3 5 14 3 14 3zM32 20c6-12 18-10 14-3-3 5-14 3-14 3z"/></svg>
+        <i class="fa-solid fa-heart text-mauve text-[9px] mb-3 -mr-1"></i>
+      </span>
+      <span class="logo-script text-[34px] text-mauve -mt-1">Wishly</span>
+      <span class="text-[7px] tracking-[.22em] text-mauve/70 mt-0.5">GIFTS • TREATS • MEMORIES</span>
+    </a>
+
+    <!-- nav -->
+    <nav class="hidden lg:flex items-center gap-4 xl:gap-7">
+      <a href="#home" class="nav-link active">الرئيسية</a>
+      <div class="dd"><button class="nav-link">المنتجات <i class="fa-solid fa-chevron-down text-[8px] mr-1"></i></button>
+        <div class="dd-menu"><button onclick="goCollection('all')">كل المنتجات</button><button onclick="goCollection('bestseller')">الأكثر مبيعاً</button><button onclick="goCollection('new')">وصل حديثاً</button><button onclick="goCollection('sale')">عروض</button></div></div>
+      <a href="#" onclick="event.preventDefault(); filterByCategory('baby')" class="nav-link">باقات الولادة</a>
+      <div class="dd"><button class="nav-link">باقات المناسبات <i class="fa-solid fa-chevron-down text-[8px] mr-1"></i></button>
+        <div class="dd-menu"><button onclick="filterByCategory('engagement')">بكج فال خطوبة</button><button onclick="filterByCategory('success')">بكج فال تخرج</button><button onclick="filterByCategory('wedding')">بكج فال عرس</button><button onclick="filterByCategory('baby')">بكج ولادة</button></div></div>
+      <a href="#general" class="nav-link">التوزيعات العامة</a>
+      <a href="#about" class="nav-link">من نحن</a>
+      <a href="#contact" class="nav-link">تواصل معنا</a>
+    </nav>
+
+    <!-- left: icons + search -->
+    <div class="flex flex-col items-end gap-2">
+      <div class="flex items-center gap-3 text-[15px]">
+        <button onclick="openDrawer('cart')" class="relative" title="السلة"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-mauve text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
+        <button onclick="openDrawer('wishlist')" class="relative" title="المفضلة"><i class="fa-regular fa-heart"></i><span id="wishCount" class="absolute -top-2 -right-2 bg-mauve text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
+        <a href="#contact" title="حسابي"><i class="fa-regular fa-user"></i></a>
+        <button onclick="openSearch()" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="lg:hidden" onclick="document.getElementById('mobileNav').classList.toggle('hidden')"><i class="fa-solid fa-bars"></i></button>
+      </div>
+      <form onsubmit="event.preventDefault(); openSearch(this.q.value)" class="hidden md:flex items-center bg-white border border-[#DDBFC1] rounded-full pl-1 pr-4 h-9 w-[250px] lg:w-[190px] xl:w-[250px]">
+        <input name="q" placeholder="ابحث عن منتجك المفضل..." class="flex-1 min-w-0 bg-transparent text-[11px] focus:outline-none">
+        <button class="w-7 h-7 rounded-full bg-mauve text-white text-[11px] flex items-center justify-center"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+    </div>
+  </div>
+  <div id="mobileNav" class="hidden lg:hidden bg-cream border-t border-blush px-6 pb-5 pt-3 flex flex-col gap-3 text-sm font-semibold">
+    <a href="#home">الرئيسية</a><a href="#collection">المنتجات</a><a href="#" onclick="event.preventDefault(); filterByCategory('baby')">باقات الولادة</a><a href="#packages">باقات المناسبات</a><a href="#general">التوزيعات العامة</a><a href="#about">من نحن</a><a href="#contact">تواصل معنا</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="relative overflow-hidden bg-blushL h-[340px] md:h-[250px] lg:h-[270px]">
+  <img id="heroImg" src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=1800&q=80&auto=format" class="absolute inset-y-0 right-0 w-full md:w-[68%] h-full object-cover" alt="Wishly gifts">
+  <div class="absolute inset-0 hero-fade"></div>
+  <div class="relative max-w-[1180px] mx-auto px-6 md:px-10 h-full flex items-end md:items-center pb-6 md:pb-0">
+    <div class="md:w-[50%] lg:w-[46%] md:mr-auto text-center md:text-right relative">
+      <svg class="hidden md:block absolute -top-12 right-[-20px]" width="110" height="46" viewBox="0 0 110 46" fill="none" stroke="#9A5C6D" stroke-width="1.2" opacity=".75"><path d="M2 40c18-6 40-2 52-14 8-9-2-22-12-16-9 6 2 18 14 14 22-8 32-22 52-14" stroke-linecap="round"/></svg>
+      <h1 class="text-[1.65rem] md:text-[1.4rem] lg:text-[1.75rem] xl:text-[2rem] font-semibold text-mauve leading-snug">كل مناسبة .. لها لمستها الخاصة</h1>
+      <p class="text-[13px] md:text-sm mt-2 text-ink/80">نوفر لك أجمل التوزيعات والباقات المميزة</p>
+      <p class="text-[13px] md:text-sm mt-1 text-ink/80">بجودة عالية وتفاصيل تحكي قصة فرحتك <i class="fa-solid fa-heart text-mauve text-[10px]"></i></p>
+      <a href="#collection" class="btn mt-4 !py-2 !px-7 text-[13px]">تسوقي الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PACKAGES -->
+<section id="packages" class="max-w-[1180px] mx-auto px-5 md:px-8 pt-7 pb-4">
+  <div class="sec-title reveal">باقاتنا المميزة</div>
+  <div class="text-center text-mauve text-[10px] mt-1 mb-5"><i class="fa-solid fa-heart"></i></div>
+  <div id="pkgGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+</section>
+
+<!-- GENERAL DISTRIBUTIONS -->
+<section id="general" class="max-w-[1180px] mx-auto px-5 md:px-8 pt-5 pb-8">
+  <div class="sec-title reveal">توزيعات عامة للمناسبات</div>
+  <div id="genGrid" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3 mt-5"></div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="strip border-t border-[#dfc3c4]">
+  <div class="max-w-[1180px] mx-auto px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-4 items-center text-ink/80">
+    <div class="flex items-center gap-3 md:justify-start"><i class="fa-solid fa-truck-fast text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">توصيل لجميع الولايات</p><p class="text-[10px] opacity-70">بأمان وسرعة</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-solid fa-shield-halved text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">جودة عالية</p><p class="text-[10px] opacity-70">في كل التفاصيل</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-regular fa-heart text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">دفع آمن</p><p class="text-[10px] opacity-70">متوفر بعدة طرق</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-solid fa-headset text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">خدمة عملاء مميزة</p><p class="text-[10px] opacity-70">نحن دائماً معك</p></div></div>
+    <p class="col-span-2 md:col-span-1 text-center md:text-left text-[12px] font-semibold text-mauveD">شكراً لاختيارك وشلي <i class="fa-solid fa-heart text-mauve text-[10px]"></i></p>
+  </div>
+</div>
+
+<!-- COLLECTION -->
+<section id="collection" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto">
+  <div class="sec-title reveal">التشكيلة المُختارة</div>
+  <div class="flex flex-wrap justify-center gap-2 mt-6" id="filterTabs"></div>
+  <div class="flex flex-wrap items-center justify-between gap-4 my-7">
+    <p class="text-sm text-ink/60"><span id="resultCount">0</span> تصميم متاح <span id="activeCatLabel" class="text-mauve font-bold"></span></p>
+    <select id="sortSelect" onchange="renderProducts()" class="text-sm rounded-full border border-[#DDBFC1] bg-white px-4 py-2 focus:outline-none">
+      <option value="new">الأحدث</option><option value="bestseller">الأكثر مبيعاً</option><option value="priceAsc">السعر: من الأقل</option><option value="priceDesc">السعر: من الأعلى</option>
+    </select>
+  </div>
+  <div id="productGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+</section>
+
+<!-- OFFERS -->
+<section id="offers" class="py-16 bg-mauveD text-white relative overflow-hidden hidden">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <span class="text-blush text-xs tracking-widest font-bold">عرض لفترة محدودة</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-3 mb-4" id="offerTitle">خصم 25%</h2>
+      <p class="text-white/75 mb-6 leading-8">استمتعي بخصم خاص لفترة محدودة فقط، قبل نفاد الكمية.</p>
+      <div class="flex gap-3 mb-8">
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-d">00</p><p class="text-[11px] text-blush">يوم</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-h">00</p><p class="text-[11px] text-blush">ساعة</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-m">00</p><p class="text-[11px] text-blush">دقيقة</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-s">00</p><p class="text-[11px] text-blush">ثانية</p></div>
+      </div>
+      <a href="#collection" class="btn !bg-white !text-mauveD">تسوقي العرض الآن</a>
+    </div>
+    <div class="relative">
+      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80&auto=format" class="rounded-3xl w-full h-[300px] object-cover" alt="Offer">
+      <div class="absolute -top-5 -left-5 w-20 h-20 rounded-full bg-blush text-mauveD flex items-center justify-center text-center font-bold leading-tight" id="offerBadgeText">25%<br><span class="text-[10px]">خصم</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+  <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80&auto=format" class="rounded-3xl w-full h-[340px] object-cover" alt="Wishly">
+  <div>
+    <div class="sec-title !justify-start before:hidden after:w-24 !gap-3">من نحن</div>
+    <h2 class="text-2xl md:text-3xl font-bold text-mauve mt-4 mb-4">من فكرة صغيرة… إلى ورشة أحلام</h2>
+    <p class="text-ink/70 leading-8 mb-6">بدأنا "وشلي" من ركن صغير بشغف كبير بالتفاصيل — نؤمن أن كل توزيعة هي رسالة تحمل مشاعر صاحبتها. اليوم أصبحنا وجهة العرائس وأصحاب المناسبات الباحثات عن لمسة أنيقة تُروى قصتها في كل تفصيلة.</p>
+    <div class="grid grid-cols-2 gap-5">
+      <div class="flex gap-3"><i class="fa-solid fa-hand-holding-heart text-mauve text-xl mt-1"></i><div><p class="font-bold">رؤيتنا</p><p class="text-sm text-ink/60">أن نكون توقيع الجمال في كل مناسبة.</p></div></div>
+      <div class="flex gap-3"><i class="fa-solid fa-gem text-mauve text-xl mt-1"></i><div><p class="font-bold">رسالتنا</p><p class="text-sm text-ink/60">تفاصيل مصنوعة بعناية تليق بلحظاتك الغالية.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM ORDER -->
+<section id="custom" class="py-16 bg-blushL">
+  <div class="max-w-4xl mx-auto px-5 md:px-8">
+    <div class="sec-title reveal">اطلبي تصميماً بحسب ذوقك</div>
+    <p class="text-center text-ink/60 mt-4 mb-8 text-sm">شاركينا فكرتك، ألوانك، وموعد مناسبتك، وسنحوّلها إلى قطعة تحمل توقيعك.</p>
+    <form id="customForm" onsubmit="submitCustom(event)" class="bg-white border border-blush rounded-3xl p-6 md:p-10 grid md:grid-cols-2 gap-5 shadow-lg">
+      <div><label class="text-sm font-bold mb-2 block">الاسم</label><input required id="cfName" class="field" placeholder="اسمك الكريم"></div>
+      <div><label class="text-sm font-bold mb-2 block">رقم الجوال</label><input required id="cfPhone" class="field" placeholder="09xxxxxxxx"></div>
+      <div><label class="text-sm font-bold mb-2 block">نوع المناسبة</label><select id="cfOccasion" class="field"><option>فرح</option><option>خطوبة</option><option>مولود</option><option>تخرج</option><option>شركات</option><option>أخرى</option></select></div>
+      <div><label class="text-sm font-bold mb-2 block">موعد المناسبة</label><input type="date" id="cfDate" class="field"></div>
+      <div><label class="text-sm font-bold mb-2 block">عدد القطع</label><input type="number" min="1" id="cfPieces" class="field" placeholder="مثال: 100"></div>
+      <div><label class="text-sm font-bold mb-2 block">الميزانية التقريبية</label><input id="cfBudget" class="field" placeholder="بالجنيه السوداني"></div>
+      <div class="md:col-span-2"><label class="text-sm font-bold mb-2 block">صف فكرتك</label><textarea rows="3" id="cfDesc" class="field" placeholder="الألوان المفضلة، الستايل، أي إلهام لديك..."></textarea></div>
+      <button id="cfSubmitBtn" class="btn md:col-span-2 justify-self-start">إرسال الطلب <i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto">
+  <div class="sec-title reveal">معرض الأعمال</div>
+  <div id="galleryGrid" class="columns-2 md:columns-3 gap-4 mt-8"></div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="py-16 bg-blushL">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <div class="sec-title">كلمات أسعدتنا</div>
+    <div class="relative mt-8">
+      <div id="reviewCard" class="bg-white border border-blush rounded-3xl p-8 md:p-12 shadow-lg min-h-[240px] flex flex-col items-center justify-center"></div>
+      <button onclick="shiftReview(-1)" class="absolute top-1/2 -translate-y-1/2 -right-2 md:-right-6 w-10 h-10 rounded-full bg-white border border-blush shadow flex items-center justify-center hover:bg-blush"><i class="fa-solid fa-chevron-right"></i></button>
+      <button onclick="shiftReview(1)" class="absolute top-1/2 -translate-y-1/2 -left-2 md:-left-6 w-10 h-10 rounded-full bg-white border border-blush shadow flex items-center justify-center hover:bg-blush"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+    <div class="flex justify-center gap-2 mt-6" id="reviewDots"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-16 px-5 md:px-8 max-w-3xl mx-auto">
+  <div class="sec-title mb-8">أسئلة شائعة</div>
+  <div id="faqList" class="space-y-3"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-16 bg-blushL">
+  <div class="max-w-5xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="sec-title !justify-start before:hidden after:w-24 !gap-3">تواصل معنا</div>
+      <p class="text-ink/60 my-6 leading-8">فريقنا جاهز لمساعدتك في اختيار أو تصميم التوزيعة المثالية لمناسبتك.</p>
+      <div class="space-y-4 mb-7 text-sm">
+        <div class="flex items-center gap-3"><i class="fa-solid fa-phone text-mauve w-5"></i><span dir="ltr">0904298584</span></div>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-envelope text-mauve w-5"></i> hello@wishly-atelier.com</div>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-mauve w-5"></i> شرق النيل . السودان</div>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://www.instagram.com/wishly.sd" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@wishlygift.favors" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://wa.me/249904298584" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+      </div>
+    </div>
+    <form onsubmit="submitContact(event)" class="bg-white border border-blush rounded-3xl p-7 shadow-lg space-y-4">
+      <input required placeholder="الاسم" class="field">
+      <input required type="email" placeholder="البريد الإلكتروني" class="field">
+      <textarea required rows="4" placeholder="رسالتك" class="field"></textarea>
+      <button class="btn w-full">إرسال الرسالة</button>
+    </form>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-12 px-6 strip">
+  <div class="max-w-2xl mx-auto text-center">
+    <h3 class="text-xl font-bold text-mauveD mb-2">كوني أول من يعرف بجديدنا</h3>
+    <p class="text-ink/60 text-sm mb-5">اشتركي في نشرتنا لتصلك أحدث التصاميم والعروض الحصرية.</p>
+    <form onsubmit="event.preventDefault(); showToast('تم الاشتراك في النشرة البريدية')" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input type="email" required placeholder="بريدك الإلكتروني" class="field !rounded-full flex-1">
+      <button class="btn">اشتراك</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-mauveD text-white pt-14 pb-6 px-6 md:px-10">
+  <div class="max-w-[1180px] mx-auto grid md:grid-cols-4 gap-10 mb-10">
+    <div><span class="logo-script text-4xl text-blush">Wishly</span><p class="text-[9px] tracking-[.22em] text-blush/70 mb-3">GIFTS • TREATS • MEMORIES</p><p class="text-white/65 text-sm leading-7">توزيعات وهدايا أنيقة، تُصمم بحب لتُروى بها أجمل اللحظات.</p></div>
+    <div><p class="font-bold mb-3">روابط سريعة</p><ul class="space-y-2 text-sm text-white/65"><li><a href="#about" class="hover:text-white">من نحن</a></li><li><a href="#collection" class="hover:text-white">التشكيلة</a></li><li><a href="#custom" class="hover:text-white">طلب خاص</a></li><li><a href="#faq" class="hover:text-white">الأسئلة الشائعة</a></li></ul></div>
+    <div><p class="font-bold mb-3">الباقات</p><ul class="space-y-2 text-sm text-white/65"><li>بكج فال خطوبة</li><li>بكج فال تخرج</li><li>بكج فال عرس</li><li>بكج ولادة</li></ul></div>
+    <div><p class="font-bold mb-3">تواصل معنا</p><ul class="space-y-2 text-sm text-white/65"><li dir="ltr" class="text-right">0904298584</li><li>hello@wishly-atelier.com</li><li>شرق النيل . السودان</li></ul>
+      <a href="wishly-admin.html" target="_blank" rel="noopener" class="mt-4 inline-block text-xs text-blush/80 hover:text-white border-b border-dashed border-blush/50">لوحة تحكم البراند ←</a></div>
+  </div>
+  <div class="max-w-[1180px] mx-auto border-t border-white/10 pt-5 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-white/45"><p>© 2026 وشلي — جميع الحقوق محفوظة</p><p>صُنع بحب في السودان 🤍</p></div>
+</footer>
+
+<a href="https://wa.me/249904298584?text=السلام%20عليكم،أرغب%20في%20الاستفسار%20عن%20الهدايا%20المتوفرة." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 left-6 z-[110] w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform" title="Chat on WhatsApp"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" id="toTop" class="fixed bottom-6 right-6 z-[110] w-12 h-12 rounded-full bg-white border border-blush shadow flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500"><i class="fa-solid fa-arrow-up text-mauve"></i></button>
+
+<!-- SEARCH -->
+<div id="searchOverlay" class="fixed inset-0 z-[130] bg-mauveD/95 backdrop-blur-xl hidden">
+  <div class="max-w-2xl mx-auto pt-24 px-6">
+    <div class="flex items-center gap-4 border-b border-white/30 pb-4">
+      <i class="fa-solid fa-magnifying-glass text-blush"></i>
+      <input id="searchInput" oninput="doSearch()" placeholder="ابحثي عن تصميم، مناسبة، أو لون..." class="flex-1 bg-transparent text-white text-xl focus:outline-none placeholder:text-white/40">
+      <button onclick="closeSearch()" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    </div>
+    <div id="searchResults" class="mt-8 space-y-3 max-h-[60vh] overflow-y-auto"></div>
+  </div>
+</div>
+
+<!-- DRAWERS -->
+<div id="cartDrawerBg" class="fixed inset-0 bg-ink/50 z-[135] hidden" onclick="closeDrawer('cart')"></div>
+<div id="cartDrawer" class="drawer fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[136] shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between p-6 border-b border-blush"><p class="text-xl font-bold text-mauve">سلة المشتريات</p><button onclick="closeDrawer('cart')"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
+  <div class="p-6 border-t border-blush space-y-3">
+    <input id="checkoutName" placeholder="الاسم بالكامل" class="field !py-2.5 text-sm">
+    <input id="checkoutPhone" inputmode="tel" placeholder="رقم الجوال (09xxxxxxxx)" class="field !py-2.5 text-sm">
+    <input id="checkoutAddress" placeholder="العنوان / المنطقة (اختياري)" class="field !py-2.5 text-sm">
+    <div class="flex justify-between font-bold pt-1"><span>الإجمالي</span><span id="cartTotal" class="text-mauve">0 ج.س</span></div>
+    <button onclick="checkout()" id="checkoutBtn" class="btn w-full">إتمام الطلب</button>
+  </div>
+</div>
+<div id="wishlistDrawerBg" class="fixed inset-0 bg-ink/50 z-[135] hidden" onclick="closeDrawer('wishlist')"></div>
+<div id="wishlistDrawer" class="drawer fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[136] shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between p-6 border-b border-blush"><p class="text-xl font-bold text-mauve">المفضلة</p><button onclick="closeDrawer('wishlist')"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+  <div id="wishlistItems" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
+</div>
+
+<!-- PRODUCT QUICK VIEW -->
+<div id="productViewBg" class="fixed inset-0 z-[145] bg-ink/80 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-3xl w-full my-8 overflow-hidden shadow-2xl">
+    <div class="grid md:grid-cols-2">
+      <div class="relative bg-blushL flex items-center justify-center" style="min-height:340px;">
+        <button onclick="closeProductView()" class="absolute top-3 left-3 z-20 w-9 h-9 rounded-full bg-mauveD/70 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="shiftProductView(-1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-mauveD/60 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-right"></i></button>
+        <img id="pvMainImage" class="w-full h-full object-cover" style="max-height:520px;">
+        <button onclick="shiftProductView(1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-mauveD/60 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="pvThumbs" class="absolute bottom-3 inset-x-3 flex gap-2 justify-center flex-wrap"></div>
+      </div>
+      <div class="p-8 flex flex-col">
+        <p class="text-xs text-mauve mb-1" id="pvCategory"></p>
+        <h3 class="text-2xl font-bold mb-3" id="pvName"></h3>
+        <div class="flex items-center gap-2 mb-6"><span class="text-xl font-bold text-mauve" id="pvPrice"></span><span class="text-sm text-ink/40 line-through" id="pvOldPrice"></span></div>
+        <div class="mt-auto flex gap-2">
+          <button id="pvAddToCart" class="btn flex-1"><i class="fa-solid fa-bag-shopping"></i> أضيفي للسلة</button>
+          <button id="pvWishlist" class="w-11 h-11 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-blushL"><i class="fa-regular fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "REDACTED",
+  authDomain: "REDACTED",
+  projectId: "REDACTED",
+  messagingSenderId: "REDACTED",
+  appId: "REDACTED",
+  measurementId: "REDACTED"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ---------- reference data ---------- */
+const CATEGORY_LIST = [
+  { key:'wedding',    name:'توزيعات أفراح' },
+  { key:'engagement', name:'توزيعات خطوبة' },
+  { key:'success',    name:'توزيعات نجاح' },
+  { key:'baby',       name:'استقبال المواليد' },
+  { key:'birthday',   name:'أعياد الميلاد' },
+  { key:'corporate',  name:'هدايا الشركات' },
+  { key:'vip',        name:'هدايا VIP' },
+  { key:'custom',     name:'بوكسات حسب الطلب' },
+  { key:'jertig',     name:'توزيعات جرتق' },
+  { key:'misc',       name:'توزيعات منوعة' },
+];
+const PACKAGES = [
+  { key:'engagement', name:'بكج فال خطوبة', desc:'توزيعات ناعمة بتفاصيل تليق بفرحتكم', icon:'fa-ring',           img:'photo-1522673607200-164d1b6ce486' },
+  { key:'success',    name:'بكج فال تخرج',  desc:'توزيعات مميزة لنجاحك وفرحتك',         icon:'fa-graduation-cap', img:'photo-1513151233558-d860c5398176' },
+  { key:'wedding',    name:'بكج فال عرس',   desc:'توزيعات فاخرة تناسب ليلة العمر',      icon:'fa-ring',           img:'photo-1519741497674-611481863552' },
+  { key:'baby',       name:'بكج ولادة',     desc:'توزيعات وباقات خاصة بالمولود بكل تفاصيلها الجميلة', icon:'fa-baby', img:'photo-1519167758481-83f550bb49b3' },
+];
+const GENERAL = [
+  { key:'all',        name:'توزيعات لكل المناسبات', img:'photo-1607344645866-009c320b63e0', arrow:'plus' },
+  { key:'jertig',     name:'توزيعات جرتق',   img:'photo-1549465220-1a8b9238cd48', arrow:'plus' },
+  { key:'engagement', name:'توزيعات خطوبة',  img:'photo-1522673607200-164d1b6ce486', arrow:'plus' },
+  { key:'success',    name:'توزيعات تخرج',   img:'photo-1513151233558-d860c5398176', arrow:'plus' },
+  { key:'baby',       name:'توزيعات ولادة',  img:'photo-1519167758481-83f550bb49b3', arrow:'left' },
+  { key:'wedding',    name:'توزيعات عرس',    img:'photo-1519741497674-611481863552', arrow:'left' },
+  { key:'misc',       name:'توزيعات منوعة',  img:'photo-1567696911980-2eed69a46042', arrow:'left' },
+];
+const REVIEWS = [
+  { name:'مريم أحمد', occ:'عروس ٢٠٢٦', text:'التوزيعات كانت أجمل من الخيال، كل ضيوفي سألوني عن المكان! تفاصيل تستحق كل جنيه.' },
+  { name:'سارة خالد', occ:'خطوبة', text:'تعامل راقي واهتمام بأدق التفاصيل، فريق وشلي فهم ذوقي من أول مكالمة.' },
+  { name:'نور الهدى', occ:'مناسبة شركة', text:'هدايا الشركة كانت راقية جداً وعملائنا سعدوا بها كثيراً، سنكرر التعامل بالتأكيد.' },
+  { name:'ياسمين محمود', occ:'استقبال مولود', text:'تنظيم ودقة في المواعيد، والتغليف كان أجمل من المنتج نفسه!' },
+];
+const FAQS = [
+  { q:'كم يستغرق تجهيز الطلب؟', a:'مدة التجهيز تتراوح من 5 إلى 14 يوم عمل حسب حجم الطلب ودرجة التخصيص المطلوبة.' },
+  { q:'هل يمكن تخصيص الألوان والتصميم؟', a:'بالطبع، قسم "بوكسات حسب الطلب" مخصص بالكامل لتصميم توزيعتك بألوانك وأفكارك الخاصة.' },
+  { q:'ما هي مناطق التوصيل المتاحة؟', a:'نوصل لجميع ولايات السودان، مع إمكانية الشحن الدولي لبعض الدول العربية.' },
+  { q:'هل تتوفر عينات قبل الطلب الكامل؟', a:'نعم، يمكنك طلب عينة واحدة لمعاينة الجودة قبل تأكيد الكمية الكاملة.' },
+  { q:'ما طرق الدفع المتاحة؟', a:'الدفع عند الاستلام، التحويل البنكي، أو الدفع الإلكتروني عبر بطاقات الائتمان.' },
+];
+const GALLERY_IMGS = [
+  ['photo-1519741497674-611481863552',420],['photo-1519225421980-715cb0215aed',300],['photo-1607344645866-009c320b63e0',380],
+  ['photo-1549465220-1a8b9238cd48',280],['photo-1519167758481-83f550bb49b3',360],['photo-1522673607200-164d1b6ce486',320],
+  ['photo-1513151233558-d860c5398176',300],['photo-1567696911980-2eed69a46042',400],['photo-1519741497674-611481863552',300],
+];
+
+let products = [], offers = [], cart = [], wishlist = [];
+let currentFilter = 'all', reviewIndex = 0, activeOfferEndTs = null, productsLoaded = false;
+window._catFilter = null;
+
+function imgUrl(id, w=700){
+  if(!id) return `https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=${w}&q=80&auto=format`;
+  if(id.startsWith('data:') || id.startsWith('http')) return id;
+  return `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format`;
+}
+const tracked=(p)=>typeof p.stock==='number';
+const avail=(p)=>tracked(p)?Math.max(0,p.stock):Infinity;
+function stockBadge(p){ if(!tracked(p)) return ''; if(p.stock<=0) return '<span class="absolute inset-x-0 bottom-0 bg-ink/75 text-white text-center text-sm font-bold py-2">نفدت الكمية</span>'; const low=typeof p.minStock==='number'?p.minStock:3; return p.stock<=low?`<span class="absolute bottom-3 right-3 bg-white/95 text-mauveD text-[11px] font-bold px-2.5 py-1 rounded-full shadow">باقي ${p.stock} فقط</span>`:''; }
+function catName(key){ return CATEGORY_LIST.find(c=>c.key===key)?.name || key; }
+
+/* ---------- live Firestore ---------- */
+onSnapshot(collection(db,'products'), snap => { products = snap.docs.map(d=>({ id:d.id, ...d.data() })); productsLoaded = true; renderProducts(); });
+onSnapshot(collection(db,'offers'), snap => { offers = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderOfferSection(); });
+onSnapshot(doc(db,'settings','store'), snap => { if(snap.exists() && snap.data().heroImage) document.getElementById('heroImg').src = snap.data().heroImage; });
+
+/* ---------- reveal / scroll ---------- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold:.12 });
+function observeReveals(){ document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el)); }
+window.addEventListener('scroll', ()=>{ const y=window.scrollY, t=document.getElementById('toTop'); t.classList.toggle('opacity-0', y<500); t.classList.toggle('pointer-events-none', y<500); });
+
+/* ---------- packages + general ---------- */
+function renderPackages(){
+  document.getElementById('pkgGrid').innerHTML = PACKAGES.map(p=>`
+    <div class="pkg-card reveal text-center pb-4">
+      <div class="pkg-img"><img src="${imgUrl(p.img,600)}" alt="${p.name}" loading="lazy"></div>
+      <div class="pkg-ico"><i class="fa-solid ${p.icon}"></i></div>
+      <h3 class="font-bold mt-2 text-[15px]">${p.name}</h3>
+      <p class="text-[11px] text-ink/60 px-4 mt-1 mb-3 min-h-[32px] leading-5">${p.desc}</p>
+      <button onclick="filterByCategory('${p.key}')" class="btn !py-1.5 !px-6 text-[12px]">عرض البكج</button>
+    </div>`).join('');
+  document.getElementById('genGrid').innerHTML = GENERAL.map(g=>`
+    <button onclick="${g.key==='all' ? "goCollection('all')" : `filterByCategory('${g.key}')`}" class="gen-card reveal text-center">
+      <img src="${imgUrl(g.img,400)}" alt="${g.name}" loading="lazy">
+      <p class="text-[11px] font-bold px-1 pt-2 leading-4 min-h-[34px]">${g.name}</p>
+      <i class="fa-solid ${g.arrow==='plus'?'fa-plus':'fa-arrow-left'} text-mauve text-[10px] pb-2 block"></i>
+    </button>`).join('');
+  observeReveals();
+}
+
+/* ---------- filters + products ---------- */
+function renderFilterTabs(){
+  const tabs = [{key:'all',name:'الكل'},{key:'bestseller',name:'الأكثر مبيعاً'},{key:'new',name:'وصل حديثاً'},{key:'sale',name:'عروض'}];
+  document.getElementById('filterTabs').innerHTML = tabs.map(t=>`<button onclick="setTagFilter('${t.key}')" class="px-5 py-2 rounded-full text-sm border transition ${currentFilter===t.key && !window._catFilter ? 'bg-mauve border-mauve text-white font-bold':'border-[#DDBFC1] bg-white hover:bg-blushL'}">${t.name}</button>`).join('');
+}
+window.setTagFilter = (key)=>{ window._catFilter=null; currentFilter=key; renderFilterTabs(); renderProducts(); };
+window.goCollection = (tag)=>{ window._catFilter=null; currentFilter=tag||'all'; renderFilterTabs(); renderProducts(); document.getElementById('collection').scrollIntoView({behavior:'smooth'}); };
+window.filterByCategory = (catKey)=>{ window._catFilter=catKey; currentFilter='all'; renderFilterTabs(); renderProducts(); document.getElementById('collection').scrollIntoView({behavior:'smooth'}); };
+
+function renderProducts(){
+  const gridEl = document.getElementById('productGrid');
+  if(!productsLoaded){
+    gridEl.innerHTML = Array.from({length:8}).map(()=>`<div class="rounded-2xl overflow-hidden border border-blush bg-white"><div class="skel aspect-[4/5]"></div><div class="p-4 space-y-2"><div class="skel h-3 w-1/3 rounded"></div><div class="skel h-4 w-2/3 rounded"></div></div></div>`).join('');
+    document.getElementById('resultCount').textContent='…'; return;
+  }
+  let list = [...products];
+  if(window._catFilter) list = list.filter(p=>p.cat===window._catFilter);
+  if(currentFilter!=='all') list = list.filter(p=>p.tag===currentFilter);
+  const sort = document.getElementById('sortSelect')?.value || 'new';
+  if(sort==='priceAsc') list.sort((a,b)=>a.price-b.price);
+  if(sort==='priceDesc') list.sort((a,b)=>b.price-a.price);
+  if(sort==='bestseller') list = list.filter(p=>p.tag==='bestseller').concat(list.filter(p=>p.tag!=='bestseller'));
+  document.getElementById('resultCount').textContent = list.length;
+  document.getElementById('activeCatLabel').textContent = window._catFilter ? '— ' + catName(window._catFilter) : '';
+  if(!list.length){
+    gridEl.innerHTML = products.length===0
+      ? `<div class="col-span-full text-center py-16"><i class="fa-solid fa-gift text-4xl text-mauve/40 mb-4"></i><p class="font-bold mb-1">التشكيلة قيد التجهيز</p><p class="text-ink/50 text-sm">قريباً ستجدين هنا أحدث تصاميمنا</p></div>`
+      : `<p class="col-span-full text-center text-ink/50 py-10">لا توجد تصاميم مطابقة، جربي فلتر آخر.</p>`;
+    return;
+  }
+  gridEl.innerHTML = list.map(p=>`
+    <div class="product-card bg-white rounded-2xl overflow-hidden border border-blush shadow-sm">
+      <div class="img-wrap relative aspect-[4/5] cursor-pointer" onclick="openProductView('${p.id}')">
+        <img src="${imgUrl(p.img,600)}" class="w-full h-full object-cover" alt="${p.name}" loading="lazy">
+        ${p.gallery&&p.gallery.length?`<span class="absolute top-3 left-3 bg-mauveD/75 text-white text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-images ml-1"></i>${p.gallery.length+1}</span>`:''}
+        ${p.badge?`<span class="absolute top-3 right-3 bg-mauve text-white text-xs font-bold px-3 py-1 rounded-full">${p.badge}</span>`:''}
+        ${stockBadge(p)}
+        <div class="quick-actions absolute bottom-3 inset-x-3 flex gap-2">
+          <button ${avail(p)<=0?'disabled':''} onclick="event.stopPropagation(); addToCart('${p.id}')" class="flex-1 bg-mauveD/90 text-white text-sm rounded-full py-2 hover:bg-mauve transition disabled:opacity-50 disabled:cursor-not-allowed"><i class="fa-solid fa-bag-shopping ml-1"></i> ${avail(p)<=0?'غير متوفر':'أضيفي للسلة'}</button>
+          <button onclick="event.stopPropagation(); toggleWishlist('${p.id}')" class="w-9 h-9 rounded-full bg-white/95 text-mauve flex items-center justify-center hover:bg-blush"><i class="fa-regular fa-heart"></i></button>
+        </div>
+      </div>
+      <div class="p-4 cursor-pointer" onclick="openProductView('${p.id}')"><p class="text-xs text-mauve mb-1">${catName(p.cat)}</p><p class="font-bold mb-2 text-sm">${p.name}</p>
+        <div class="flex items-center gap-2"><span class="font-bold text-mauveD">${p.price} ج.س</span>${p.old?`<span class="text-xs text-ink/40 line-through">${p.old} ج.س</span>`:''}</div></div>
+    </div>`).join('');
+}
+
+/* ---------- offer ---------- */
+function renderOfferSection(){
+  const o = offers.find(x=>x.active && x.endsAt>Date.now());
+  const sec = document.getElementById('offers');
+  if(!o){ activeOfferEndTs=null; sec.classList.add('hidden'); return; }
+  activeOfferEndTs = o.endsAt;
+  document.getElementById('offerTitle').textContent = o.title;
+  document.getElementById('offerBadgeText').innerHTML = `${o.discount}%<br><span class="text-[10px]">خصم</span>`;
+  sec.classList.remove('hidden');
+}
+setInterval(()=>{
+  if(!activeOfferEndTs) return;
+  const diff = activeOfferEndTs - Date.now(), p=(n)=>String(Math.max(0,n)).padStart(2,'0');
+  document.getElementById('cd-d').textContent = p(Math.floor(diff/86400000));
+  document.getElementById('cd-h').textContent = p(Math.floor(diff%86400000/3600000));
+  document.getElementById('cd-m').textContent = p(Math.floor(diff%3600000/60000));
+  document.getElementById('cd-s').textContent = p(Math.floor(diff%60000/1000));
+},1000);
+
+/* ---------- cart / wishlist ---------- */
+window.addToCart = (id)=>{ const p=products.find(x=>x.id===id); if(!p) return;
+  if(avail(p)<=0){ showToast('عذراً، هذا المنتج غير متوفر حالياً'); return; }
+  const e=cart.find(x=>x.id===id);
+  if(e){ if(e.qty+1>avail(p)){ showToast(`الكمية المتاحة ${p.stock} فقط`); return; } e.qty++; } else cart.push({...p,qty:1});
+  renderCart(); showToast(`تمت إضافة "${p.name}" إلى السلة`); };
+window.changeQty = (id,d)=>{ const it=cart.find(x=>x.id===id); const live=products.find(x=>x.id===id); if(d>0 && live && it.qty+d>avail(live)){ showToast(`الكمية المتاحة ${live.stock} فقط`); return; } it.qty+=d; if(it.qty<=0) cart=cart.filter(x=>x.id!==id); renderCart(); };
+window.removeFromCart = (id)=>{ cart=cart.filter(x=>x.id!==id); renderCart(); };
+function renderCart(){
+  document.getElementById('cartItems').innerHTML = cart.length ? cart.map(i=>`
+    <div class="flex gap-4 items-center"><img src="${imgUrl(i.img,150)}" class="w-20 h-20 rounded-xl object-cover">
+      <div class="flex-1"><p class="font-bold text-sm">${i.name}</p><p class="text-mauve text-sm">${i.price} ج.س</p>
+        <div class="flex items-center gap-3 mt-2"><button onclick="changeQty('${i.id}',-1)" class="w-7 h-7 rounded-full border border-mauve/40 hover:bg-blushL">-</button><span>${i.qty}</span><button onclick="changeQty('${i.id}',1)" class="w-7 h-7 rounded-full border border-mauve/40 hover:bg-blushL">+</button></div></div>
+      <button onclick="removeFromCart('${i.id}')" class="text-ink/40 hover:text-mauveD"><i class="fa-solid fa-trash"></i></button></div>`).join('')
+    : `<div class="text-center text-ink/40 mt-20"><i class="fa-solid fa-bag-shopping text-3xl mb-3"></i><p>سلتك فارغة حالياً</p></div>`;
+  document.getElementById('cartTotal').textContent = cart.reduce((s,i)=>s+i.price*i.qty,0)+' ج.س';
+  const c = cart.reduce((s,i)=>s+i.qty,0), b=document.getElementById('cartCount'); b.textContent=c; b.classList.toggle('hidden',c===0);
+}
+window.toggleWishlist = (id)=>{ const p=products.find(x=>x.id===id); if(!p) return;
+  if(wishlist.find(x=>x.id===id)){ wishlist=wishlist.filter(x=>x.id!==id); showToast('تمت الإزالة من المفضلة'); } else { wishlist.push(p); showToast(`أضيفت "${p.name}" إلى المفضلة`); }
+  renderWishlist(); };
+function renderWishlist(){
+  document.getElementById('wishlistItems').innerHTML = wishlist.length ? wishlist.map(p=>`
+    <div class="flex gap-4 items-center"><img src="${imgUrl(p.img,150)}" class="w-20 h-20 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-sm">${p.name}</p><p class="text-mauve text-sm">${p.price} ج.س</p></div>
+      <button onclick="addToCart('${p.id}')" class="btn ghost !px-3 !py-1.5 text-xs">أضيفي للسلة</button></div>`).join('')
+    : `<div class="text-center text-ink/40 mt-20"><i class="fa-regular fa-heart text-3xl mb-3"></i><p>لا يوجد عناصر مفضلة بعد</p></div>`;
+  const b=document.getElementById('wishCount'); b.textContent=wishlist.length; b.classList.toggle('hidden',wishlist.length===0);
+}
+window.openDrawer = (t)=>{ document.getElementById(t+'DrawerBg').classList.remove('hidden'); document.getElementById(t+'Drawer').classList.add('open'); };
+window.closeDrawer = (t)=>{ document.getElementById(t+'DrawerBg').classList.add('hidden'); document.getElementById(t+'Drawer').classList.remove('open'); };
+
+/* ---------- product quick view ---------- */
+let pvImages=[], pvIndex=0;
+window.openProductView = (id)=>{
+  const p=products.find(x=>x.id===id); if(!p) return;
+  pvImages=[p.img,...(p.gallery||[])].filter(Boolean); if(!pvImages.length) pvImages=[p.img]; pvIndex=0;
+  document.getElementById('pvCategory').textContent=catName(p.cat);
+  document.getElementById('pvName').textContent=p.name;
+  document.getElementById('pvPrice').textContent=p.price+' ج.س';
+  document.getElementById('pvOldPrice').textContent=p.old?p.old+' ج.س':'';
+  const pvBtn=document.getElementById('pvAddToCart'); const out=avail(p)<=0; pvBtn.disabled=out; pvBtn.innerHTML=out?'غير متوفر حالياً':'<i class="fa-solid fa-bag-shopping"></i> أضيفي للسلة'; pvBtn.onclick=()=>addToCart(p.id);
+  document.getElementById('pvWishlist').onclick=()=>toggleWishlist(p.id);
+  renderProductView();
+  const bg=document.getElementById('productViewBg'); bg.classList.remove('hidden'); bg.classList.add('flex');
+};
+function renderProductView(){
+  document.getElementById('pvMainImage').src=imgUrl(pvImages[pvIndex],900);
+  const th=document.getElementById('pvThumbs');
+  if(pvImages.length>1){
+    th.innerHTML=pvImages.map((s,i)=>`<img src="${imgUrl(s,120)}" data-pvthumb="${i}" class="w-12 h-12 object-cover rounded-lg cursor-pointer border-2 ${i===pvIndex?'border-mauve':'border-transparent opacity-70 hover:opacity-100'}">`).join('');
+    th.querySelectorAll('[data-pvthumb]').forEach(t=>t.onclick=()=>{ pvIndex=Number(t.dataset.pvthumb); renderProductView(); });
+  } else th.innerHTML='';
+}
+window.shiftProductView = (d)=>{ pvIndex=(pvIndex+d+pvImages.length)%pvImages.length; renderProductView(); };
+window.closeProductView = ()=>{ const bg=document.getElementById('productViewBg'); bg.classList.add('hidden'); bg.classList.remove('flex'); };
+
+/* ---------- checkout ---------- */
+window.checkout = async ()=>{
+  if(!cart.length){ showToast('سلتك فارغة، أضيفي تصميماً أولاً'); return; }
+  const name=document.getElementById('checkoutName').value.trim(), phone=document.getElementById('checkoutPhone').value.trim(), address=document.getElementById('checkoutAddress').value.trim();
+  if(!name||!phone){ showToast('من فضلك أدخلي الاسم ورقم الجوال لإتمام الطلب'); return; }
+  const btn=document.getElementById('checkoutBtn'), original=btn.textContent; btn.disabled=true; btn.textContent='جارِ الإرسال...';
+  try{
+    await addDoc(collection(db,'orders'), { customer:name, phone, address, items:cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,cat:i.cat,img:(i.img&&i.img.startsWith('http'))?i.img:''})), source:'web', total:cart.reduce((s,i)=>s+i.price*i.qty,0), status:'قيد الانتظار', createdAt:Date.now(), seen:false });
+    showToast('تم إرسال طلبك بنجاح! سيتواصل معك فريقنا قريباً');
+    cart=[]; renderCart(); closeDrawer('cart'); document.getElementById('checkoutName').value=''; document.getElementById('checkoutPhone').value=''; document.getElementById('checkoutAddress').value='';
+  }catch(err){ showToast('تعذر إرسال الطلب، تحققي من اتصالك بالإنترنت وحاولي مرة أخرى'); console.error(err); }
+  btn.disabled=false; btn.textContent=original;
+};
+
+/* ---------- search ---------- */
+window.openSearch = (q)=>{ document.getElementById('searchOverlay').classList.remove('hidden'); const i=document.getElementById('searchInput'); if(typeof q==='string') i.value=q; i.focus(); doSearch(); };
+window.closeSearch = ()=>document.getElementById('searchOverlay').classList.add('hidden');
+window.doSearch = ()=>{
+  const q=document.getElementById('searchInput').value.trim();
+  const r=q?products.filter(p=>(p.name||'').includes(q)||catName(p.cat).includes(q)):products;
+  document.getElementById('searchResults').innerHTML=r.map(p=>`
+    <button onclick="closeSearch(); openProductView('${p.id}')" class="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-white/10 text-white text-right">
+      <img src="${imgUrl(p.img,100)}" class="w-14 h-14 rounded-lg object-cover"><div class="flex-1"><p class="font-bold">${p.name}</p><p class="text-blush text-sm">${p.price} ج.س</p></div><i class="fa-solid fa-arrow-left text-white/40"></i></button>`).join('')||`<p class="text-white/50 text-center py-10">لا توجد نتائج مطابقة</p>`;
+};
+
+/* ---------- gallery / reviews / faq ---------- */
+function renderGallery(){
+  document.getElementById('galleryGrid').innerHTML=GALLERY_IMGS.map(([id,h])=>`
+    <div class="mb-4 break-inside-avoid rounded-2xl overflow-hidden reveal cursor-zoom-in group" onclick="openLightbox('${id}')"><img src="${imgUrl(id,600)}" style="height:${h}px" class="w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy"></div>`).join('');
+  observeReveals();
+}
+window.openLightbox=(id)=>{ const b=document.createElement('div'); b.className='fixed inset-0 bg-ink/90 z-[155] flex items-center justify-center p-6 cursor-zoom-out'; b.innerHTML=`<img src="${imgUrl(id,1400)}" class="max-h-[85vh] rounded-2xl shadow-2xl">`; b.onclick=()=>b.remove(); document.body.appendChild(b); };
+function renderReview(){
+  const r=REVIEWS[reviewIndex];
+  document.getElementById('reviewCard').innerHTML=`<div class="flex gap-1 text-mauve mb-5">${'<i class="fa-solid fa-star"></i>'.repeat(5)}</div><p class="text-lg leading-9 mb-6">"${r.text}"</p><p class="font-bold">${r.name}</p><p class="text-sm text-ink/50">${r.occ}</p>`;
+  document.getElementById('reviewDots').innerHTML=REVIEWS.map((_,i)=>`<button onclick="jumpReview(${i})" class="w-2.5 h-2.5 rounded-full ${i===reviewIndex?'bg-mauve':'bg-mauve/25'}"></button>`).join('');
+}
+window.jumpReview=(i)=>{ reviewIndex=i; renderReview(); };
+window.shiftReview=(d)=>{ reviewIndex=(reviewIndex+d+REVIEWS.length)%REVIEWS.length; renderReview(); };
+setInterval(()=>window.shiftReview(1),6000);
+function renderFaq(){
+  document.getElementById('faqList').innerHTML=FAQS.map((f,i)=>`
+    <div class="bg-white border border-blush rounded-2xl overflow-hidden">
+      <button onclick="toggleFaq(${i})" class="w-full flex items-center justify-between p-5 text-right font-bold hover:bg-blushL">${f.q} <i class="fa-solid fa-plus text-mauve transition-transform" id="faqIcon${i}"></i></button>
+      <div class="acc-body px-5" id="faqBody${i}"><p class="pb-5 text-ink/60 leading-7">${f.a}</p></div></div>`).join('');
+}
+window.toggleFaq=(i)=>{
+  const body=document.getElementById('faqBody'+i), icon=document.getElementById('faqIcon'+i);
+  const open=body.style.maxHeight&&body.style.maxHeight!=='0px';
+  document.querySelectorAll('.acc-body').forEach(b=>b.style.maxHeight='0px');
+  document.querySelectorAll('[id^=faqIcon]').forEach(ic=>ic.style.transform='rotate(0deg)');
+  if(!open){ body.style.maxHeight=body.scrollHeight+'px'; icon.style.transform='rotate(45deg)'; }
+};
+
+/* ---------- forms / toast ---------- */
+window.submitCustom = async (e)=>{
+  e.preventDefault();
+  const g=(id)=>document.getElementById(id).value;
+  const btn=document.getElementById('cfSubmitBtn'), original=btn.innerHTML; btn.disabled=true; btn.innerHTML='جارِ الإرسال...';
+  try{
+    await addDoc(collection(db,'customOrders'), { name:g('cfName').trim(), phone:g('cfPhone').trim(), occasion:g('cfOccasion'), eventDate:g('cfDate'), pieces:g('cfPieces'), budget:g('cfBudget').trim(), description:g('cfDesc').trim(), status:'جديد', createdAt:Date.now(), seen:false });
+    showToast('استلمنا طلبك الخاص، سيتواصل معك فريق التصميم قريباً'); e.target.reset();
+  }catch(err){ showToast('تعذر إرسال الطلب، تحققي من اتصالك بالإنترنت وحاولي مرة أخرى'); console.error(err); }
+  btn.disabled=false; btn.innerHTML=original;
+};
+window.submitContact=(e)=>{ e.preventDefault(); showToast('تم إرسال رسالتك بنجاح، شكراً لتواصلك معنا'); e.target.reset(); };
+let toastTimer;
+function showToast(msg){ document.getElementById('toastMsg').textContent=msg; const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3200); }
+window.showToast=showToast;
+
+document.querySelectorAll('#mobileNav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mobileNav').classList.add('hidden')));
+
+/* ---------- init ---------- */
+renderPackages(); renderFilterTabs(); renderProducts(); renderGallery(); renderReview(); renderFaq(); renderCart(); renderWishlist(); observeReveals();
+</script>
+</body>
+</html>
