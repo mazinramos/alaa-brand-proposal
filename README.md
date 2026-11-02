@@ -36,8 +36,8 @@ final/               ← الملفين النهائيين (المشرف فقط)
 
 | الحساب | المهمة | الـ branch | الحالة |
 |---|---|---|---|
-| 1 | شرح موقع وشلي | `acct-1-site-explanation` | لم يبدأ |
-| 2 | تصور موقع Alaa Mahjob | `acct-2-vision` | لم يبدأ |
-| 3 | مقارنة الباك إند (Firebase / Cloudflare) | `acct-3-backend` | لم يبدأ |
-| 4 | الأسعار والخطط | `acct-4-pricing` | لم يبدأ |
-| 5 | تصميم الـ PDF | `acct-5-pdf-design` | لم يبدأ |
+| 1 | شرح موقع وشلي | `acct-1-site-explanation` | تم ودُمج في main |
+| 2 | تصور موقع Alaa Mahjob | `acct-2-vision` | تم ودُمج في main |
+| 3 | مقارنة الباك إند (Firebase / Cloudflare) | `acct-3-backend` | تم ودُمج في main |
+| 4 | الأسعار والخطط | `acct-4-pricing` | تم ودُمج في main |
+| 5 | تصميم الـ PDF | `acct-5-pdf-design` | تم ودُمج في main |
