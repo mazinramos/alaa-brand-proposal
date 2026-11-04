@@ -4,64 +4,52 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
 
 import { firebaseConfig } from '../shared/firebaseConfig.js';
+import { brand, categories } from '../shared/brand.js';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* ---------- reference data ---------- */
-const CATEGORY_LIST = [
-  { key:'wedding',    name:'توزيعات أفراح' },
-  { key:'engagement', name:'توزيعات خطوبة' },
-  { key:'success',    name:'توزيعات نجاح' },
-  { key:'baby',       name:'استقبال المواليد' },
-  { key:'birthday',   name:'أعياد الميلاد' },
-  { key:'corporate',  name:'هدايا الشركات' },
-  { key:'vip',        name:'هدايا VIP' },
-  { key:'custom',     name:'بوكسات حسب الطلب' },
-  { key:'jertig',     name:'توزيعات جرتق' },
-  { key:'misc',       name:'توزيعات منوعة' },
-];
-const PACKAGES = [
-  { key:'engagement', name:'بكج فال خطوبة', desc:'توزيعات ناعمة بتفاصيل تليق بفرحتكم', icon:'fa-ring',           img:'photo-1522673607200-164d1b6ce486' },
-  { key:'success',    name:'بكج فال تخرج',  desc:'توزيعات مميزة لنجاحك وفرحتك',         icon:'fa-graduation-cap', img:'photo-1513151233558-d860c5398176' },
-  { key:'wedding',    name:'بكج فال عرس',   desc:'توزيعات فاخرة تناسب ليلة العمر',      icon:'fa-ring',           img:'photo-1519741497674-611481863552' },
-  { key:'baby',       name:'بكج ولادة',     desc:'توزيعات وباقات خاصة بالمولود بكل تفاصيلها الجميلة', icon:'fa-baby', img:'photo-1519167758481-83f550bb49b3' },
-];
-const GENERAL = [
-  { key:'all',        name:'توزيعات لكل المناسبات', img:'photo-1607344645866-009c320b63e0', arrow:'plus' },
-  { key:'jertig',     name:'توزيعات جرتق',   img:'photo-1549465220-1a8b9238cd48', arrow:'plus' },
-  { key:'engagement', name:'توزيعات خطوبة',  img:'photo-1522673607200-164d1b6ce486', arrow:'plus' },
-  { key:'success',    name:'توزيعات تخرج',   img:'photo-1513151233558-d860c5398176', arrow:'plus' },
-  { key:'baby',       name:'توزيعات ولادة',  img:'photo-1519167758481-83f550bb49b3', arrow:'left' },
-  { key:'wedding',    name:'توزيعات عرس',    img:'photo-1519741497674-611481863552', arrow:'left' },
-  { key:'misc',       name:'توزيعات منوعة',  img:'photo-1567696911980-2eed69a46042', arrow:'left' },
-];
+const CATEGORY_LIST = categories;
+// وصف وأيقونة كل تصنيف في بطاقات التصنيفات (الأسماء نفسها من brand.js)
+const CATEGORY_META = {
+  occasion: { desc:'سهرة وخطوبة وحفلات بتفاصيل تليق بإطلالتك', icon:'fa-gem' },
+  thobe:    { desc:'القطع السودانية التقليدية بلمسة معاصرة',    icon:'fa-shirt' },
+  daily:    { desc:'قطع أنيقة للاستعمال اليومي والعمل',         icon:'fa-sun' },
+  sets:     { desc:'قطعتان أو أكثر تكتمل بها إطلالتك',          icon:'fa-layer-group' },
+  custom:   { desc:'قطع تُصمَّم حسب الطلب بمقاساتك',            icon:'fa-scissors' },
+};
+const PACKAGES = CATEGORY_LIST.slice(0,4).map(c=>({ key:c.key, name:c.name, desc:CATEGORY_META[c.key]?.desc||'', icon:CATEGORY_META[c.key]?.icon||'fa-gem' }));
+const GENERAL = [{ key:'all', name:'كل القطع', arrow:'plus' }].concat(CATEGORY_LIST.map((c,i)=>({ key:c.key, name:c.name, arrow:i<2?'plus':'left' })));
+// TODO-ALAA: آراء حقيقية لعميلات ألاء (الاسم والمناسبة والنص بعد موافقتهن). النصوص التالية مكان مؤقت فقط.
 const REVIEWS = [
-  { name:'مريم أحمد', occ:'عروس ٢٠٢٦', text:'التوزيعات كانت أجمل من الخيال، كل ضيوفي سألوني عن المكان! تفاصيل تستحق كل جنيه.' },
-  { name:'سارة خالد', occ:'خطوبة', text:'تعامل راقي واهتمام بأدق التفاصيل، فريق وشلي فهم ذوقي من أول مكالمة.' },
-  { name:'نور الهدى', occ:'مناسبة شركة', text:'هدايا الشركة كانت راقية جداً وعملائنا سعدوا بها كثيراً، سنكرر التعامل بالتأكيد.' },
-  { name:'ياسمين محمود', occ:'استقبال مولود', text:'تنظيم ودقة في المواعيد، والتغليف كان أجمل من المنتج نفسه!' },
+  { name:'اسم العميلة', occ:'فساتين المناسبات', text:'هنا يظهر رأي حقيقي لإحدى عميلات ألاء بعد أخذ موافقتها.' },
+  { name:'اسم العميلة', occ:'الأثواب والعبايات', text:'هنا يظهر رأي حقيقي لإحدى عميلات ألاء بعد أخذ موافقتها.' },
+  { name:'اسم العميلة', occ:'تفصيل خاص', text:'هنا يظهر رأي حقيقي لإحدى عميلات ألاء بعد أخذ موافقتها.' },
 ];
+// TODO-ALAA: إجابات ألاء الفعلية (مدة الجاهز والتفصيل، مناطق التوصيل وتكلفته، الاستبدال، طرق الدفع)
 const FAQS = [
-  { q:'كم يستغرق تجهيز الطلب؟', a:'مدة التجهيز تتراوح من 5 إلى 14 يوم عمل حسب حجم الطلب ودرجة التخصيص المطلوبة.' },
-  { q:'هل يمكن تخصيص الألوان والتصميم؟', a:'بالطبع، قسم "بوكسات حسب الطلب" مخصص بالكامل لتصميم توزيعتك بألوانك وأفكارك الخاصة.' },
-  { q:'ما هي مناطق التوصيل المتاحة؟', a:'نوصل لجميع ولايات السودان، مع إمكانية الشحن الدولي لبعض الدول العربية.' },
-  { q:'هل تتوفر عينات قبل الطلب الكامل؟', a:'نعم، يمكنك طلب عينة واحدة لمعاينة الجودة قبل تأكيد الكمية الكاملة.' },
-  { q:'ما طرق الدفع المتاحة؟', a:'الدفع عند الاستلام، التحويل البنكي، أو الدفع الإلكتروني عبر بطاقات الائتمان.' },
+  { q:'كم تستغرق مدة تجهيز القطعة؟', a:'تختلف المدة بحسب القطعة وطريقة تجهيزها (قطعة جاهزة أو تفصيل خاص)، ونؤكد لك الموعد المتوقع عند تأكيد طلبك.' },
+  { q:'هل يمكن تفصيل قطعة بمقاساتي؟', a:'نعم، من قسم "طلب تفصيل" تكتبين فكرتك وموعد حاجتك، وسنتواصل معك لتأكيد المقاسات والتفاصيل والسعر.' },
+  { q:'ما هي مناطق التوصيل المتاحة؟', a:'نوصل داخل السودان، ونؤكد معك طريقة التوصيل وتكلفته عند الطلب.' },
+  { q:'هل يمكن استبدال القطعة؟', a:'نوضح لك سياسة الاستبدال عند تأكيد الطلب.' },
+  { q:'ما طرق الدفع المتاحة؟', a:'نؤكد معك طريقة الدفع المناسبة بعد استلام طلبك.' },
 ];
+// TODO-ALAA: صور اللوك بوك (تُضاف من صور ألاء). المكعبات الحالية أماكن مؤقتة بنفس الارتفاعات.
 const GALLERY_IMGS = [
-  ['photo-1519741497674-611481863552',420],['photo-1519225421980-715cb0215aed',300],['photo-1607344645866-009c320b63e0',380],
-  ['photo-1549465220-1a8b9238cd48',280],['photo-1519167758481-83f550bb49b3',360],['photo-1522673607200-164d1b6ce486',320],
-  ['photo-1513151233558-d860c5398176',300],['photo-1567696911980-2eed69a46042',400],['photo-1519741497674-611481863552',300],
+  [null,420],[null,300],[null,380],
+  [null,280],[null,360],[null,320],
+  [null,300],[null,400],[null,300],
 ];
 
 let products = [], offers = [], cart = [], wishlist = [];
 let currentFilter = 'all', reviewIndex = 0, activeOfferEndTs = null, productsLoaded = false;
 window._catFilter = null;
 
+// خلفية بديلة بلون التصميم (blushL) تحل محل أي صورة غير متوفرة
+const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5'%3E%3Crect width='4' height='5' fill='%23F6E9E8'/%3E%3C/svg%3E";
 function imgUrl(id, w=700){
-  if(!id) return `https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=${w}&q=80&auto=format`;
-  if(id.startsWith('data:') || id.startsWith('http')) return id;
-  return `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format`;
+  if(id && (id.startsWith('data:') || id.startsWith('http'))) return id;
+  return PLACEHOLDER_IMG;
 }
 const tracked=(p)=>typeof p.stock==='number';
 const avail=(p)=>tracked(p)?Math.max(0,p.stock):Infinity;
@@ -86,7 +74,7 @@ function renderPackages(){
       <div class="pkg-ico"><i class="fa-solid ${p.icon}"></i></div>
       <h3 class="font-bold mt-2 text-[15px]">${p.name}</h3>
       <p class="text-[11px] text-ink/60 px-4 mt-1 mb-3 min-h-[32px] leading-5">${p.desc}</p>
-      <button onclick="filterByCategory('${p.key}')" class="btn !py-1.5 !px-6 text-[12px]">عرض البكج</button>
+      <button onclick="filterByCategory('${p.key}')" class="btn !py-1.5 !px-6 text-[12px]">عرض القطع</button>
     </div>`).join('');
   document.getElementById('genGrid').innerHTML = GENERAL.map(g=>`
     <button onclick="${g.key==='all' ? "goCollection('all')" : `filterByCategory('${g.key}')`}" class="gen-card reveal text-center">
@@ -123,8 +111,8 @@ function renderProducts(){
   document.getElementById('activeCatLabel').textContent = window._catFilter ? '— ' + catName(window._catFilter) : '';
   if(!list.length){
     gridEl.innerHTML = products.length===0
-      ? `<div class="col-span-full text-center py-16"><i class="fa-solid fa-gift text-4xl text-mauve/40 mb-4"></i><p class="font-bold mb-1">التشكيلة قيد التجهيز</p><p class="text-ink/50 text-sm">قريباً ستجدين هنا أحدث تصاميمنا</p></div>`
-      : `<p class="col-span-full text-center text-ink/50 py-10">لا توجد تصاميم مطابقة، جربي فلتر آخر.</p>`;
+      ? `<div class="col-span-full text-center py-16"><i class="fa-solid fa-shirt text-4xl text-mauve/40 mb-4"></i><p class="font-bold mb-1">التشكيلة قيد التجهيز</p><p class="text-ink/50 text-sm">قريباً ستجدين هنا أحدث تصاميمنا</p></div>`
+      : `<p class="col-span-full text-center text-ink/50 py-10">لا توجد قطع مطابقة، جربي فلتر آخر.</p>`;
     return;
   }
   gridEl.innerHTML = list.map(p=>`
@@ -221,13 +209,13 @@ window.closeProductView = ()=>{ const bg=document.getElementById('productViewBg'
 
 /* ---------- checkout ---------- */
 window.checkout = async ()=>{
-  if(!cart.length){ showToast('سلتك فارغة، أضيفي تصميماً أولاً'); return; }
+  if(!cart.length){ showToast('سلتك فارغة، أضيفي قطعة أولاً'); return; }
   const name=document.getElementById('checkoutName').value.trim(), phone=document.getElementById('checkoutPhone').value.trim(), address=document.getElementById('checkoutAddress').value.trim();
   if(!name||!phone){ showToast('من فضلك أدخلي الاسم ورقم الجوال لإتمام الطلب'); return; }
   const btn=document.getElementById('checkoutBtn'), original=btn.textContent; btn.disabled=true; btn.textContent='جارِ الإرسال...';
   try{
     await addDoc(collection(db,'orders'), { customer:name, phone, address, items:cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,cat:i.cat,img:(i.img&&i.img.startsWith('http'))?i.img:''})), source:'web', total:cart.reduce((s,i)=>s+i.price*i.qty,0), status:'قيد الانتظار', createdAt:Date.now(), seen:false });
-    showToast('تم إرسال طلبك بنجاح! سيتواصل معك فريقنا قريباً');
+    showToast(`تم إرسال طلبك بنجاح! سيتواصل معك فريق ${brand.nameAr} قريباً`);
     cart=[]; renderCart(); closeDrawer('cart'); document.getElementById('checkoutName').value=''; document.getElementById('checkoutPhone').value=''; document.getElementById('checkoutAddress').value='';
   }catch(err){ showToast('تعذر إرسال الطلب، تحققي من اتصالك بالإنترنت وحاولي مرة أخرى'); console.error(err); }
   btn.disabled=false; btn.textContent=original;
@@ -247,7 +235,7 @@ window.doSearch = ()=>{
 /* ---------- gallery / reviews / faq ---------- */
 function renderGallery(){
   document.getElementById('galleryGrid').innerHTML=GALLERY_IMGS.map(([id,h])=>`
-    <div class="mb-4 break-inside-avoid rounded-2xl overflow-hidden reveal cursor-zoom-in group" onclick="openLightbox('${id}')"><img src="${imgUrl(id,600)}" style="height:${h}px" class="w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy"></div>`).join('');
+    <div class="mb-4 break-inside-avoid rounded-2xl overflow-hidden reveal cursor-zoom-in group" ${id?`onclick="openLightbox('${id}')"`:''}><img src="${imgUrl(id,600)}" style="height:${h}px" class="w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy"></div>`).join('');
   observeReveals();
 }
 window.openLightbox=(id)=>{ const b=document.createElement('div'); b.className='fixed inset-0 bg-ink/90 z-[155] flex items-center justify-center p-6 cursor-zoom-out'; b.innerHTML=`<img src="${imgUrl(id,1400)}" class="max-h-[85vh] rounded-2xl shadow-2xl">`; b.onclick=()=>b.remove(); document.body.appendChild(b); };
@@ -280,7 +268,7 @@ window.submitCustom = async (e)=>{
   const btn=document.getElementById('cfSubmitBtn'), original=btn.innerHTML; btn.disabled=true; btn.innerHTML='جارِ الإرسال...';
   try{
     await addDoc(collection(db,'customOrders'), { name:g('cfName').trim(), phone:g('cfPhone').trim(), occasion:g('cfOccasion'), eventDate:g('cfDate'), pieces:g('cfPieces'), budget:g('cfBudget').trim(), description:g('cfDesc').trim(), status:'جديد', createdAt:Date.now(), seen:false });
-    showToast('استلمنا طلبك الخاص، سيتواصل معك فريق التصميم قريباً'); e.target.reset();
+    showToast(`استلمنا طلبك الخاص، سيتواصل معك فريق ${brand.nameAr} قريباً`); e.target.reset();
   }catch(err){ showToast('تعذر إرسال الطلب، تحققي من اتصالك بالإنترنت وحاولي مرة أخرى'); console.error(err); }
   btn.disabled=false; btn.innerHTML=original;
 };
