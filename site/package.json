@@ -9,7 +9,9 @@
     "parity": "node tests/parity/run.mjs",
     "parity:self": "node tests/parity/run.mjs --self",
     "parity:selftest": "node tests/parity/selftest.mjs",
-    "parity:browser": "playwright install chromium"
+    "parity:browser": "playwright install chromium",
+    "brandcheck": "node tests/brandcheck/run.mjs",
+    "brandcheck:selftest": "node tests/brandcheck/selftest.mjs"
   },
   "private": true,
   "type": "module",
