@@ -1,7 +1,7 @@
 {
   "name": "alaa-store",
   "version": "0.1.0",
-  "description": "Alaa Mahjob store (Vite). Baseline converted from Wishly.",
+  "description": "Alaa Mahjob store (Vite). Store and admin panel.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

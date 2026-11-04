@@ -63,7 +63,8 @@ const FILE_EXT = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif', 'i
 // رقم واتساب مقبول فقط لو الرمز المؤقت، أو تعبير ديناميكي مصدره brand.
 function waCheck(value, line) {
   if (value.startsWith('ALAA_WHATSAPP_NUMBER')) return false;
-  if (value.startsWith('${')) return !/brand\b/i.test(value.slice(0, value.indexOf('}') + 1) || line);
+  // رابط ديناميكي لرقم عميلة (متغير waNumber/phone في دالة waLink باللوحة): مقبول لأنه ليس رقماً مكتوباً.
+  if (value.startsWith('${')) { const expr = value.slice(0, value.indexOf('}') + 1); return !/brand\b|^\$\{(?:n|num|phone|waNumber)\}$/i.test(expr); }
   if (value === '') return !/brand\.|ALAA_WHATSAPP_NUMBER/.test(line);
   return true;
 }

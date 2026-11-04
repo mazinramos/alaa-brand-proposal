@@ -1,4 +1,4 @@
-// Same theme the original Wishly pages declared inline (identical in store and admin).
+// Shared theme for the store and the admin panel.
 // Tailwind 3.4 is pinned on purpose: the original pages used the Tailwind 3 CDN.
 /** @type {import('tailwindcss').Config} */
 export default {
