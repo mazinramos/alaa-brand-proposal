@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>fixture</title>
+<style>
+  body{font-family:sans-serif;margin:0;background:#fff}
+  .hero{background:#9A5C6D;color:#fff;padding:40px}
+  .btn-x{background:#eee;padding:8px 16px;display:inline-block}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s}
+  .reveal.in{opacity:1;transform:none}
+  @media (min-width:768px){ .md\:wide{width:600px} }
+</style></head>
+<body>
+<div class="hero"><h1>عنوان تجريبي</h1><p id="pid"></p></div>
+<div class="btn-x md:wide">زر</div>
+<div class="reveal" id="r1" style="height:1200px">محتوى يظهر عند التمرير</div>
+<div class="reveal" id="r2">نهاية الصفحة <span class="ghost-class">بلا قاعدة</span></div>
+<script>
+  const firebaseConfig = {
+    apiKey: "REDACTED",
+    authDomain: "REDACTED",
+    projectId: "REDACTED",
+    appId: "REDACTED"
+  };
+  document.getElementById('pid').textContent = 'project=' + firebaseConfig.projectId;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }));
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body></html>

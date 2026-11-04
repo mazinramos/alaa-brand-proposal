@@ -1,2 +1,314 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>store placeholder</title></head><body><p>Store placeholder, replaced by task 01.</p></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وشلي | Wishly — Gifts • Treats • Memories</title>
+<meta name="description" content="Wishly (وشلي) متجر متخصص في توزيعات وباقات المناسبات: خطوبة، تخرج، عرس، ولادة وجرتق بتفاصيل أنيقة تحكي قصة فرحتك.">
+<meta name="google-site-verification" content="IH_dYUXH_BQW7TR7uUDlCoLQvJy0kQdNy503aXl8W8w" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%239A5C6D'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='Georgia,serif'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="antialiased">
+
+<div class="fixed bottom-24 inset-x-0 z-[160] flex justify-center px-4 pointer-events-none">
+  <div id="toast" class="bg-white border border-blush rounded-2xl px-6 py-4 shadow-2xl flex items-center gap-3 max-w-[92vw]">
+    <i class="fa-solid fa-circle-check text-mauve text-lg"></i><span id="toastMsg" class="text-sm font-semibold">تم بنجاح</span>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="bg-blush text-center text-[12px] py-2 font-medium text-ink/80"><i class="fa-solid fa-heart text-mauve text-[10px] ml-1"></i> توزيعات مميزة .. للحظات أجمل</div>
+
+<!-- HEADER -->
+<header class="bg-cream sticky top-0 z-[120] shadow-[0_1px_0_#f0e1e0]" id="siteHeader">
+  <div class="max-w-[1180px] mx-auto px-5 md:px-8 py-3 flex items-center justify-between gap-4">
+    <!-- logo (right in RTL) -->
+    <a href="#home" class="flex flex-col items-center leading-none shrink-0" aria-label="Wishly">
+      <span class="flex items-end gap-1">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="26" width="40" height="30" rx="2"/><rect x="8" y="20" width="48" height="9" rx="2"/><path d="M32 20v36"/><path d="M32 20c-6-12-18-10-14-3 3 5 14 3 14 3zM32 20c6-12 18-10 14-3-3 5-14 3-14 3z"/></svg>
+        <i class="fa-solid fa-heart text-mauve text-[9px] mb-3 -mr-1"></i>
+      </span>
+      <span class="logo-script text-[34px] text-mauve -mt-1">Wishly</span>
+      <span class="text-[7px] tracking-[.22em] text-mauve/70 mt-0.5">GIFTS • TREATS • MEMORIES</span>
+    </a>
+
+    <!-- nav -->
+    <nav class="hidden lg:flex items-center gap-4 xl:gap-7">
+      <a href="#home" class="nav-link active">الرئيسية</a>
+      <div class="dd"><button class="nav-link">المنتجات <i class="fa-solid fa-chevron-down text-[8px] mr-1"></i></button>
+        <div class="dd-menu"><button onclick="goCollection('all')">كل المنتجات</button><button onclick="goCollection('bestseller')">الأكثر مبيعاً</button><button onclick="goCollection('new')">وصل حديثاً</button><button onclick="goCollection('sale')">عروض</button></div></div>
+      <a href="#" onclick="event.preventDefault(); filterByCategory('baby')" class="nav-link">باقات الولادة</a>
+      <div class="dd"><button class="nav-link">باقات المناسبات <i class="fa-solid fa-chevron-down text-[8px] mr-1"></i></button>
+        <div class="dd-menu"><button onclick="filterByCategory('engagement')">بكج فال خطوبة</button><button onclick="filterByCategory('success')">بكج فال تخرج</button><button onclick="filterByCategory('wedding')">بكج فال عرس</button><button onclick="filterByCategory('baby')">بكج ولادة</button></div></div>
+      <a href="#general" class="nav-link">التوزيعات العامة</a>
+      <a href="#about" class="nav-link">من نحن</a>
+      <a href="#contact" class="nav-link">تواصل معنا</a>
+    </nav>
+
+    <!-- left: icons + search -->
+    <div class="flex flex-col items-end gap-2">
+      <div class="flex items-center gap-3 text-[15px]">
+        <button onclick="openDrawer('cart')" class="relative" title="السلة"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-mauve text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
+        <button onclick="openDrawer('wishlist')" class="relative" title="المفضلة"><i class="fa-regular fa-heart"></i><span id="wishCount" class="absolute -top-2 -right-2 bg-mauve text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
+        <a href="#contact" title="حسابي"><i class="fa-regular fa-user"></i></a>
+        <button onclick="openSearch()" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="lg:hidden" onclick="document.getElementById('mobileNav').classList.toggle('hidden')"><i class="fa-solid fa-bars"></i></button>
+      </div>
+      <form onsubmit="event.preventDefault(); openSearch(this.q.value)" class="hidden md:flex items-center bg-white border border-[#DDBFC1] rounded-full pl-1 pr-4 h-9 w-[250px] lg:w-[190px] xl:w-[250px]">
+        <input name="q" placeholder="ابحث عن منتجك المفضل..." class="flex-1 min-w-0 bg-transparent text-[11px] focus:outline-none">
+        <button class="w-7 h-7 rounded-full bg-mauve text-white text-[11px] flex items-center justify-center"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+    </div>
+  </div>
+  <div id="mobileNav" class="hidden lg:hidden bg-cream border-t border-blush px-6 pb-5 pt-3 flex flex-col gap-3 text-sm font-semibold">
+    <a href="#home">الرئيسية</a><a href="#collection">المنتجات</a><a href="#" onclick="event.preventDefault(); filterByCategory('baby')">باقات الولادة</a><a href="#packages">باقات المناسبات</a><a href="#general">التوزيعات العامة</a><a href="#about">من نحن</a><a href="#contact">تواصل معنا</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="relative overflow-hidden bg-blushL h-[340px] md:h-[250px] lg:h-[270px]">
+  <img id="heroImg" src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=1800&q=80&auto=format" class="absolute inset-y-0 right-0 w-full md:w-[68%] h-full object-cover" alt="Wishly gifts">
+  <div class="absolute inset-0 hero-fade"></div>
+  <div class="relative max-w-[1180px] mx-auto px-6 md:px-10 h-full flex items-end md:items-center pb-6 md:pb-0">
+    <div class="md:w-[50%] lg:w-[46%] md:mr-auto text-center md:text-right relative">
+      <svg class="hidden md:block absolute -top-12 right-[-20px]" width="110" height="46" viewBox="0 0 110 46" fill="none" stroke="#9A5C6D" stroke-width="1.2" opacity=".75"><path d="M2 40c18-6 40-2 52-14 8-9-2-22-12-16-9 6 2 18 14 14 22-8 32-22 52-14" stroke-linecap="round"/></svg>
+      <h1 class="text-[1.65rem] md:text-[1.4rem] lg:text-[1.75rem] xl:text-[2rem] font-semibold text-mauve leading-snug">كل مناسبة .. لها لمستها الخاصة</h1>
+      <p class="text-[13px] md:text-sm mt-2 text-ink/80">نوفر لك أجمل التوزيعات والباقات المميزة</p>
+      <p class="text-[13px] md:text-sm mt-1 text-ink/80">بجودة عالية وتفاصيل تحكي قصة فرحتك <i class="fa-solid fa-heart text-mauve text-[10px]"></i></p>
+      <a href="#collection" class="btn mt-4 !py-2 !px-7 text-[13px]">تسوقي الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PACKAGES -->
+<section id="packages" class="max-w-[1180px] mx-auto px-5 md:px-8 pt-7 pb-4">
+  <div class="sec-title reveal">باقاتنا المميزة</div>
+  <div class="text-center text-mauve text-[10px] mt-1 mb-5"><i class="fa-solid fa-heart"></i></div>
+  <div id="pkgGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+</section>
+
+<!-- GENERAL DISTRIBUTIONS -->
+<section id="general" class="max-w-[1180px] mx-auto px-5 md:px-8 pt-5 pb-8">
+  <div class="sec-title reveal">توزيعات عامة للمناسبات</div>
+  <div id="genGrid" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3 mt-5"></div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="strip border-t border-[#dfc3c4]">
+  <div class="max-w-[1180px] mx-auto px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-4 items-center text-ink/80">
+    <div class="flex items-center gap-3 md:justify-start"><i class="fa-solid fa-truck-fast text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">توصيل لجميع الولايات</p><p class="text-[10px] opacity-70">بأمان وسرعة</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-solid fa-shield-halved text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">جودة عالية</p><p class="text-[10px] opacity-70">في كل التفاصيل</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-regular fa-heart text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">دفع آمن</p><p class="text-[10px] opacity-70">متوفر بعدة طرق</p></div></div>
+    <div class="flex items-center gap-3"><i class="fa-solid fa-headset text-mauve text-xl"></i><div><p class="text-[12px] font-bold leading-tight">خدمة عملاء مميزة</p><p class="text-[10px] opacity-70">نحن دائماً معك</p></div></div>
+    <p class="col-span-2 md:col-span-1 text-center md:text-left text-[12px] font-semibold text-mauveD">شكراً لاختيارك وشلي <i class="fa-solid fa-heart text-mauve text-[10px]"></i></p>
+  </div>
+</div>
+
+<!-- COLLECTION -->
+<section id="collection" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto">
+  <div class="sec-title reveal">التشكيلة المُختارة</div>
+  <div class="flex flex-wrap justify-center gap-2 mt-6" id="filterTabs"></div>
+  <div class="flex flex-wrap items-center justify-between gap-4 my-7">
+    <p class="text-sm text-ink/60"><span id="resultCount">0</span> تصميم متاح <span id="activeCatLabel" class="text-mauve font-bold"></span></p>
+    <select id="sortSelect" onchange="renderProducts()" class="text-sm rounded-full border border-[#DDBFC1] bg-white px-4 py-2 focus:outline-none">
+      <option value="new">الأحدث</option><option value="bestseller">الأكثر مبيعاً</option><option value="priceAsc">السعر: من الأقل</option><option value="priceDesc">السعر: من الأعلى</option>
+    </select>
+  </div>
+  <div id="productGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+</section>
+
+<!-- OFFERS -->
+<section id="offers" class="py-16 bg-mauveD text-white relative overflow-hidden hidden">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <span class="text-blush text-xs tracking-widest font-bold">عرض لفترة محدودة</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-3 mb-4" id="offerTitle">خصم 25%</h2>
+      <p class="text-white/75 mb-6 leading-8">استمتعي بخصم خاص لفترة محدودة فقط، قبل نفاد الكمية.</p>
+      <div class="flex gap-3 mb-8">
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-d">00</p><p class="text-[11px] text-blush">يوم</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-h">00</p><p class="text-[11px] text-blush">ساعة</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-m">00</p><p class="text-[11px] text-blush">دقيقة</p></div>
+        <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[66px]"><p class="text-2xl font-bold" id="cd-s">00</p><p class="text-[11px] text-blush">ثانية</p></div>
+      </div>
+      <a href="#collection" class="btn !bg-white !text-mauveD">تسوقي العرض الآن</a>
+    </div>
+    <div class="relative">
+      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80&auto=format" class="rounded-3xl w-full h-[300px] object-cover" alt="Offer">
+      <div class="absolute -top-5 -left-5 w-20 h-20 rounded-full bg-blush text-mauveD flex items-center justify-center text-center font-bold leading-tight" id="offerBadgeText">25%<br><span class="text-[10px]">خصم</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+  <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80&auto=format" class="rounded-3xl w-full h-[340px] object-cover" alt="Wishly">
+  <div>
+    <div class="sec-title !justify-start before:hidden after:w-24 !gap-3">من نحن</div>
+    <h2 class="text-2xl md:text-3xl font-bold text-mauve mt-4 mb-4">من فكرة صغيرة… إلى ورشة أحلام</h2>
+    <p class="text-ink/70 leading-8 mb-6">بدأنا "وشلي" من ركن صغير بشغف كبير بالتفاصيل — نؤمن أن كل توزيعة هي رسالة تحمل مشاعر صاحبتها. اليوم أصبحنا وجهة العرائس وأصحاب المناسبات الباحثات عن لمسة أنيقة تُروى قصتها في كل تفصيلة.</p>
+    <div class="grid grid-cols-2 gap-5">
+      <div class="flex gap-3"><i class="fa-solid fa-hand-holding-heart text-mauve text-xl mt-1"></i><div><p class="font-bold">رؤيتنا</p><p class="text-sm text-ink/60">أن نكون توقيع الجمال في كل مناسبة.</p></div></div>
+      <div class="flex gap-3"><i class="fa-solid fa-gem text-mauve text-xl mt-1"></i><div><p class="font-bold">رسالتنا</p><p class="text-sm text-ink/60">تفاصيل مصنوعة بعناية تليق بلحظاتك الغالية.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM ORDER -->
+<section id="custom" class="py-16 bg-blushL">
+  <div class="max-w-4xl mx-auto px-5 md:px-8">
+    <div class="sec-title reveal">اطلبي تصميماً بحسب ذوقك</div>
+    <p class="text-center text-ink/60 mt-4 mb-8 text-sm">شاركينا فكرتك، ألوانك، وموعد مناسبتك، وسنحوّلها إلى قطعة تحمل توقيعك.</p>
+    <form id="customForm" onsubmit="submitCustom(event)" class="bg-white border border-blush rounded-3xl p-6 md:p-10 grid md:grid-cols-2 gap-5 shadow-lg">
+      <div><label class="text-sm font-bold mb-2 block">الاسم</label><input required id="cfName" class="field" placeholder="اسمك الكريم"></div>
+      <div><label class="text-sm font-bold mb-2 block">رقم الجوال</label><input required id="cfPhone" class="field" placeholder="09xxxxxxxx"></div>
+      <div><label class="text-sm font-bold mb-2 block">نوع المناسبة</label><select id="cfOccasion" class="field"><option>فرح</option><option>خطوبة</option><option>مولود</option><option>تخرج</option><option>شركات</option><option>أخرى</option></select></div>
+      <div><label class="text-sm font-bold mb-2 block">موعد المناسبة</label><input type="date" id="cfDate" class="field"></div>
+      <div><label class="text-sm font-bold mb-2 block">عدد القطع</label><input type="number" min="1" id="cfPieces" class="field" placeholder="مثال: 100"></div>
+      <div><label class="text-sm font-bold mb-2 block">الميزانية التقريبية</label><input id="cfBudget" class="field" placeholder="بالجنيه السوداني"></div>
+      <div class="md:col-span-2"><label class="text-sm font-bold mb-2 block">صف فكرتك</label><textarea rows="3" id="cfDesc" class="field" placeholder="الألوان المفضلة، الستايل، أي إلهام لديك..."></textarea></div>
+      <button id="cfSubmitBtn" class="btn md:col-span-2 justify-self-start">إرسال الطلب <i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="py-16 px-5 md:px-8 max-w-[1180px] mx-auto">
+  <div class="sec-title reveal">معرض الأعمال</div>
+  <div id="galleryGrid" class="columns-2 md:columns-3 gap-4 mt-8"></div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="py-16 bg-blushL">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <div class="sec-title">كلمات أسعدتنا</div>
+    <div class="relative mt-8">
+      <div id="reviewCard" class="bg-white border border-blush rounded-3xl p-8 md:p-12 shadow-lg min-h-[240px] flex flex-col items-center justify-center"></div>
+      <button onclick="shiftReview(-1)" class="absolute top-1/2 -translate-y-1/2 -right-2 md:-right-6 w-10 h-10 rounded-full bg-white border border-blush shadow flex items-center justify-center hover:bg-blush"><i class="fa-solid fa-chevron-right"></i></button>
+      <button onclick="shiftReview(1)" class="absolute top-1/2 -translate-y-1/2 -left-2 md:-left-6 w-10 h-10 rounded-full bg-white border border-blush shadow flex items-center justify-center hover:bg-blush"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+    <div class="flex justify-center gap-2 mt-6" id="reviewDots"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-16 px-5 md:px-8 max-w-3xl mx-auto">
+  <div class="sec-title mb-8">أسئلة شائعة</div>
+  <div id="faqList" class="space-y-3"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-16 bg-blushL">
+  <div class="max-w-5xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="sec-title !justify-start before:hidden after:w-24 !gap-3">تواصل معنا</div>
+      <p class="text-ink/60 my-6 leading-8">فريقنا جاهز لمساعدتك في اختيار أو تصميم التوزيعة المثالية لمناسبتك.</p>
+      <div class="space-y-4 mb-7 text-sm">
+        <div class="flex items-center gap-3"><i class="fa-solid fa-phone text-mauve w-5"></i><span dir="ltr">0904298584</span></div>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-envelope text-mauve w-5"></i> hello@wishly-atelier.com</div>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-mauve w-5"></i> شرق النيل . السودان</div>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://www.instagram.com/wishly.sd" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@wishlygift.favors" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://wa.me/249904298584" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="w-10 h-10 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-mauve hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+      </div>
+    </div>
+    <form onsubmit="submitContact(event)" class="bg-white border border-blush rounded-3xl p-7 shadow-lg space-y-4">
+      <input required placeholder="الاسم" class="field">
+      <input required type="email" placeholder="البريد الإلكتروني" class="field">
+      <textarea required rows="4" placeholder="رسالتك" class="field"></textarea>
+      <button class="btn w-full">إرسال الرسالة</button>
+    </form>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-12 px-6 strip">
+  <div class="max-w-2xl mx-auto text-center">
+    <h3 class="text-xl font-bold text-mauveD mb-2">كوني أول من يعرف بجديدنا</h3>
+    <p class="text-ink/60 text-sm mb-5">اشتركي في نشرتنا لتصلك أحدث التصاميم والعروض الحصرية.</p>
+    <form onsubmit="event.preventDefault(); showToast('تم الاشتراك في النشرة البريدية')" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input type="email" required placeholder="بريدك الإلكتروني" class="field !rounded-full flex-1">
+      <button class="btn">اشتراك</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-mauveD text-white pt-14 pb-6 px-6 md:px-10">
+  <div class="max-w-[1180px] mx-auto grid md:grid-cols-4 gap-10 mb-10">
+    <div><span class="logo-script text-4xl text-blush">Wishly</span><p class="text-[9px] tracking-[.22em] text-blush/70 mb-3">GIFTS • TREATS • MEMORIES</p><p class="text-white/65 text-sm leading-7">توزيعات وهدايا أنيقة، تُصمم بحب لتُروى بها أجمل اللحظات.</p></div>
+    <div><p class="font-bold mb-3">روابط سريعة</p><ul class="space-y-2 text-sm text-white/65"><li><a href="#about" class="hover:text-white">من نحن</a></li><li><a href="#collection" class="hover:text-white">التشكيلة</a></li><li><a href="#custom" class="hover:text-white">طلب خاص</a></li><li><a href="#faq" class="hover:text-white">الأسئلة الشائعة</a></li></ul></div>
+    <div><p class="font-bold mb-3">الباقات</p><ul class="space-y-2 text-sm text-white/65"><li>بكج فال خطوبة</li><li>بكج فال تخرج</li><li>بكج فال عرس</li><li>بكج ولادة</li></ul></div>
+    <div><p class="font-bold mb-3">تواصل معنا</p><ul class="space-y-2 text-sm text-white/65"><li dir="ltr" class="text-right">0904298584</li><li>hello@wishly-atelier.com</li><li>شرق النيل . السودان</li></ul>
+      <a href="wishly-admin.html" target="_blank" rel="noopener" class="mt-4 inline-block text-xs text-blush/80 hover:text-white border-b border-dashed border-blush/50">لوحة تحكم البراند ←</a></div>
+  </div>
+  <div class="max-w-[1180px] mx-auto border-t border-white/10 pt-5 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-white/45"><p>© 2026 وشلي — جميع الحقوق محفوظة</p><p>صُنع بحب في السودان 🤍</p></div>
+</footer>
+
+<a href="https://wa.me/249904298584?text=السلام%20عليكم،أرغب%20في%20الاستفسار%20عن%20الهدايا%20المتوفرة." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 left-6 z-[110] w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform" title="Chat on WhatsApp"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" id="toTop" class="fixed bottom-6 right-6 z-[110] w-12 h-12 rounded-full bg-white border border-blush shadow flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500"><i class="fa-solid fa-arrow-up text-mauve"></i></button>
+
+<!-- SEARCH -->
+<div id="searchOverlay" class="fixed inset-0 z-[130] bg-mauveD/95 backdrop-blur-xl hidden">
+  <div class="max-w-2xl mx-auto pt-24 px-6">
+    <div class="flex items-center gap-4 border-b border-white/30 pb-4">
+      <i class="fa-solid fa-magnifying-glass text-blush"></i>
+      <input id="searchInput" oninput="doSearch()" placeholder="ابحثي عن تصميم، مناسبة، أو لون..." class="flex-1 bg-transparent text-white text-xl focus:outline-none placeholder:text-white/40">
+      <button onclick="closeSearch()" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    </div>
+    <div id="searchResults" class="mt-8 space-y-3 max-h-[60vh] overflow-y-auto"></div>
+  </div>
+</div>
+
+<!-- DRAWERS -->
+<div id="cartDrawerBg" class="fixed inset-0 bg-ink/50 z-[135] hidden" onclick="closeDrawer('cart')"></div>
+<div id="cartDrawer" class="drawer fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[136] shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between p-6 border-b border-blush"><p class="text-xl font-bold text-mauve">سلة المشتريات</p><button onclick="closeDrawer('cart')"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
+  <div class="p-6 border-t border-blush space-y-3">
+    <input id="checkoutName" placeholder="الاسم بالكامل" class="field !py-2.5 text-sm">
+    <input id="checkoutPhone" inputmode="tel" placeholder="رقم الجوال (09xxxxxxxx)" class="field !py-2.5 text-sm">
+    <input id="checkoutAddress" placeholder="العنوان / المنطقة (اختياري)" class="field !py-2.5 text-sm">
+    <div class="flex justify-between font-bold pt-1"><span>الإجمالي</span><span id="cartTotal" class="text-mauve">0 ج.س</span></div>
+    <button onclick="checkout()" id="checkoutBtn" class="btn w-full">إتمام الطلب</button>
+  </div>
+</div>
+<div id="wishlistDrawerBg" class="fixed inset-0 bg-ink/50 z-[135] hidden" onclick="closeDrawer('wishlist')"></div>
+<div id="wishlistDrawer" class="drawer fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[136] shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between p-6 border-b border-blush"><p class="text-xl font-bold text-mauve">المفضلة</p><button onclick="closeDrawer('wishlist')"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+  <div id="wishlistItems" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
+</div>
+
+<!-- PRODUCT QUICK VIEW -->
+<div id="productViewBg" class="fixed inset-0 z-[145] bg-ink/80 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-3xl w-full my-8 overflow-hidden shadow-2xl">
+    <div class="grid md:grid-cols-2">
+      <div class="relative bg-blushL flex items-center justify-center" style="min-height:340px;">
+        <button onclick="closeProductView()" class="absolute top-3 left-3 z-20 w-9 h-9 rounded-full bg-mauveD/70 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="shiftProductView(-1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-mauveD/60 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-right"></i></button>
+        <img id="pvMainImage" class="w-full h-full object-cover" style="max-height:520px;">
+        <button onclick="shiftProductView(1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-mauveD/60 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="pvThumbs" class="absolute bottom-3 inset-x-3 flex gap-2 justify-center flex-wrap"></div>
+      </div>
+      <div class="p-8 flex flex-col">
+        <p class="text-xs text-mauve mb-1" id="pvCategory"></p>
+        <h3 class="text-2xl font-bold mb-3" id="pvName"></h3>
+        <div class="flex items-center gap-2 mb-6"><span class="text-xl font-bold text-mauve" id="pvPrice"></span><span class="text-sm text-ink/40 line-through" id="pvOldPrice"></span></div>
+        <div class="mt-auto flex gap-2">
+          <button id="pvAddToCart" class="btn flex-1"><i class="fa-solid fa-bag-shopping"></i> أضيفي للسلة</button>
+          <button id="pvWishlist" class="w-11 h-11 rounded-full border border-mauve/40 text-mauve flex items-center justify-center hover:bg-blushL"><i class="fa-regular fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/store/main.js"></script>
+</body>
+</html>

@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "parity": "node tests/parity/run.mjs",
+    "parity:self": "node tests/parity/run.mjs --self",
+    "parity:selftest": "node tests/parity/selftest.mjs",
+    "parity:browser": "playwright install chromium"
   },
   "private": true,
   "type": "module",
@@ -16,6 +20,7 @@
     "jspdf": "2.5.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "autoprefixer": "^10.6.2",
     "postcss": "^8.5.32",
     "tailwindcss": "3.4.19",
