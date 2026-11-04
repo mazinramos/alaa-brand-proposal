@@ -1,5 +1,5 @@
 /* =========================================================================
-   Wishly Admin — core: firebase, state, helpers, UI primitives
+   Alaa Admin — core: firebase, state, helpers, UI primitives
 ========================================================================= */
 import '../tailwind.css';
 import './styles.css';
@@ -14,6 +14,7 @@ import {
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "firebase/auth";
 
 import { firebaseConfig } from '../shared/firebaseConfig.js';
+import { brand, categories } from '../shared/brand.js';
 
 // Libraries that were global <script> tags in the legacy page
 window.Chart = Chart;
@@ -24,18 +25,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 /* ---------- reference data ---------- */
-const CATEGORY_LIST = [
-  { key:'wedding',    name:'توزيعات أفراح' },
-  { key:'engagement', name:'توزيعات خطوبة' },
-  { key:'success',    name:'توزيعات نجاح وتخرج' },
-  { key:'baby',       name:'استقبال المواليد' },
-  { key:'birthday',   name:'أعياد الميلاد' },
-  { key:'corporate',  name:'هدايا الشركات' },
-  { key:'vip',        name:'هدايا VIP' },
-  { key:'custom',     name:'بوكسات حسب الطلب' },
-  { key:'jertig',     name:'توزيعات جرتق' },
-  { key:'misc',       name:'توزيعات منوعة' },
-];
+const CATEGORY_LIST = categories;
 const ORDER_STATUSES  = ['قيد الانتظار','قيد التجهيز','جاهز للتسليم','تم التسليم','ملغي'];
 const FLOW_STATUSES   = ['قيد الانتظار','قيد التجهيز','جاهز للتسليم','تم التسليم'];
 const CUSTOM_STATUSES = ['جديد','تم التواصل','قيد التصميم','عرض سعر مُرسل','مؤكد','ملغي'];
@@ -55,7 +45,7 @@ const MAUVE = '#9A5C6D';
 
 /* ---------- state ---------- */
 let products = [], orders = [], customOrders = [], offers = [], templates = [], stockLogs = [];
-let settings = { heroImage:'', countryCode:'249', defaultMinStock:3, lateHours:24, phone:'0904298584', email:'hello@wishly-atelier.com' };
+let settings = { heroImage:'', countryCode:'249', defaultMinStock:3, lateHours:24, phone:brand.whatsapp, email:brand.email };
 let unsub = [];
 let activeTab = 'dashboard';
 let ready = { orders:false, custom:false, products:false };
@@ -82,7 +72,7 @@ const catName = (k) => CATEGORY_LIST.find(c => c.key === k)?.name || (k === 'gen
 const isLive = (o) => o.status !== 'ملغي';
 const normPhone = (p) => String(p || '').replace(/\D/g, '').slice(-9);
 const custKey = (o) => normPhone(o.phone) || ('n:' + (o.customer || o.name || '').trim());
-const fallbackImg = () => 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=300&q=70&auto=format';
+const fallbackImg = () => "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23F6E9E8'/%3E%3C/svg%3E";
 const productById = (id) => products.find(p => p.id === id);
 const tracked = (p) => !!p && typeof p.stock === 'number';
 const minStockOf = (p) => (typeof p.minStock === 'number' ? p.minStock : Number(settings.defaultMinStock) || 3);
@@ -368,7 +358,7 @@ function notifyNew(kind, d){
   const label = kind === 'order' ? 'طلب جديد' : 'طلب خاص جديد';
   const who = kind === 'order' ? d.customer : d.name;
   toast(`${label} من ${who || 'عميلة'}${kind === 'order' ? ' — ' + money(d.total) : ''}`); beep();
-  if ('Notification' in window && Notification.permission === 'granted') { try { new Notification(label + ' — وشلي', { body:`${who || ''}`, tag:kind + Date.now() }); } catch (e) {} }
+  if ('Notification' in window && Notification.permission === 'granted') { try { new Notification(label + ' — ' + brand.nameAr, { body:`${who || ''}`, tag:kind + Date.now() }); } catch (e) {} }
 }
 
 /* =========================================================================
@@ -526,7 +516,7 @@ actions.exportDash = () => {
   const B = bounds(dashRange); const n = Math.min(B.span, dashRange >= 9999 ? 90 : B.span); const start = startOfDay(Date.now()) - (n - 1) * DAY;
   const rows = [['التاريخ', 'عدد الطلبات', 'المبيعات (ج.س)']];
   for (let i = 0; i < n; i++) { const t = start + i * DAY; const day = orders.filter(o => startOfDay(o.createdAt) === t); rows.push([new Date(t).toISOString().slice(0, 10), day.length, sum(day.filter(isLive), o => o.total)]); }
-  downloadCSV('wishly-daily-sales.csv', rows);
+  downloadCSV(brand.exportPrefix + '-daily-sales.csv', rows);
 };
 
 function renderDashboard(){
@@ -599,7 +589,7 @@ function renderDashboard(){
   <section class="hero-card p-5 md:p-7 grid lg:grid-cols-[1.05fr_1fr] gap-6 mb-5">
     <div>
       <p class="text-white/75 text-sm">${greet}</p>
-      <h2 class="text-2xl md:text-[1.9rem] font-extrabold mt-1 leading-tight">وشلي اليوم</h2>
+      <h2 class="text-2xl md:text-[1.9rem] font-extrabold mt-1 leading-tight">${brand.nameAr} اليوم</h2>
       <div class="grid grid-cols-3 gap-2.5 mt-5">
         <div class="rounded-2xl bg-white/12 p-3.5" style="background:rgba(255,255,255,.13)"><p class="text-[11px] text-white/70">مبيعات اليوم</p><p class="text-lg md:text-xl font-extrabold mt-1">${money(salesToday)}</p><p class="text-[11px] text-white/70 mt-0.5">أمس ${money(salesYest)}</p></div>
         <div class="rounded-2xl p-3.5" style="background:rgba(255,255,255,.13)"><p class="text-[11px] text-white/70">طلبات اليوم</p><p class="text-lg md:text-xl font-extrabold mt-1">${today.length}</p><p class="text-[11px] text-white/70 mt-0.5">أمس ${yest.length}</p></div>
@@ -779,7 +769,7 @@ document.addEventListener('drop', (e) => { const col = e.target.closest && e.tar
 actions.exportOrders = () => {
   const rows = [['رقم الطلب', 'التاريخ', 'العميلة', 'الهاتف', 'العنوان', 'المنتجات', 'الإجمالي', 'الحالة', 'المصدر']];
   [...orders].sort((a, b) => a.createdAt - b.createdAt).forEach(o => rows.push([code(o), new Date(o.createdAt).toISOString().slice(0, 16).replace('T', ' '), o.customer, o.phone, o.address || '', (o.items || []).map(i => `${i.name}×${i.qty}`).join(' | '), o.total, o.status, SOURCES[o.source || 'web'] || o.source]));
-  downloadCSV('wishly-orders.csv', rows);
+  downloadCSV(brand.exportPrefix + '-orders.csv', rows);
 };
 
 /* ---------- order detail panel ---------- */
@@ -787,10 +777,10 @@ let orderPanel = null, orderPanelId = null;
 function statusMsg(o, st){
   const n = o.customer || '';
   return ({
-    'قيد الانتظار':`مرحباً ${n}\nوصلنا طلبك ${code(o)} من وشلي وسنتواصل معك لتأكيد التفاصيل.`,
+    'قيد الانتظار':`مرحباً ${n}\nوصلنا طلبك ${code(o)} من ${brand.nameAr} وسنتواصل معك لتأكيد التفاصيل.`,
     'قيد التجهيز':`مرحباً ${n}\nتم تأكيد طلبك ${code(o)} وبدأنا في تجهيزه بكل حب. الإجمالي ${money(o.total)}.`,
     'جاهز للتسليم':`مرحباً ${n}\nطلبك ${code(o)} جاهز للتسليم! متى يناسبك الاستلام؟`,
-    'تم التسليم':`شكراً لثقتك بوشلي يا ${n}\nنتمنى أن تكون التفاصيل عند حسن ظنك، ويسعدنا سماع رأيك.`,
+    'تم التسليم':`شكراً لثقتك ب${brand.nameAr} يا ${n}\nنتمنى أن تكون القطعة عند حسن ظنك، ويسعدنا سماع رأيك.`,
   })[st] || '';
 }
 function openOrderPanel(id){
@@ -830,7 +820,7 @@ function renderOrderPanel(force){
         <div class="p-4 flex items-center justify-between" style="background:var(--mauveD);color:#fff"><span class="font-bold">الإجمالي</span><span class="text-lg font-extrabold">${money(o.total)}</span></div></div>
       ${mism.length ? `<div class="rounded-xl p-3 text-xs leading-6" style="background:var(--warnBg);color:var(--warn)"><i class="fa-solid fa-triangle-exclamation ml-1"></i> سعر ${mism.map(m => esc(m.name)).join('، ')} في الطلب يختلف عن سعره الحالي في المتجر (${mism.map(m => money(productById(m.id).price)).join('، ')}). تأكدي من السعر قبل التأكيد.</div>` : ''}
       ${hasCost ? `<p class="text-xs muted"><i class="fa-solid fa-coins text-mauve ml-1"></i> ربح تقديري لهذا الطلب: <b style="color:var(--mauveD)">${money(profit)}</b></p>` : ''}
-      <div><label class="label" for="opNotes">ملاحظات داخلية</label><textarea id="opNotes" class="input" rows="3" data-change="opNotes" placeholder="مثال: العميلة تريد الشريط ذهبياً، التسليم بعد العصر...">${esc(o.notes || '')}</textarea></div>
+      <div><label class="label" for="opNotes">ملاحظات داخلية</label><textarea id="opNotes" class="input" rows="3" data-change="opNotes" placeholder="مثال: العميلة تريد القطعة بلون عنابي، التسليم بعد العصر...">${esc(o.notes || '')}</textarea></div>
       <div><p class="label">سجل الطلب</p><div class="space-y-2">${hist.map(h => `<div class="flex items-center gap-2 text-xs"><span class="w-2 h-2 rounded-full" style="background:var(--mauve)"></span><b>${esc(h.status)}</b><span class="muted">${fmtDT(h.at)}</span></div>`).join('')}</div></div>
       <div class="flex gap-2 flex-wrap pt-2"><button class="btn btn-soft flex-1" data-act="editOrder" data-id="${esc(o.id)}"><i class="fa-solid fa-pen"></i> تعديل الطلب</button><button class="btn flex-1" data-act="orderInvoice" data-id="${esc(o.id)}"><i class="fa-solid fa-file-invoice"></i> الفاتورة</button><button class="btn btn-danger" data-act="deleteOrder" data-id="${esc(o.id)}"><i class="fa-solid fa-trash"></i> حذف</button></div>
     </div>`);
@@ -943,7 +933,8 @@ actions.editOrder = (d) => {
 /* =========================================================================
    CUSTOM ORDERS
 ========================================================================= */
-const occasionToCategory = (o) => ({ 'فرح':'wedding', 'خطوبة':'engagement', 'مولود':'baby', 'تخرج':'success', 'شركات':'corporate' }[o] || 'general');
+// TODO-ALAA: قيم المناسبة تأتي من نموذج طلب التفصيل في المتجر؛ تُراجع مع قائمة المناسبات النهائية.
+const occasionToCategory = (o) => ({ 'فرح':'occasion', 'خطوبة':'occasion', 'تخرج':'occasion' }[o] || 'general');
 const cFilter = { status:'all', q:'' };
 const daysLeft = (c) => c.eventDate ? Math.ceil((new Date(c.eventDate + 'T00:00:00').getTime() - startOfDay(Date.now())) / DAY) : null;
 function dueChip(c){
@@ -984,7 +975,7 @@ actions.openCustom = (d) => openCustomModal(d.id);
 function openCustomModal(id){
   const c = customOrders.find(x => x.id === id); if (!c) return;
   if (c.seen === false) updateDoc(doc(db, 'customOrders', id), { seen:true }).catch(() => {});
-  const waMsg = `مرحباً ${c.name || ''}\nشكراً لاختيارك وشلي! استلمنا طلبك الخاص${c.occasion ? ' لمناسبة ' + c.occasion : ''} ونودّ معرفة المزيد من التفاصيل عن فكرتك لنجهّز لك عرض السعر.`;
+  const waMsg = `مرحباً ${c.name || ''}\nشكراً لاختيارك ${brand.nameAr}! استلمنا طلب التفصيل الخاص بك${c.occasion ? ' لمناسبة ' + c.occasion : ''} ونودّ معرفة المزيد من التفاصيل عن فكرتك لنجهّز لك عرض السعر.`;
   const linked = c.linkedOrderId && orders.find(o => o.id === c.linkedOrderId);
   const m = openModal({ title:'<i class="fa-solid fa-palette text-mauve ml-2"></i> طلب خاص — ' + esc(c.name), size:'lg', body: `
     <div class="grid sm:grid-cols-3 gap-3 mb-4">
@@ -1036,7 +1027,7 @@ actions.pSearch = (d, t) => { pFilter.q = t.value; updateProducts(); };
 actions.pCat = (d, t) => { pFilter.cat = t.value; updateProducts(); };
 actions.pNew = () => openProductPanel();
 actions.pEdit = (d) => openProductPanel(d.id);
-actions.exportProducts = () => downloadCSV('wishly-products.csv', [['الاسم', 'القسم', 'السعر', 'قبل الخصم', 'التكلفة', 'المخزون', 'الحد الأدنى', 'الوسم'], ...products.map(p => [p.name, catName(p.cat), p.price, p.old || '', p.cost || '', tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.tag || ''])]);
+actions.exportProducts = () => downloadCSV(brand.exportPrefix + '-products.csv', [['الاسم', 'القسم', 'السعر', 'قبل الخصم', 'التكلفة', 'المخزون', 'الحد الأدنى', 'الوسم'], ...products.map(p => [p.name, catName(p.cat), p.price, p.old || '', p.cost || '', tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.tag || ''])]);
 function updateProducts(){
   const region = $('#pRegion'); if (!region) return; if (!ready.products) { region.innerHTML = skeleton(); return; }
   const q = pFilter.q.trim().toLowerCase(), sold30 = soldUnits(30);
@@ -1120,7 +1111,7 @@ actions.iChip = (d) => { iFilter.f = d.v; updateInventory(); };
 actions.iAdj = async (d) => { await adjustStock(d.id, { delta:Number(d.v), reason:'تعديل يدوي' }); };
 actions.iSet = async (d, t) => { const ok = await adjustStock(d.id, { set:t.value, reason:'تعديل يدوي' }); if (ok === false) updateInventory(); };
 actions.iTrack = async (d) => { try { await updateDoc(doc(db, 'products', d.id), { stock:0 }); toast('تم تفعيل تتبع المخزون — سجّلي الكمية الحالية'); } catch (e) { toast(friendlyError(e), 'err'); } };
-actions.exportInventory = () => { const s30 = soldUnits(30); downloadCSV('wishly-inventory.csv', [['المنتج', 'القسم', 'المخزون', 'الحد الأدنى', 'التكلفة', 'السعر', 'مباع آخر 30 يوم', 'أيام متبقية', 'الحالة'], ...products.map(p => { const st = stockState(p, s30); return [p.name, catName(p.cat), tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.cost || '', p.price, s30[p.id] || 0, st.days != null ? Math.round(st.days) : '', st.label]; })]); };
+actions.exportInventory = () => { const s30 = soldUnits(30); downloadCSV(brand.exportPrefix + '-inventory.csv', [['المنتج', 'القسم', 'المخزون', 'الحد الأدنى', 'التكلفة', 'السعر', 'مباع آخر 30 يوم', 'أيام متبقية', 'الحالة'], ...products.map(p => { const st = stockState(p, s30); return [p.name, catName(p.cat), tracked(p) ? p.stock : '', tracked(p) ? minStockOf(p) : '', p.cost || '', p.price, s30[p.id] || 0, st.days != null ? Math.round(st.days) : '', st.label]; })]); };
 function updateInventory(){
   if (!$('#iTable')) return; if (!ready.products) { $('#iTable').innerHTML = skeleton(); return; }
   const s30 = soldUnits(30), trk = products.filter(tracked);
@@ -1180,9 +1171,9 @@ actions.kSearch = (d, t) => { kFilter.q = t.value; updateCustomers(); };
 actions.kChip = (d) => { kFilter.seg = d.v; updateCustomers(); };
 function segMsg(c){
   const n = c.name || ''; const s = c.seg[0];
-  if (s === 'VIP') return `مرحباً ${n}\nاشتقنا لكِ في وشلي! جهّزنا تشكيلة جديدة ويسعدنا أن تكوني أول من يطّلع عليها. هل تودين أن نرسل لكِ الصور؟`;
+  if (s === 'VIP') return `مرحباً ${n}\nاشتقنا لكِ في ${brand.nameAr}! جهّزنا كولكشن جديداً ويسعدنا أن تكوني أول من يطّلع عليها. هل تودين أن نرسل لكِ الصور؟`;
   if (s === 'خاملة' || s === 'تحتاج متابعة') return `مرحباً ${n}\nاشتقنا إليكِ! لدينا تصاميم جديدة لمناسباتك القادمة، ويسعدنا تجهيز خصم خاص لكِ على طلبكِ القادم.`;
-  return `شكراً لثقتك بوشلي يا ${n}\nيسعدنا سماع رأيك في طلبك، ونحن جاهزون لأي مناسبة قادمة.`;
+  return `شكراً لثقتك ب${brand.nameAr} يا ${n}\nيسعدنا سماع رأيك في طلبك، ونحن جاهزون لأي مناسبة قادمة.`;
 }
 function updateCustomers(){
   const region = $('#kRegion'); if (!region) return; if (!ready.orders) { region.innerHTML = skeleton(); return; }
@@ -1198,7 +1189,7 @@ function updateCustomers(){
     <p class="text-[11px] muted mt-3">يتم تجميع العميلات حسب رقم الجوال. تصنيف VIP = 3 طلبات فأكثر أو من أعلى 10% إنفاقاً.</p>`;
 }
 actions.openCustomer = (d) => openCustomerModal(d.key);
-actions.exportCustomers = () => downloadCSV('wishly-customers.csv', [['الاسم', 'الهاتف', 'التصنيف', 'عدد الطلبات', 'إجمالي الإنفاق', 'آخر طلب'], ...customersAgg().map(c => [c.name, c.phone, c.seg[0], c.count, c.total, new Date(c.last).toISOString().slice(0, 10)])]);
+actions.exportCustomers = () => downloadCSV(brand.exportPrefix + '-customers.csv', [['الاسم', 'الهاتف', 'التصنيف', 'عدد الطلبات', 'إجمالي الإنفاق', 'آخر طلب'], ...customersAgg().map(c => [c.name, c.phone, c.seg[0], c.count, c.total, new Date(c.last).toISOString().slice(0, 10)])]);
 function openCustomerModal(key){
   const c = customersAgg().find(x => x.key === key); if (!c) return;
   openModal({ title:'<i class="fa-solid fa-user text-mauve ml-2"></i> ' + esc(c.name), size:'md', body: `
@@ -1219,7 +1210,7 @@ views.offers = {
       <div class="lg:col-span-2 min-w-0 card overflow-x-auto"><table class="tbl min-w-[620px]"><thead><tr><th>العرض</th><th>الخصم</th><th>القسم</th><th>ينتهي</th><th>مفعّل</th><th></th></tr></thead><tbody id="offerRows"></tbody></table></div>
       <form id="offerForm" class="card card-pad space-y-3">
         <p class="font-bold" id="offerFormTitle"><i class="fa-solid fa-plus text-mauve ml-1"></i> إنشاء عرض جديد</p>
-        <div><label class="label">عنوان العرض</label><input required id="ofTitle" class="input" placeholder="خصم 25% على بوكسات الأفراح"></div>
+        <div><label class="label">عنوان العرض</label><input required id="ofTitle" class="input" placeholder="خصم 25% على فساتين المناسبات"></div>
         <div class="grid grid-cols-2 gap-3"><div><label class="label">نسبة الخصم %</label><input required id="ofDiscount" type="number" min="1" max="90" class="input"></div><div><label class="label">ينتهي في</label><input required id="ofEnds" type="datetime-local" class="input"></div></div>
         <div><label class="label">القسم</label><select id="ofCategory" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
         <label class="flex items-center justify-between gap-3 cursor-pointer text-sm font-semibold">عرض مفعّل حالياً<input type="checkbox" id="ofActive" class="sr-only" checked><span class="tg"></span></label>
@@ -1261,27 +1252,26 @@ actions.oDel = async (d) => { const ok = await confirmBox({ title:'حذف الع
    MESSAGES (templates attached to invoices)
 ========================================================================= */
 let editingTplId = null;
+// TODO-ALAA: صياغة الرسائل الجاهزة مبدئية وتُراجع مع ألاء.
 const SEED_MSGS = [
-  { category:'wedding', title:'تهنئة فرح', text:'مبروك الفرح الجميل يا {name} نتمنى لكما حياة مليئة بالسعادة والمحبة.' },
-  { category:'engagement', title:'تهنئة خطوبة', text:'ألف مبروك الخطوبة يا {name} أتمّ الله عليكم بالخير.' },
-  { category:'baby', title:'تهنئة مولود', text:'ألف مبروك السلامة يا {name} جعله الله قرة عين لكم.' },
-  { category:'success', title:'تهنئة نجاح', text:'مبروك النجاح يا {name} فخورين بك ونتمنى لك مستقبلاً مشرقاً.' },
-  { category:'jertig', title:'تهنئة جرتق', text:'مبروك الجرتق يا {name} أسعد الله أيامكم بكل خير.' },
-  { category:'birthday', title:'عيد ميلاد', text:'كل عام وأنتِ بخير يا {name} أجمل الأمنيات في يومك.' },
-  { category:'corporate', title:'شكر الشركات', text:'شكراً لثقتكم بوشلي يا {name} سعداء بخدمتكم دائماً.' },
-  { category:'general', title:'شكر عام', text:'شكراً لاختيارك وشلي يا {name} يسعدنا أن نكون جزءاً من لحظاتك الجميلة.' },
+  { category:'occasion', title:'شكر - فساتين المناسبات', text:`شكراً لاختيارك ${brand.nameAr} يا {name} نتمنى أن تكون إطلالتك في مناسبتك مميزة وأنيقة.` },
+  { category:'thobe', title:'شكر - الأثواب والعبايات', text:`شكراً لثقتك ب${brand.nameAr} يا {name} نتمنى أن تكون القطعة على ذوقك وتليق بك.` },
+  { category:'daily', title:'شكر - الإطلالات اليومية', text:`شكراً لاختيارك ${brand.nameAr} يا {name} نتمنى لك إطلالة يومية أنيقة ومريحة.` },
+  { category:'sets', title:'شكر - إطلالات متكاملة', text:`شكراً لثقتك ب${brand.nameAr} يا {name} نتمنى أن تعجبك الإطلالة المتكاملة.` },
+  { category:'custom', title:'شكر - تفصيل خاص', text:`شكراً لثقتك ب${brand.nameAr} يا {name} سعداء بتفصيل قطعتك الخاصة ونتمنى أن تنال إعجابك.` },
+  { category:'general', title:'شكر عام', text:`شكراً لاختيارك ${brand.nameAr} يا {name} يسعدنا أن نكون جزءاً من إطلالتك.` },
 ];
-const catLabelMsg = (k) => k === 'general' ? 'كل المناسبات' : catName(k);
+const catLabelMsg = (k) => k === 'general' ? 'كل التصنيفات' : catName(k);
 views.messages = {
   mount(){
     editingTplId = null;
     $('#adminContent').innerHTML = `<div class="grid lg:grid-cols-3 gap-5 items-start">
-      <div class="lg:col-span-2 min-w-0 card overflow-x-auto"><table class="tbl min-w-[560px]"><thead><tr><th>المناسبة</th><th>العنوان</th><th>الرسالة</th><th></th></tr></thead><tbody id="tplRows"></tbody></table></div>
+      <div class="lg:col-span-2 min-w-0 card overflow-x-auto"><table class="tbl min-w-[560px]"><thead><tr><th>التصنيف</th><th>العنوان</th><th>الرسالة</th><th></th></tr></thead><tbody id="tplRows"></tbody></table></div>
       <form id="tplForm" class="card card-pad space-y-3">
         <p class="font-bold" id="tplFormTitle"><i class="fa-solid fa-plus text-mauve ml-1"></i> إضافة رسالة</p>
-        <div><label class="label">المناسبة</label><select id="mfCategory" class="input"><option value="general">كل المناسبات (عامة)</option>${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
+        <div><label class="label">التصنيف</label><select id="mfCategory" class="input"><option value="general">كل التصنيفات (عامة)</option>${CATEGORY_LIST.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
         <div><label class="label">عنوان مختصر</label><input required id="mfTitle" class="input"></div>
-        <div><label class="label">نص الرسالة</label><textarea required id="mfText" rows="4" class="input" placeholder="مبروك الفرح يا {name}"></textarea></div>
+        <div><label class="label">نص الرسالة</label><textarea required id="mfText" rows="4" class="input" placeholder="شكراً لاختيارك ${brand.nameAr} يا {name}"></textarea></div>
         <p class="text-[11px] muted">اكتبي {name} ليتحوّل تلقائياً إلى اسم العميلة على الفاتورة.</p>
         <div class="flex gap-2"><button class="btn flex-1" id="tplSubmit">إضافة</button><button type="button" class="btn btn-soft hidden" id="tplCancel">إلغاء</button></div>
       </form></div>`;
@@ -1292,7 +1282,7 @@ views.messages = {
 function updateMessages(){
   const el = $('#tplRows'); if (!el) return;
   el.innerHTML = templates.map(t => `<tr><td>${esc(catLabelMsg(t.category))}</td><td><b>${esc(t.title)}</b></td><td class="max-w-[280px]"><p class="truncate text-xs muted" title="${esc(t.text)}">${esc(t.text)}</p></td><td class="whitespace-nowrap"><button class="btn-icon" data-act="tplEdit" data-id="${esc(t.id)}"><i class="fa-solid fa-pen"></i></button><button class="btn-icon danger" data-act="tplDel" data-id="${esc(t.id)}"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('')
-    || `<tr><td colspan="4" class="text-center py-10"><p class="muted mb-3">لا توجد رسائل بعد — تظهر في الفواتير حسب نوع المناسبة.</p><button class="btn btn-sm" data-act="tplSeed"><i class="fa-solid fa-wand-magic-sparkles"></i> إضافة رسائل جاهزة</button></td></tr>`;
+    || `<tr><td colspan="4" class="text-center py-10"><p class="muted mb-3">لا توجد رسائل بعد — تظهر في الفواتير حسب تصنيف القطع.</p><button class="btn btn-sm" data-act="tplSeed"><i class="fa-solid fa-wand-magic-sparkles"></i> إضافة رسائل جاهزة</button></td></tr>`;
 }
 actions.tplSeed = async () => { try { const b = writeBatch(db); SEED_MSGS.forEach(s => b.set(doc(collection(db, 'messageTemplates')), { ...s, createdAt:Date.now() })); await b.commit(); toast('تمت إضافة الرسائل الجاهزة'); } catch (e) { toast(friendlyError(e), 'err'); } };
 actions.tplEdit = (d) => { const t = templates.find(x => x.id === d.id); if (!t) return; editingTplId = t.id; $('#mfCategory').value = t.category; $('#mfTitle').value = t.title; $('#mfText').value = t.text; $('#tplFormTitle').innerHTML = '<i class="fa-solid fa-pen text-mauve ml-1"></i> تعديل الرسالة'; $('#tplSubmit').textContent = 'حفظ التعديلات'; $('#tplCancel').classList.remove('hidden'); };
@@ -1339,7 +1329,7 @@ async function saveSettings(e){
 }
 actions.backup = () => {
   const blob = new Blob([JSON.stringify({ exportedAt:new Date().toISOString(), products, orders, customOrders, offers, messageTemplates:templates, stockLogs }, null, 2)], { type:'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'wishly-backup-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = brand.exportPrefix + '-backup-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
 };
 actions.askNotif = async () => { if (!('Notification' in window)) { toast('المتصفح لا يدعم الإشعارات', 'err'); return; } const r = await Notification.requestPermission(); toast(r === 'granted' ? 'تم تفعيل الإشعارات' : 'لم يتم السماح بالإشعارات من المتصفح', r === 'granted' ? undefined : 'err'); };
 
@@ -1354,15 +1344,15 @@ function invoicePaperHTML(d, msg){
   const rows = (d.items || []).map((it, i) => `<tr><td style="padding:10px 6px;text-align:center;color:#8E787D;font-size:13px">${i + 1}</td><td style="padding:10px 6px;font-weight:700;letter-spacing:0">${pdfSafe(it.name)}</td><td style="padding:10px 6px;text-align:center">${num(it.qty)}</td><td style="padding:10px 6px;text-align:center">${money(it.price)}</td><td style="padding:10px 6px;text-align:center;font-weight:700">${money(it.price * it.qty)}</td></tr>`).join('');
   return `<div style="padding:34px;letter-spacing:0;font-kerning:none;font-synthesis:none" dir="rtl">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #9A5C6D;padding-bottom:18px;margin-bottom:22px;gap:12px">
-      <div style="display:flex;align-items:center;gap:10px"><svg width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="26" width="40" height="30" rx="2"/><rect x="8" y="20" width="48" height="9" rx="2"/><path d="M32 20v36"/><path d="M32 20c-6-12-18-10-14-3 3 5 14 3 14 3zM32 20c6-12 18-10 14-3-3 5-14 3-14 3z"/></svg>
-        <div><p style="font-family:'Great Vibes',cursive;font-size:36px;line-height:1.25;margin:0;color:#9A5C6D">Wishly</p><p style="font-size:10px;letter-spacing:0;word-spacing:2px;color:#9A5C6D;margin:14px 0 0">GIFTS • TREATS • MEMORIES</p></div></div>
+      <div style="display:flex;align-items:center;gap:10px"><svg width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 22v-4a5 5 0 1 1 5 5"/><path d="M32 22 6 44a3 3 0 0 0 2 5h48a3 3 0 0 0 2-5z"/></svg>
+        <div><p style="font-family:'Great Vibes',cursive;font-size:36px;line-height:1.25;margin:0;color:#9A5C6D">${brand.logoScript}</p><p style="font-size:10px;letter-spacing:0;word-spacing:2px;color:#9A5C6D;margin:14px 0 0">${brand.taglineEn.toUpperCase()}</p></div></div>
       <div style="text-align:left"><p style="font-weight:800;font-size:20px;margin:0;color:#7A4455">فاتورة بيع</p><p style="font-size:12px;color:#8E787D;margin:4px 0 0">${esc(d.label)}</p><p style="font-size:12px;color:#8E787D;margin:2px 0 0">${fmtDate(d.date, { year:'numeric', month:'long', day:'numeric' })}</p></div></div>
     <div style="display:flex;justify-content:space-between;margin-bottom:22px;gap:20px;flex-wrap:wrap"><div><p style="font-size:11px;color:#8E787D;margin:0 0 4px">فاتورة إلى</p><p style="font-weight:700;margin:0">${pdfSafe(d.customer || 'عميلة')}</p><p style="font-size:13px;color:#6B5459;margin:2px 0 0" dir="ltr">${esc(d.phone || '')}</p>${d.address ? `<p style="font-size:12px;color:#8E787D;margin:4px 0 0">العنوان: ${pdfSafe(d.address)}</p>` : ''}</div>
       <div style="text-align:left"><p style="font-size:11px;color:#8E787D;margin:0 0 4px">الحالة</p><p style="font-weight:700;margin:0">${pdfSafe(d.status || '')}</p></div></div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:18px"><thead><tr style="background:#F6E9E8">${['#', 'المنتج', 'الكمية', 'السعر', 'الإجمالي'].map(h => `<th style="padding:10px 6px;font-size:12px;color:#7A4455">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
     <div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="width:240px"><div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid #eee;font-size:14px"><span>الإجمالي الفرعي</span><span>${money(d.total)}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;background:#7A4455;color:#fff;border-radius:12px;padding:12px 14px;font-weight:800"><span>الإجمالي الكلي</span><span>${money(d.total)}</span></div></div></div>
     ${msg ? `<div style="margin-bottom:22px;padding:16px 20px;background:#FBF6F3;border-right:3px solid #9A5C6D;border-radius:10px"><p style="font-size:13px;line-height:1.9;color:#3B2A2F;margin:0;white-space:pre-line">${pdfSafe(msg)}</p></div>` : ''}
-    <div style="text-align:center;border-top:1px dashed #ddd;padding-top:16px;color:#8E787D;font-size:12px;line-height:1.9">شكراً لثقتك في وشلي — للاستفسار: <span dir="ltr">${esc(settings.phone || '')}</span> | ${esc(settings.email || '')}<br>السودان</div></div>`;
+    <div style="text-align:center;border-top:1px dashed #ddd;padding-top:16px;color:#8E787D;font-size:12px;line-height:1.9">شكراً لثقتك في ${brand.nameAr} — للاستفسار: <span dir="ltr">${esc(settings.phone || '')}</span> | ${esc(settings.email || '')}<br>السودان</div></div>`;
 }
 function openInvoice(data){
   invData = { ...data, customer:data.customer || 'عميلة' }; const opts = templatesFor(data.category || 'general');
@@ -1376,7 +1366,7 @@ function openInvoice(data){
 function invRefresh(){
   if (!invModal) return; const msg = ($('#invTxt', invModal.el)?.value || '').trim();
   $('#invoicePaper', invModal.el).innerHTML = invoicePaperHTML(invData, msg);
-  const wa = $('#invWa', invModal.el); if (wa) wa.href = waLink(invData.phone, `مرحباً ${invData.customer}\nفاتورتك من وشلي جاهزة (${invData.label})\nالإجمالي: ${money(invData.total)}${msg ? '\n\n' + msg : ''}`);
+  const wa = $('#invWa', invModal.el); if (wa) wa.href = waLink(invData.phone, `مرحباً ${invData.customer}\nفاتورتك من ${brand.nameAr} جاهزة (${invData.label})\nالإجمالي: ${money(invData.total)}${msg ? '\n\n' + msg : ''}`);
 }
 actions.invSel = (d, t) => { const tp = templates.find(x => x.id === t.value); $('#invTxt', invModal.el).value = tp ? tp.text.replace(/\{name\}/g, invData.customer) : ''; invRefresh(); };
 actions.invTxt = () => invRefresh();
@@ -1394,7 +1384,7 @@ actions.invPdf = async (d, t) => {
 function openInvoiceBuilder({ name = '', phone = '', address = '', category = 'general', items = [] } = {}){
   const m = openModal({ title:'<i class="fa-solid fa-file-invoice text-mauve ml-2"></i> إنشاء فاتورة', size:'lg', body: `<form id="ibForm" class="space-y-4">
     <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">اسم العميلة</label><input id="ibName" class="input" value="${esc(name)}"></div><div><label class="label">رقم الجوال</label><input id="ibPhone" class="input" dir="ltr" value="${esc(phone)}"></div></div>
-    <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">العنوان (اختياري)</label><input id="ibAddr" class="input" value="${esc(address)}"></div><div><label class="label">المناسبة (لاختيار رسالة مناسبة)</label><select id="ibCat" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}" ${c.key === category ? 'selected' : ''}>${c.name}</option>`).join('')}<option value="general" ${category === 'general' ? 'selected' : ''}>أخرى / عامة</option></select></div></div>
+    <div class="grid sm:grid-cols-2 gap-3"><div><label class="label">العنوان (اختياري)</label><input id="ibAddr" class="input" value="${esc(address)}"></div><div><label class="label">التصنيف (لاختيار رسالة مناسبة)</label><select id="ibCat" class="input">${CATEGORY_LIST.map(c => `<option value="${c.key}" ${c.key === category ? 'selected' : ''}>${c.name}</option>`).join('')}<option value="general" ${category === 'general' ? 'selected' : ''}>أخرى / عامة</option></select></div></div>
     <div><p class="label">عناصر الفاتورة</p>${itemsEditor(items)}</div><button class="btn w-full !py-3"><i class="fa-solid fa-eye"></i> معاينة الفاتورة</button></form>` });
   irCalcTotal(m.el);
   $('#ibForm', m.el).addEventListener('submit', (e) => {
