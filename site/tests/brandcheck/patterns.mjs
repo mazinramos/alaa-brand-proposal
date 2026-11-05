@@ -53,6 +53,7 @@ export const PATTERNS = [
       const tld = m.split('.').pop().toLowerCase();
       if (FILE_EXT.has(tld)) return false; // مثل icon@2x.png
       if (m.toLowerCase().includes(OLD)) return false; // مُبلَّغ عنه بنمط الاسم القديم
+      if (m.toLowerCase().endsWith('@alaa.demo')) return false; // حساب دخول النسخة التجريبية (src/demo)
       return true;
     },
   },

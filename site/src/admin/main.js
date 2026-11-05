@@ -1341,18 +1341,25 @@ const templatesFor = (cat) => { const ex = templates.filter(t => t.category === 
 // html2canvas يكسر الحروف العربية الملاصقة للأرقام (مثل "منتج1")، فنعزل الأرقام داخل عناصر مستقلة
 const pdfSafe = (v) => esc(v).replace(/(&#?\w+;)|(\d+)/g, (m, ent, d) => ent ? ent : `<span style="display:inline-block;direction:ltr;unicode-bidi:isolate">${d}</span>`);
 function invoicePaperHTML(d, msg){
-  const rows = (d.items || []).map((it, i) => `<tr><td style="padding:10px 6px;text-align:center;color:#8E787D;font-size:13px">${i + 1}</td><td style="padding:10px 6px;font-weight:700;letter-spacing:0">${pdfSafe(it.name)}</td><td style="padding:10px 6px;text-align:center">${num(it.qty)}</td><td style="padding:10px 6px;text-align:center">${money(it.price)}</td><td style="padding:10px 6px;text-align:center;font-weight:700">${money(it.price * it.qty)}</td></tr>`).join('');
-  return `<div style="padding:34px;letter-spacing:0;font-kerning:none;font-synthesis:none" dir="rtl">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #9A5C6D;padding-bottom:18px;margin-bottom:22px;gap:12px">
-      <div style="display:flex;align-items:center;gap:10px"><svg width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="#9A5C6D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 22v-4a5 5 0 1 1 5 5"/><path d="M32 22 6 44a3 3 0 0 0 2 5h48a3 3 0 0 0 2-5z"/></svg>
-        <div><p style="font-family:'Great Vibes',cursive;font-size:36px;line-height:1.25;margin:0;color:#9A5C6D">${brand.logoScript}</p><p style="font-size:10px;letter-spacing:0;word-spacing:2px;color:#9A5C6D;margin:14px 0 0">${brand.taglineEn.toUpperCase()}</p></div></div>
-      <div style="text-align:left"><p style="font-weight:800;font-size:20px;margin:0;color:#7A4455">فاتورة بيع</p><p style="font-size:12px;color:#8E787D;margin:4px 0 0">${esc(d.label)}</p><p style="font-size:12px;color:#8E787D;margin:2px 0 0">${fmtDate(d.date, { year:'numeric', month:'long', day:'numeric' })}</p></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:22px;gap:20px;flex-wrap:wrap"><div><p style="font-size:11px;color:#8E787D;margin:0 0 4px">فاتورة إلى</p><p style="font-weight:700;margin:0">${pdfSafe(d.customer || 'عميلة')}</p><p style="font-size:13px;color:#6B5459;margin:2px 0 0" dir="ltr">${esc(d.phone || '')}</p>${d.address ? `<p style="font-size:12px;color:#8E787D;margin:4px 0 0">العنوان: ${pdfSafe(d.address)}</p>` : ''}</div>
-      <div style="text-align:left"><p style="font-size:11px;color:#8E787D;margin:0 0 4px">الحالة</p><p style="font-weight:700;margin:0">${pdfSafe(d.status || '')}</p></div></div>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:18px"><thead><tr style="background:#F6E9E8">${['#', 'المنتج', 'الكمية', 'السعر', 'الإجمالي'].map(h => `<th style="padding:10px 6px;font-size:12px;color:#7A4455">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="width:240px"><div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid #eee;font-size:14px"><span>الإجمالي الفرعي</span><span>${money(d.total)}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;background:#7A4455;color:#fff;border-radius:12px;padding:12px 14px;font-weight:800"><span>الإجمالي الكلي</span><span>${money(d.total)}</span></div></div></div>
-    ${msg ? `<div style="margin-bottom:22px;padding:16px 20px;background:#FBF6F3;border-right:3px solid #9A5C6D;border-radius:10px"><p style="font-size:13px;line-height:1.9;color:#3B2A2F;margin:0;white-space:pre-line">${pdfSafe(msg)}</p></div>` : ''}
-    <div style="text-align:center;border-top:1px dashed #ddd;padding-top:16px;color:#8E787D;font-size:12px;line-height:1.9">شكراً لثقتك في ${brand.nameAr} — للاستفسار: <span dir="ltr">${esc(settings.phone || '')}</span> | ${esc(settings.email || '')}<br>السودان</div></div>`;
+  const rows = (d.items || []).map((it, i) => `<tr style="background:${i % 2 ? '#FBF6F3' : '#ffffff'}"><td style="padding:12px 8px;text-align:center;color:#8E787D;font-size:13px">${num(i + 1)}</td><td style="padding:12px 8px;font-weight:700;letter-spacing:0">${pdfSafe(it.name)}</td><td style="padding:12px 8px;text-align:center">${num(it.qty)}</td><td style="padding:12px 8px;text-align:center">${money(it.price)}</td><td style="padding:12px 8px;text-align:center;font-weight:800;color:#7A4455">${money(it.price * it.qty)}</td></tr>`).join('');
+  const hanger = '<svg width="46" height="46" viewBox="0 0 64 64" fill="none" stroke="#F1D3C8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 22v-4a5 5 0 1 1 5 5"/><path d="M32 22 6 44a3 3 0 0 0 2 5h48a3 3 0 0 0 2-5z"/></svg>';
+  const card = (title, inner) => `<div style="flex:1;min-width:210px;background:#FBF6F3;border:1px solid #EBD6D5;border-radius:14px;padding:14px 16px"><p style="font-size:11px;color:#9A5C6D;font-weight:700;margin:0 0 8px">${title}</p>${inner}</div>`;
+  return `<div style="letter-spacing:0;font-kerning:none;font-synthesis:none;background:#fff" dir="rtl">
+    <div style="background:linear-gradient(120deg,#5E2F40 0%,#7A4455 55%,#9A5C6D 100%);padding:28px 34px 26px;display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">${hanger}
+        <div><p style="font-family:'Great Vibes',cursive;font-size:44px;line-height:1.2;margin:0;color:#FBF6F3">${brand.logoScript}</p><p style="font-size:10px;letter-spacing:.32em;color:#F1D3C8;margin:6px 0 0;direction:ltr;text-align:right">${brand.taglineEn.toUpperCase()}</p></div></div>
+      <div style="text-align:left"><p style="font-weight:800;font-size:24px;margin:0;color:#FBF6F3">فاتورة بيع</p><p style="font-size:13px;color:#F1D3C8;margin:6px 0 0"><span dir="ltr" style="unicode-bidi:isolate">${esc(d.label)}</span></p><p style="font-size:12px;color:#F1D3C8;margin:2px 0 0">${fmtDate(d.date, { year:'numeric', month:'long', day:'numeric' })}</p></div></div>
+    <div style="height:5px;background:linear-gradient(90deg,#CEA9A6,#F1D3C8,#CEA9A6)"></div>
+    <div style="padding:26px 34px 30px">
+      <div style="display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap">
+        ${card('فاتورة إلى', `<p style="font-weight:800;font-size:16px;margin:0">${pdfSafe(d.customer || 'عميلة')}</p><p style="font-size:13px;color:#6B5459;margin:4px 0 0" dir="ltr">${esc(d.phone || '')}</p>${d.address ? `<p style="font-size:12px;color:#8E787D;margin:6px 0 0">العنوان: ${pdfSafe(d.address)}</p>` : ''}`)}
+        ${card('بيانات الفاتورة', `<p style="font-size:13px;margin:0;color:#3B2A2F">رقم الفاتورة: <b dir="ltr" style="unicode-bidi:isolate">${esc(d.label)}</b></p><p style="font-size:13px;margin:6px 0 0;color:#3B2A2F">الحالة: <b>${pdfSafe(d.status || '')}</b></p>`)}
+      </div>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;margin-bottom:20px;border:1px solid #EBD6D5;border-radius:14px;overflow:hidden"><thead><tr style="background:#7A4455">${['#', 'القطعة', 'الكمية', 'السعر', 'الإجمالي'].map(h => `<th style="padding:12px 8px;font-size:12px;color:#FBF6F3;font-weight:700">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:24px"><div style="width:270px"><div style="display:flex;justify-content:space-between;padding:8px 4px;font-size:14px;color:#6B5459"><span>الإجمالي الفرعي</span><span>${money(d.total)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;background:linear-gradient(120deg,#7A4455,#9A5C6D);color:#fff;border-radius:14px;padding:14px 16px;font-weight:800;font-size:16px"><span>الإجمالي الكلي</span><span>${money(d.total)}</span></div></div></div>
+      ${msg ? `<div style="margin-bottom:24px;padding:16px 20px;background:#FBF6F3;border-right:4px solid #CEA9A6;border-radius:12px"><p style="font-size:13px;line-height:1.95;color:#3B2A2F;margin:0;white-space:pre-line">${pdfSafe(msg)}</p></div>` : ''}
+      <div style="text-align:center;border-top:1px solid #EBD6D5;padding-top:18px;color:#8E787D;font-size:12px;line-height:2"><span style="color:#7A4455;font-weight:800;font-size:14px">شكراً لثقتك في ${brand.nameAr}</span><br>للاستفسار: <span dir="ltr">${esc(settings.phone || '')}</span> | ${esc(settings.email || '')}<br>السودان</div>
+    </div></div>`;
 }
 function openInvoice(data){
   invData = { ...data, customer:data.customer || 'عميلة' }; const opts = templatesFor(data.category || 'general');
@@ -1374,9 +1381,9 @@ actions.invPrint = () => window.print();
 actions.invPdf = async (d, t) => {
   if (!invModal) return; t.disabled = true;
   try {
-    const el = $('#invoicePaper', invModal.el); const cv = await html2canvas(el, { scale:2, backgroundColor:'#ffffff', useCORS:true }); const img = cv.toDataURL('image/png');
+    const el = $('#invoicePaper', invModal.el); const cv = await html2canvas(el, { scale:2, backgroundColor:'#ffffff', useCORS:true }); const img = cv.toDataURL('image/jpeg', 0.92);
     const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'pt', 'a4'); const pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight(); const ih = cv.height * pw / cv.width;
-    let left = ih, pos = 0; pdf.addImage(img, 'PNG', 0, pos, pw, ih); left -= ph; while (left > 0) { pos -= ph; pdf.addPage(); pdf.addImage(img, 'PNG', 0, pos, pw, ih); left -= ph; }
+    let left = ih, pos = 0; pdf.addImage(img, 'JPEG', 0, pos, pw, ih, undefined, 'FAST'); left -= ph; while (left > 0) { pos -= ph; pdf.addPage(); pdf.addImage(img, 'JPEG', 0, pos, pw, ih, undefined, 'FAST'); left -= ph; }
     pdf.save((invData.file || 'فاتورة') + '.pdf'); toast('تم تحميل الفاتورة PDF');
   } catch (e) { toast('تعذر إنشاء ملف PDF', 'err'); console.error(e); }
   t.disabled = false;
